@@ -5,14 +5,12 @@ CFLAGS = -c -Wall -I$(HEADER)
 TARGET = Src/main.c
 BUILD_DIR = Build
 
-
-
 all: $(TARGET) CaMa
 	$(CC) $(TARGET) $(CFLAGS) -o $(BUILD_DIR)/main.o
-	$(CC) $(BUILD_DIR)/*.o -o final 
+	$(CC) $(BUILD_DIR)/*.o -o :q 
 
 CaMa: 
-	$(CC) $(CFLAGS) Src/CaMa/CaMa.c -o $(BUILD_DIR)/CaMa.o
+	$(CC) $(CFLAGS) Src/CaMa/caMa.c -o $(BUILD_DIR)/caMa.o
 
 clean: 
 	rm -rf *.o
