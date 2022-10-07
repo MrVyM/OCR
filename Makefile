@@ -1,19 +1,37 @@
+
+FINAL = main.out
 CC = gcc
-OBJ = main.o
-HEADER = include/
-CFLAGS = -c -Wall -Wextra -Werror -pedantic -I$(HEADER)
-TARGET = src/main.c
+SRC_DIR = src
+INCLUDE_DIR = include
 BUILD_DIR = build
-
-all: $(TARGET) CaMa
-	$(CC) $(TARGET) $(CFLAGS) -o $(BUILD_DIR)/main.o
-	$(CC) $(BUILD_DIR)/*.o -o final 
-
-CaMa: 
-	$(CC) $(CFLAGS) src/CaMa/caMa.c -o $(BUILD_DIR)/caMa.o
+CFLAGS = -Wall -Wextra -Werror -I $(INCLUDE_DIR)/
 
 
+# find source file
+SRC = $(shell find $(SRC_DIR) -type f -name '*.c')
 
-clean: 
-	rm -rf $(BUILD_DIR)/*
+# find source directory
+SEARCH_DIR = $(shell find $(SRC_DIR) -type d)
+
+# construct buid directory
+$(shell mkdir -p $(BUILD_DIR))
+$(shell mkdir -p $(patsubst $(SRC_DIR)%, $(BUILD_DIR)%, $(SEARCH_DIR)))
+
+# Change the source file
+TEMP_OBJ = $(patsubst $(SRC_DIR)%, $(BUILD_DIR)%, $(SRC))
+OBJ = $(patsubst %.c,%.o, $(TEMP_OBJ))
+
+
+all : $(OBJ) $(FINAL)
+
+$(FINAL):
+	$(CC) $(OBJ) -c -o $(FINAL)	
+	@echo "Build done."
+
+$(OBJ): $(SRC)
+	$(CC) $@ $(CFLAGS) -c -o $@
+	@echo -e "Compilation done.\n" 
+
+clean:
+	rm -rf $(BUILD_DIR)
 
