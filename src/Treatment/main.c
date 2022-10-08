@@ -37,16 +37,19 @@ void update_surface_pixels(SDL_Surface* surface, Uint8 * pixelsMatrix)
 	SDL_UnlockSurface(surface);
 }
 
-int main()
+int main(int argc, char** argv)
 {
 	// Checks the number of arguments.
     if (argc != 2)
         errx(EXIT_FAILURE, "Usage: image-file");
 
     if (SDL_Init(SDL_INIT_VIDEO) != 0)
-        errx(EXIT_FAILURE, "%s", SDL_GetError());
+	{
+		errx(EXIT_FAILURE, "%s", SDL_GetError());
+	}
+        
 
-	SDL_Surface * surface = IMG_Load(argv[1])
+	SDL_Surface * surface = IMG_Load(argv[1]);
 	if(surface == NULL)
 		errx(EXIT_FAILURE, "%s", SDL_GetError());
 	
@@ -67,3 +70,5 @@ int main()
     SDL_Quit();
 	return EXIT_SUCCESS;
 }
+//gcc -Wall -Wextra -O3 `pkg-config --cflags sdl2 SDL2_image`   -c -o main.o main.c
+//gcc   main.o  `pkg-config --libs sdl2 SDL2_image` -o main
