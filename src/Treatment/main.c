@@ -2,6 +2,7 @@
 #include <err.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include "blur.h"
 
 Uint8 pixel_to_grayscale(Uint32 pixel_color, SDL_PixelFormat* format)
 {
@@ -61,9 +62,20 @@ int main(int argc, char** argv)
 	Uint8 pixels[pixelsLen];
 	surface_to_grayscale(surface, pixels);
 	// TODO Traitement de l'image...
-	update_surface_pixels(surface, pixels);
 
-	if(SDL_SaveBMP(surface, "result_treatment.bmp") != 0)
+	//START BLUR
+	int radius = 2;
+    size_t borderSize = 2 * radius + 1;
+    size_t matrixSize = borderSize * borderSize;
+    float blurMatrix[matrixSize];
+    generateGaussianMatrix(radius, blurMatrix);
+    printMatrix(blurMatrix, borderSize);
+	Uint8 outBlurPixels[pixelsLen];
+	applyFilter(pixels, outBlurPixels, surface->w, pixelsLen, blurMatrix, borderSize);
+	//END BLUR
+	update_surface_pixels(surface, outBlurPixels);
+
+	if(SDL_SaveBMP(surface, "result.bmp") != 0)
         errx(EXIT_FAILURE, "%s", SDL_GetError());
 	
     SDL_FreeSurface(surface);
