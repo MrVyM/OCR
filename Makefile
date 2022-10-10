@@ -1,15 +1,14 @@
 
-FINAL = main.out
+EXE = main.out
 CC = gcc
 SRC_DIR = src
 INCLUDE_DIR = include
 BUILD_DIR = build
 CFLAGS = -Wall -Wextra -Werror -I $(INCLUDE_DIR)/
-
+LFLAGS = -lSDL_image 
 
 # find source file
 SRC = $(shell find $(SRC_DIR) -type f -name '*.c')
-
 # find source directory
 SEARCH_DIR = $(shell find $(SRC_DIR) -type d)
 
@@ -17,19 +16,20 @@ SEARCH_DIR = $(shell find $(SRC_DIR) -type d)
 $(shell mkdir -p $(BUILD_DIR))
 $(shell mkdir -p $(patsubst $(SRC_DIR)%, $(BUILD_DIR)%, $(SEARCH_DIR)))
 
+
 # Change the source file
 TEMP_OBJ = $(patsubst $(SRC_DIR)%, $(BUILD_DIR)%, $(SRC))
 OBJ = $(patsubst %.c,%.o, $(TEMP_OBJ))
 
 
-all : $(OBJ) $(FINAL)
+all: $(EXE)  
 
-$(FINAL):
-	$(CC) $(OBJ) -c -o $(FINAL)	
+$(EXE): $(OBJ)
+	$(CC) $(LFLAGS) $^ -o $(EXE)	
 	@echo "Build done."
 
-$(OBJ): $(SRC)
-	$(CC) $@ $(CFLAGS) -c -o $@
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
+	$(CC) $< $(CFLAGS) -c -o $@
 	@echo -e "Compilation done.\n" 
 
 clean:

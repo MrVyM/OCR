@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <err.h>
-#include "../Include/Solver/solving.h"
-#include "../Include/Solver/file.h"
+#include "Solver/solving.h"
+#include "Solver/file.h"
 
 
 int main(int argc, char** argv){

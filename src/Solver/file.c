@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "../Include/Solver/solving.h"
+#include "Solver/solving.h"
 
 /*******************************************************************************
  * Allows to read a sudoku grid from a file who has the name "filename"

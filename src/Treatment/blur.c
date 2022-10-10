@@ -3,8 +3,8 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
-#define max(a,b) (a>=b?a:b)
-#define min(a,b) (a<=b?a:b)
+#define max(a,b) (a > b ? a : b)
+#define min(a,b) (a < b ? a : b)
 
 #define SIGMA 10
 #define SIGMA2 SIGMA * SIGMA
