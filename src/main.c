@@ -2,7 +2,7 @@
 #include <err.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-#include "blur.h"
+#include "Treatment/blur.h"
 
 Uint8 pixel_to_grayscale(Uint32 pixel_color, SDL_PixelFormat* format)
 {
