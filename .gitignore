@@ -1,8 +1,11 @@
 # Directory of build
-.build/
+build/
+
+# Picture .bmp
+*.bmp
 
 # Directory for testing file
-.test/
+test/
 
 # Prerequisites
 *.d
