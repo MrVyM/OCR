@@ -64,7 +64,7 @@ int main(int argc, char** argv)
 	// TODO Traitement de l'image...
 
 	//START BLUR
-	int radius = 2;
+	int radius = 5;
     size_t borderSize = 2 * radius + 1;
     size_t matrixSize = borderSize * borderSize;
     float blurMatrix[matrixSize];

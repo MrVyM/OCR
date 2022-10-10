@@ -6,7 +6,7 @@
 #define max(a,b) (a>=b?a:b)
 #define min(a,b) (a<=b?a:b)
 
-#define SIGMA 1.5
+#define SIGMA 10
 #define SIGMA2 SIGMA * SIGMA
 #define TWO_PI 6.28318530718
 
@@ -29,17 +29,16 @@ size_t pixelsSize, float* filterMatrix, size_t filterBorderSize)
         y = index / rowPixels;
         float sum = 0;
 
-        printf("x=%zu y=%zu, radius=%zu ;\n",x,y, radius);
-        for(size_t square_i = max(x-radius, 0); square_i < min(x + radius + 2, rowPixels); square_i++)
+        //printf("x=%zu y=%zu, radius=%zu, filterBorderSize : %zu, rowPIxel : %zu\n",x,y, radius, filterBorderSize, rowPixels);
+        for(size_t square_i = max(x-radius, 0); square_i < min(x + radius + 1, rowPixels); square_i++)
         {   
-            printf("---%zu", x);
-            for(size_t square_j = max((int)y-(int)radius, 0); square_j < min(y+radius+2, pixelsSize/rowPixels); square_j++)
+            for(size_t square_j = max((int)y-(int)radius, 0); square_j < min(y+radius+1, pixelsSize/rowPixels); square_j++)
             {
-                float value = max(0, (int)square_i-((int)x-(int)radius)) * filterBorderSize + max(0, (int)square_j-((int)y-(int)radius));
-                printf("%lf \n",value);
-                sum += ((float) inPixels[square_i * rowPixels + square_j]) * filterMatrix[max(0, (int)square_i-((int)x-(int)radius)) * filterBorderSize + max(0, (int)square_j-((int)y-(int)radius))];
+                //printf("Square_j : %zu\n", square_j);
+                ssize_t value = ((ssize_t)square_i - (ssize_t)x + (ssize_t)radius)* filterBorderSize + (ssize_t)square_j - (ssize_t)y + (ssize_t)radius;
+                //printf("[%zu][%zu] = %zu\n",(ssize_t)square_i - (ssize_t)x + (ssize_t)radius,(ssize_t)square_j - (ssize_t)y + (ssize_t)radius, value);           
+                sum += inPixels[square_j * rowPixels + square_i] * filterMatrix[value];
             }
-            
         }
         outPixels[index] = (Uint8) sum;
     }
