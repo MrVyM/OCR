@@ -6,7 +6,7 @@ SRC_DIR = src
 INCLUDE_DIR = include
 BUILD_DIR = build
 CFLAGS = `pkg-config --cflags sdl2 SDL2_image` -Wall -Wextra -Werror -I $(INCLUDE_DIR)/
-LFLAGS = -lm `pkg-config --libs sdl2 SDL2_image` 
+LFLAGS = `pkg-config --libs sdl2 SDL2_image`
 
 # find source file
 SRC = $(shell find $(SRC_DIR) -type f -name '*.c')
@@ -45,7 +45,7 @@ build: title $(EXE)
 	@echo -e "\nBuild Finish.\n"
 
 $(EXE): $(OBJ)
-	@$(CC) $(LFLAGS) $^ -o $(EXE)	
+	$(CC) $^ $(LFLAGS) -o $(EXE) -lm
 	@echo -e "\nExecutable $(EXE) done."
 
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
