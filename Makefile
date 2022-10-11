@@ -45,7 +45,7 @@ build: title $(EXE)
 	@echo -e "\nBuild Finish.\n"
 
 $(EXE): $(OBJ)
-	$(CC) $^ $(LFLAGS) -o $(EXE) -lm
+	@$(CC) $^ $(LFLAGS) -o $(EXE) -lm
 	@echo -e "\nExecutable $(EXE) done."
 
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
