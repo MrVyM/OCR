@@ -3,8 +3,8 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
-#define max(a,b) (a > b ? a : b)
-#define min(a,b) (a < b ? a : b)
+#define max(a, b) ((a) > (b) ? (a) : (b))
+#define min(a, b) ((a) < (b) ? (a) : (b))
 
 #define SIGMA 10
 #define SIGMA2 SIGMA * SIGMA
@@ -29,15 +29,13 @@ size_t pixelsSize, float* filterMatrix, size_t filterBorderSize)
         y = index / rowPixels;
         float sum = 0;
 
-        //printf("x=%zu y=%zu, radius=%zu, filterBorderSize : %zu, rowPIxel : %zu\n",x,y, radius, filterBorderSize, rowPixels);
         for(size_t square_i = max(x-radius, 0); square_i < min(x + radius + 1, rowPixels); square_i++)
         {   
             for(size_t square_j = max((int)y-(int)radius, 0); square_j < min(y+radius+1, pixelsSize/rowPixels); square_j++)
             {
-                //printf("Square_j : %zu\n", square_j);
-                ssize_t value = ((ssize_t)square_i - (ssize_t)x + (ssize_t)radius)* filterBorderSize + (ssize_t)square_j - (ssize_t)y + (ssize_t)radius;
-                //printf("[%zu][%zu] = %zu\n",(ssize_t)square_i - (ssize_t)x + (ssize_t)radius,(ssize_t)square_j - (ssize_t)y + (ssize_t)radius, value);           
-                sum += inPixels[square_j * rowPixels + square_i] * filterMatrix[value];
+                ssize_t xFilter = ((ssize_t)square_i - (ssize_t)x + (ssize_t)radius);
+                ssize_t yFilter = (ssize_t)square_j - (ssize_t)y + (ssize_t)radius;         
+                sum += inPixels[square_j * rowPixels + square_i] * filterMatrix[xFilter * filterBorderSize + yFilter];
             }
         }
         outPixels[index] = (Uint8) sum;
@@ -69,13 +67,3 @@ void printMatrix(float* squaredMatrix, size_t borderSize)
             printf("\n");
     }
 }
-
-/*int main()
-{
-    int radius = 1;
-    size_t borderSize = 2 * radius + 1;
-    size_t matrixSize = borderSize * borderSize;
-    float blurMatrix[matrixSize];
-    generateGaussianMatrix(radius, blurMatrix);
-    printMatrix(blurMatrix, borderSize);
-}*/
