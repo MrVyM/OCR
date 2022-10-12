@@ -1,5 +1,6 @@
-#include "CaMa/caMa.h"
+#include "Struct/vector.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 void printVector(Vector vect) 
 {
@@ -25,6 +26,4 @@ void scalarAddVector(Vector* vect, char scalar)
         vect->value[i] += scalar;
     }
 }
-
-
 

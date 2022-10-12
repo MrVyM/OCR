@@ -58,7 +58,7 @@ void generateGaussianMatrix(int radius, float* gaussianMatrix)
         gaussianMatrix[index] /= sumValues;
 }
 
-void printMatrix(float* squaredMatrix, size_t borderSize)
+/*void printMatrix(float* squaredMatrix, size_t borderSize)
 {
     for(size_t index = 0; index < borderSize * borderSize; index++)
     {
@@ -67,3 +67,4 @@ void printMatrix(float* squaredMatrix, size_t borderSize)
             printf("\n");
     }
 }
+*/
