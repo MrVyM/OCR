@@ -1,12 +1,5 @@
 #pragma once
 
-typedef struct 
-{
-    int length;
-    char* value; 
-} Vector;
-
-
 struct Matrix
 {
     int width;
@@ -15,3 +8,8 @@ struct Matrix
 };
 
 typedef struct Matrix Matrix;
+
+Matrix* initMatrix(int width, int height);
+
+void printMatrix(Matrix* matrix);
+
