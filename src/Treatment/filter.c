@@ -102,5 +102,5 @@ void printFilter(Filter* filter)
 
 void freeFilter(Filter* filter)
 {
-	return;
+	freeMatrix(filter.matrix);
 }
