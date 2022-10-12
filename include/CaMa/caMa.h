@@ -4,6 +4,8 @@
 
 Matrix* initMatrix(int width, int height);
 
+void printMatrix(Matrix* matrix);
+
 void printVector(Vector vect);
 
 void scalarMulVector(Vector* vect, char scalar);
