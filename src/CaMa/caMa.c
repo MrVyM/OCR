@@ -38,3 +38,15 @@ Matrix* initMatrix(int width, int height) {
     matrix->value = data;
     return matrix;
 }
+
+
+void printMatrix(Matrix* matrix)
+{
+    for(int i = 0; i < matrix->height; i++)
+    {
+        printf("%d : ",i);
+        for(int j = 0; j < matrix->width; j++)
+            printf("%d ",matrix->value[i][j])
+        printf("\n");
+    }
+}
