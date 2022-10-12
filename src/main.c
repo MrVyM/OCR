@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "CaMa/caMa.h"
+#include "Struct/matrix.h"
 
 int main(void)
 {

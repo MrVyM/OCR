@@ -21,7 +21,7 @@ void printMatrix(Matrix* matrix)
     {
         printf("%d : ",i);
         for(int j = 0; j < matrix->width; j++)
-            printf("%d ",matrix->value[i][j])
+            printf("%d ",matrix->value[i][j]);
         printf("\n");
     }
 }
