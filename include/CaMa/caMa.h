@@ -2,6 +2,8 @@
 
 #include "structure.h"
 
+Matrix* initMatrix(int width, int height);
+
 void printVector(Vector vect);
 
 void scalarMulVector(Vector* vect, char scalar);

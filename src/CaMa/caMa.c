@@ -1,5 +1,6 @@
 #include "CaMa/caMa.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 void printVector(Vector vect) 
 {
@@ -26,5 +27,14 @@ void scalarAddVector(Vector* vect, char scalar)
     }
 }
 
-
-
+Matrix* initMatrix(int width, int height) {
+    Matrix* matrix = malloc(sizeof(Matrix));
+    matrix->width = width;
+    matrix->height = height;
+    char** data = malloc(sizeof(char*) * height); 
+    for(int x = 0; x < height; x++){
+        data[x] = calloc(width, sizeof(char));
+    }
+    matrix->value = data;
+    return matrix;
+}
