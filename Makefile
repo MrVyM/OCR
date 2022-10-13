@@ -26,6 +26,9 @@ OBJ = $(patsubst %.c,%.o, $(TEMP_OBJ))
 all: title $(EXE)
 	@echo -e "\nMake Finish.\n"
 
+run: all
+	@./$(EXE)
+
 help: 
 	@echo -e "build : Rebuild the $(EXE) file."
 	@echo -e "compile : Compile the *.c from $(SRC_DIR)."
