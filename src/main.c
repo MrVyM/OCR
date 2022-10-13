@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "Struct/matrix.h"
+#include "Xor/function.h"
 
 int main(void)
 {
@@ -15,5 +16,6 @@ int main(void)
     printMatrix(m1);
     printMatrix(m3);
     freeMatrix(m);
+    printf("%lf",sigmoid(0.2));
     return 0;
 }
