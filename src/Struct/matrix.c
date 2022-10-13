@@ -14,6 +14,20 @@ Matrix* initMatrix(int width, int height) {
     return matrix;
 }
 
+Matrix* randomMatrix(int width, int height) {
+    Matrix* matrix = malloc(sizeof(Matrix));
+    matrix->width = width;
+    matrix->height = height;
+    float** data = malloc(sizeof(float*) * height); 
+    for(int x = 0; x < height; x++){
+        data[x] = calloc(width, sizeof(float));
+        for(int y = 0; y < width; y++)
+            data[x][y] = (float)rand()/RAND_MAX;
+    }
+    matrix->value = data;
+    return matrix;
+}
+
 void printMatrix(Matrix* matrix)
 {
     for(int i = 0; i < matrix->height; i++)
