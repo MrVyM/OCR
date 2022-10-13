@@ -5,7 +5,7 @@ CC = gcc
 SRC_DIR = src
 INCLUDE_DIR = include
 BUILD_DIR = build
-CFLAGS = `pkg-config --cflags sdl2 SDL2_image` -Wall -Wextra -Werror -I $(INCLUDE_DIR)/
+CFLAGS = `pkg-config --cflags sdl2 SDL2_image` -Wall -Wextra -I $(INCLUDE_DIR)/
 LFLAGS = `pkg-config --libs sdl2 SDL2_image`
 
 # find source file
