@@ -22,3 +22,5 @@ void addScalarMatrix(Matrix* matrix, float scalar);
 void mulScalarMatrix(Matrix* matrix, float scalar);
 
 void addMatrix(Matrix* m1, Matrix* m2);
+
+Matrix* mulMatrix(Matrix* m1, Matrix* m2);

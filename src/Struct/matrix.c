@@ -77,3 +77,19 @@ void addMatrix(Matrix* m1, Matrix* m2)
             m1->value[i][j] += m2->value[i][j];
     }
 }
+
+Matrix* mulMatrix(Matrix* m1, Matrix* m2)
+{
+    if (m2->height != m1->width)
+        exit(-11);
+    Matrix* result = initMatrix(m1->height,m2->width);
+    for(int i = 0; i < m1->height; i++)
+    {
+        for(int j = 0; j <m2->width; j++)
+        {
+            for(int k = 0; k < m1->width; k++)
+                result->value[i][j] += m1->value[i][k] * m2->value[k][j];
+        }
+    }
+    return result;
+}
