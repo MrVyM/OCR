@@ -1,9 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "Xor/network.h"
+#include "Struct/neuralNetwork.h"
 
 int main(void)
 {
-    train();
+    NeuralNetwork* net = initNetwork(2,3,1);
+    printf("%d",net->numHidden);
     return 0;
 }

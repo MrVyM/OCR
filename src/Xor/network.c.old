@@ -2,14 +2,14 @@
 #include "Struct/matrix.h"
 
 
-int train()
+int train(int initMatrix, 
+          int hidUnit, 
+          int outUnit, 
+          float (*activ)(float), 
+        float (*activDeriv)(float))
 {
     Matrix* mIn = initMatrix(4,2);
     Matrix* mOut = initMatrix(4,1);
-
-    int inUnit = 2;
-    int hidUnit = 3;
-    int outUnit = 1;
 
     float learning = 0.1;
     int iter = 3500;
