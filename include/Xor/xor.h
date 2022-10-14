@@ -1,4 +1,3 @@
 #pragma once
 
-int train();
-
+NeuralNetwork* trainXor(NeuralNetwork* net);
