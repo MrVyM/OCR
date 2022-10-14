@@ -15,6 +15,8 @@ Matrix* randomMatrix(int width, int height);
 
 void printMatrix(Matrix* matrix);
 
+Matrix* transpose(Matrix* matrix);
+
 void freeMatrix(Matrix* matrix);
 
 void addScalarMatrix(Matrix* matrix, float scalar);
@@ -22,5 +24,7 @@ void addScalarMatrix(Matrix* matrix, float scalar);
 void mulScalarMatrix(Matrix* matrix, float scalar);
 
 void addMatrix(Matrix* m1, Matrix* m2);
+
+void applyFunctionMatrix(Matrix* m1,(float)(*fc)(float))
 
 Matrix* mulMatrix(Matrix* m1, Matrix* m2);
