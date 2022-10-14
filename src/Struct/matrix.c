@@ -1,12 +1,17 @@
 #include "Struct/matrix.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <err.h>
 
 Matrix* initMatrix(int width, int height) {
     Matrix* matrix = malloc(sizeof(Matrix));
+    if (matrix == NULL)
+        errx(-1,"The matrix cannot be initialize");
     matrix->width = width;
     matrix->height = height;
     float** data = malloc(sizeof(float*) * height); 
+    if (data == NULL)
+        errx(-1,"The data cannot be initialize");
     for(int x = 0; x < height; x++){
         data[x] = calloc(width, sizeof(float));
     }
@@ -16,9 +21,13 @@ Matrix* initMatrix(int width, int height) {
 
 Matrix* randomMatrix(int width, int height) {
     Matrix* matrix = malloc(sizeof(Matrix));
+    if (matrix == NULL)
+        errx(-1,"The matrix cannot be initialize");
     matrix->width = width;
     matrix->height = height;
     float** data = malloc(sizeof(float*) * height); 
+    if (data == NULL)
+        errx(-1,"The data cannot be initialize");
     for(int x = 0; x < height; x++){
         data[x] = calloc(width, sizeof(float));
         for(int y = 0; y < width; y++)
@@ -37,6 +46,18 @@ void printMatrix(Matrix* matrix)
             printf("%f ",matrix->value[i][j]);
         printf("\n");
     }
+}
+
+Matrix* transpose(Matrix* matrix)
+{
+    Matrix* result = initMatrix(matrix->height,matrix->width);
+    for(int x = 0; x < matrix->height; x++)
+    {
+        for(int y = 0; y < matrix->width; y++)
+            result->value[y][x] = matrix->value[x][y];  
+    }
+    freeMatrix(matrix);
+    return result;
 }
 
 void freeMatrix(Matrix* matrix)
