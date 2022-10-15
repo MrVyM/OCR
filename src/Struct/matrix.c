@@ -48,6 +48,18 @@ void printMatrix(Matrix* matrix)
     }
 }
 
+Matrix* applyFunctionMatrix(Matrix* m1, float(*func)(float))
+{
+    Matrix* res = initMatrix(m1->width,m1->height);
+    for(int i = 0; i < m1->height; i++)
+    {
+        for(int j = 0; j < m1->width; j++)
+            res->value[i][j] = func(m1->value[i][j]);
+    }
+    return res;
+}
+
+
 Matrix* transpose(Matrix* matrix)
 {
     Matrix* result = initMatrix(matrix->height,matrix->width);

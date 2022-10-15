@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include "Struct/neuralNetwork.h"
 #include "Xor/xor.h"
+#include "Struct/matrix.h"
+#include "Xor/function.h"
 
 int main(void)
 {
