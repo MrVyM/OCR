@@ -12,8 +12,8 @@ struct Pixel
 };
 typedef struct Pixel Pixel;
 
-Pixel* initPixel(Uint8 red, Uint8 green, Uint8 blue);
-Pixel* updateAllColorsPixel(Pixel* pixel, Uint8 color);
-void printPixel(Pixel* pixel);
-void freePixel(Pixel* pixel);
+Pixel *initPixel(Uint8 red, Uint8 green, Uint8 blue);
+Pixel *updateSameColorPixel(Pixel *pixel, Uint8 color);
+void printPixel(Pixel *pixel);
+void freePixel(Pixel *pixel);
 #endif
