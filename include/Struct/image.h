@@ -12,9 +12,8 @@ struct Image
 typedef struct Image Image;
 
 Image *createEmptyImage(int width, int height);
-Image *createImageFromSurface(SDL_Surface *surface);
-void saveImage(Image *image);
-Image *cloneImage(Image *image);
+Image *importImage(char *filename);
+void saveImage(Image *image, char *filename);
 void freeImage(Image *image);
 
 #endif

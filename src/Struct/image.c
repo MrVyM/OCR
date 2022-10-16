@@ -5,15 +5,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <err.h>
-#include <math.h>
 
 Image *createEmptyImage(int width, int height)
 {
   Image *image = malloc(sizeof(Image));
 
-    if (image == NULL)
-        errx(-1, "Error while allocating a pointer (createEmptyImage)");
-  
+  if (image == NULL)
+    errx(-1, "Error while allocating a pointer (createEmptyImage)");
+
   image->width = width;
   image->height = height;
   image->pixels = calloc(width, sizeof(Pixel *));
@@ -37,40 +36,79 @@ Image *createEmptyImage(int width, int height)
   return image;
 }
 
-Uint8 pixel_to_grayscale(Uint32 pixel_color, SDL_PixelFormat* format)
+Image *importImage(char *filename)
 {
-    Uint8 red, green, blue;
-    SDL_GetRGB(pixel_color, format, &red, &green, &blue);
-    return 0.3*red + 0.59*green + 0.11*blue;
-}
+  SDL_Surface *surface = IMG_Load(filename);
 
-Image *createImageFromSurface(SDL_Surface *surface)
-{
-  Image *image = createEmptyImage(surface->w, surface->h);
-  Uint32* pixels = surface->pixels;
-  SDL_PixelFormat* format = surface->format;
-
-  if(SDL_LockSurface(surface) != 0)
+  if (surface == NULL)
     errx(EXIT_FAILURE, "%s", SDL_GetError());
-  
-  for(int x = 0; x < image->width; x++)
+
+  surface = SDL_ConvertSurfaceFormat(surface, SDL_PIXELFORMAT_RGB888, 0);
+
+  if (surface == NULL)
+    errx(EXIT_FAILURE, "%s", SDL_GetError());
+
+  Image *image = createEmptyImage(surface->w, surface->h);
+  Uint32 *pixels = surface->pixels;
+  SDL_PixelFormat *format = surface->format;
+
+  if (SDL_LockSurface(surface) != 0)
+    errx(EXIT_FAILURE, "%s", SDL_GetError());
+
+  for (int x = 0; x < image->width; x++)
   {
-    for(int y = 0; y < image->height; y++)
+    for (int y = 0; y < image->height; y++)
     {
       Pixel *pixel = &image->pixels[x][y];
-      SDL_GetRGB(pixels[x * image->width + y], format, &pixel->red, &pixel->green, &pixel->blue);
+      SDL_GetRGB(pixels[y * image->width + x], format, &pixel->red, &pixel->green, &pixel->blue);
     }
   }
-  
+
   SDL_UnlockSurface(surface);
+  SDL_FreeSurface(surface);
   return image;
+}
+
+void saveImage(Image *image, char *filename)
+{
+  SDL_Surface *surface = SDL_CreateRGBSurface(0, image->width, image->height, 32, 0, 0, 0, 0);
+
+  if (surface == NULL)
+    errx(EXIT_FAILURE, "%s", SDL_GetError());
+
+  surface = SDL_ConvertSurfaceFormat(surface, SDL_PIXELFORMAT_RGB888, 0);
+
+  if (surface == NULL)
+    errx(EXIT_FAILURE, "%s", SDL_GetError());
+
+  SDL_PixelFormat *format = surface->format;
+  Uint32 *pixels = surface->pixels;
+
+  if (SDL_LockSurface(surface) != 0)
+    errx(EXIT_FAILURE, "%s", SDL_GetError());
+
+  for (int x = 0; x < image->width; x++)
+  {
+    for (int y = 0; y < image->height; y++)
+    {
+      Pixel *pixel = &image->pixels[x][y];
+      pixels[y * image->width + x] = SDL_MapRGB(format, pixel->red, pixel->green, pixel->blue);
+    }
+  }
+
+  SDL_UnlockSurface(surface);
+
+  if (SDL_SaveBMP(surface, filename) != 0)
+    errx(EXIT_FAILURE, "%s", SDL_GetError());
+
+  SDL_FreeSurface(surface);
 }
 
 void freeImage(Image *image)
 {
-  for(int x = 0; x < image->width; x++)
+  for (int x = 0; x < image->width; x++)
     free(image->pixels[x]);
-  
+
   free(image->pixels);
   free(image);
 }
