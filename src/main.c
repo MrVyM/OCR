@@ -4,6 +4,7 @@
 #include "Struct/image.h"
 #include "Treatment/grayscale.h"
 #include "Treatment/blur.h"
+#include "Treatment/rotation.h"
 #include <err.h>
 
 int main(int argc, char **argv)
@@ -21,6 +22,8 @@ int main(int argc, char **argv)
     saveImage(image, "grayscale.bmp");
     applyGaussianBlur(image);
     saveImage(image, "blur.bmp");
+    image = rotateImage(image, 25);
+    saveImage(image, "rotation.bmp");
     freeImage(image);
     SDL_Quit();
 
