@@ -3,6 +3,7 @@
 #include "Struct/pixel.h"
 #include "Struct/image.h"
 #include "Treatment/grayscale.h"
+#include "Treatment/blur.h"
 #include <err.h>
 
 int main(int argc, char **argv)
@@ -17,7 +18,9 @@ int main(int argc, char **argv)
 
     Image *image = importImage(argv[1]);
     grayscaleImage(image);
-    saveImage(image, "test.bmp");
+    saveImage(image, "grayscale.bmp");
+    applyGaussianBlur(image);
+    saveImage(image, "blur.bmp");
     freeImage(image);
     SDL_Quit();
 
