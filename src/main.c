@@ -9,7 +9,7 @@ int main(int argc, char **argv)
 {
     if (argc != 2)
         errx(EXIT_FAILURE, "Usage: image-file");
-    
+
     if (SDL_Init(SDL_INIT_VIDEO) != 0)
     {
         errx(EXIT_FAILURE, "%s", SDL_GetError());

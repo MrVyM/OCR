@@ -10,11 +10,11 @@ void print_sudoku(unsigned char grid[9][9])
 {
     for (unsigned char x = 0; x < 9; x++)
     {
-        if(x == 3 || x == 6)
+        if (x == 3 || x == 6)
             printf("\n");
         for (unsigned char y = 0; y < 9; y++)
         {
-            if(y == 3 || y == 6)
+            if (y == 3 || y == 6)
                 printf(" ");
             printf("%d", grid[x][y]);
         }
@@ -36,18 +36,18 @@ int can_be_placed(unsigned char grid[9][9], unsigned char row, unsigned char col
     for (unsigned char x = 0; x <= 8; x++)
         if (grid[row][x] == num)
             return 0;
-    
+
     for (unsigned char x = 0; x <= 8; x++)
         if (grid[x][col] == num)
             return 0;
- 
+
     unsigned char startRow = row - row % 3, startCol = col - col % 3;
-   
+
     for (unsigned char i = 0; i < 3; i++)
         for (unsigned char j = 0; j < 3; j++)
             if (grid[i + startRow][j + startCol] == num)
                 return 0;
- 
+
     return 1;
 }
 

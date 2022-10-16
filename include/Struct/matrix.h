@@ -4,23 +4,23 @@ struct Matrix
 {
     int width;
     int height;
-    float** value;
+    float **value;
 };
 
 typedef struct Matrix Matrix;
 
-Matrix* initMatrix(int width, int height);
+Matrix *initMatrix(int width, int height);
 
-Matrix* randomMatrix(int width, int height);
+Matrix *randomMatrix(int width, int height);
 
-void printMatrix(Matrix* matrix);
+void printMatrix(Matrix *matrix);
 
-void freeMatrix(Matrix* matrix);
+void freeMatrix(Matrix *matrix);
 
-void addScalarMatrix(Matrix* matrix, float scalar);
+void addScalarMatrix(Matrix *matrix, float scalar);
 
-void mulScalarMatrix(Matrix* matrix, float scalar);
+void mulScalarMatrix(Matrix *matrix, float scalar);
 
-void addMatrix(Matrix* m1, Matrix* m2);
+void addMatrix(Matrix *m1, Matrix *m2);
 
-Matrix* mulMatrix(Matrix* m1, Matrix* m2);
+Matrix *mulMatrix(Matrix *m1, Matrix *m2);
