@@ -1,9 +1,5 @@
 #include "Struct/matrix.h"
 #include "Struct/image.h"
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include <math.h>
 
 // https://stackoverflow.com/questions/65554301/how-to-calculate-the-sizes-of-a-rectangle-that-contains-rotated-image-potential
@@ -17,8 +13,8 @@ void calculate_size(int a, int b, double theta, int *width, int *height)
 
 Image *rotateImage(Image *image, double angle)
 {
-    if(angle == 0) return;
-    
+    if(angle == 0) return image;
+
     angle = angle *  M_PI / 180;
 
     int new_width, new_height;

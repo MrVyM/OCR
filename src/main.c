@@ -5,6 +5,7 @@
 #include "Treatment/grayscale.h"
 #include "Treatment/blur.h"
 #include "Treatment/rotation.h"
+#include "Treatment/resize.h"
 #include <err.h>
 
 int main(int argc, char **argv)
@@ -16,6 +17,7 @@ int main(int argc, char **argv)
         errx(EXIT_FAILURE, "%s", SDL_GetError());
 
     Image *image = importImage(argv[1]);
+    image = resizeImage(image);
     grayscaleImage(image);
     saveImage(image, "grayscale.bmp");
     applyGaussianBlur(image);
