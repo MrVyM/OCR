@@ -13,16 +13,14 @@ int main(int argc, char **argv)
         errx(EXIT_FAILURE, "Usage: image-file");
 
     if (SDL_Init(SDL_INIT_VIDEO) != 0)
-    {
         errx(EXIT_FAILURE, "%s", SDL_GetError());
-    }
 
     Image *image = importImage(argv[1]);
     grayscaleImage(image);
     saveImage(image, "grayscale.bmp");
     applyGaussianBlur(image);
     saveImage(image, "blur.bmp");
-    image = rotateImage(image, -25);
+    image = rotateImage(image, -95962);
     saveImage(image, "rotation.bmp");
     freeImage(image);
     SDL_Quit();

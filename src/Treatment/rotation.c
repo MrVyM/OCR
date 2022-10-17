@@ -5,7 +5,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include <err.h>
 
 // https://stackoverflow.com/questions/65554301/how-to-calculate-the-sizes-of-a-rectangle-that-contains-rotated-image-potential
 void calculate_size(int a, int b, double theta, int *width, int *height)
@@ -18,7 +17,8 @@ void calculate_size(int a, int b, double theta, int *width, int *height)
 
 Image *rotateImage(Image *image, double angle)
 {
-    printf("Angle de rotation : %f (degré)\n", angle);
+    if(angle == 0) return;
+    
     angle = angle *  M_PI / 180;
 
     int new_width, new_height;
@@ -30,10 +30,10 @@ Image *rotateImage(Image *image, double angle)
 
     for(int x = 0; x < new_width; x++)
     {
-        for(int y = 0; y < new_width; y++)
+        for(int y = 0; y < new_height; y++)
         {
-            int xp = (x - center_x) * cos(angle) - (y - center_y) * sin(angle);
-            int yp = (x - center_x) * sin(angle) + (y - center_y) * cos(angle);
+            int xp = (x - center_x) * cos(angle) + (y - center_y) * sin(angle) + image->width/2;
+            int yp = -(x - center_x) * sin(angle) + (y - center_y) * cos(angle) + image->height/2;
             if(0 <= xp && xp < image->width && 0 <= yp  && yp < image->height)
                 rotatedImage->pixels[x][y] = image->pixels[xp][yp];
         }
