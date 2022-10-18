@@ -22,12 +22,12 @@ Matrix* initMatrix(int width, int height) {
 Matrix* randomMatrix(int width, int height) {
     Matrix* matrix = malloc(sizeof(Matrix));
     if (matrix == NULL)
-        errx(-1,"The matrix cannot be initialize");
+        errx(-1,"randomMatrix : the matrix cannot be initialize");
     matrix->width = width;
     matrix->height = height;
     float** data = malloc(sizeof(float*) * height); 
     if (data == NULL)
-        errx(-1,"The data cannot be initialize");
+        errx(-1,"randomMatrix : the line cannot be initialize");
     for(int x = 0; x < height; x++){
         data[x] = calloc(width, sizeof(float));
         for(int y = 0; y < width; y++)
@@ -39,6 +39,7 @@ Matrix* randomMatrix(int width, int height) {
 
 void printMatrix(Matrix* matrix)
 {
+    printf("h : %d w : %d\n",matrix->height,matrix->width);
     for(int i = 0; i < matrix->height; i++)
     {
         printf("%d : ",i);
@@ -90,7 +91,6 @@ void addScalarMatrix(Matrix* matrix, float scalar)
             matrix->value[i][j] += scalar;
     }
 }
-
 void mulScalarMatrix(Matrix* matrix, float scalar)
 {
     for(int i = 0; i < matrix->height; i++)
@@ -102,9 +102,8 @@ void mulScalarMatrix(Matrix* matrix, float scalar)
 
 void addMatrix(Matrix* m1, Matrix* m2)
 {
-
     if (m1->height != m2->height || m1->width != m2->width)
-        errx(-10,"The size of the matrix is not correct");
+        errx(-10,"addMatrix : The size of the matrix is not correct");
     for(int i = 0; i < m1->height; i++)
     {
         for(int j = 0; j < m1->width; j++)
@@ -115,7 +114,7 @@ void addMatrix(Matrix* m1, Matrix* m2)
 void subMatrix(Matrix* m1, Matrix* m2)
 {
     if (m1->height != m2->height || m1->width != m2->width)
-        errx(-10,"The size of the matrix is not correct");
+        errx(-10,"subMatrix : The size of the matrix is not correct");
     for(int i = 0; i < m1->height; i++)
     {
         for(int j = 0; j < m1->width; j++)
@@ -125,14 +124,10 @@ void subMatrix(Matrix* m1, Matrix* m2)
 
 Matrix* mulMatrix(Matrix* m1, Matrix* m2)
 {
-    Matrix* result = initMatrix(m1->height,m2->width);
-    for(int i = 0; i < m1->height; i++)
-    {
-        for(int j = 0; j <m2->width; j++)
-        {
+    Matrix* res = initMatrix(m2->width,m1->height);
+    for(int i = 0; i < m2->width; i++)
+        for(int j = 0; j < m1->height; j++)
             for(int k = 0; k < m1->width; k++)
-                result->value[i][j] += m1->value[i][k] * m2->value[k][j];
-        }
-    }
-    return result;
+                res->value[i][j] += m1->value[i][k] * m2->value[k][j];
+    return res;
 }

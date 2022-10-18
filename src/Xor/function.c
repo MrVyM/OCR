@@ -12,3 +12,16 @@ float relu(float z)
         return 0;
     return z;
 }
+
+float deriv_sigmoid(float z)
+{
+    float t = sigmoid(z);
+    return t*(1 - t);
+}
+
+float deriv_relu(float z)
+{
+    if (z < 0)
+        return 0;
+    return 1;
+}

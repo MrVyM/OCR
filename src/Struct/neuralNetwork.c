@@ -11,8 +11,8 @@ NeuralNetwork* initNetwork(int numInput, int numHidden, int numOuput)
 		errx(-1,"NeuralNetwork cannot be initialize.");
 
 
-    network->hidden = randomMatrix(numHidden,numInput);
-	network->output = randomMatrix(numOuput,numHidden);
+    network->hidden = randomMatrix(numInput,numHidden);
+	network->output = randomMatrix(numHidden,numOuput);
 	network->hiddenBias = randomMatrix(1,numHidden);
 	network->outputBias = randomMatrix(1,numOuput);
 
@@ -21,6 +21,18 @@ NeuralNetwork* initNetwork(int numInput, int numHidden, int numOuput)
 	network->numInput = numInput;
 
 	return network;
+}
+
+void printNeural(NeuralNetwork* net)
+{
+	printf("Hidden :\n");
+	printMatrix(net->hidden);
+	printf("Output :\n");
+	printMatrix(net->output);
+	printf("HiddenBias :\n");
+	printMatrix(net->hiddenBias);
+	printf("OutputBias :\n");
+	printMatrix(net->outputBias);
 }
 
 void freeNetwork(NeuralNetwork* network)
