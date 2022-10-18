@@ -13,8 +13,8 @@ NeuralNetwork* initNetwork(int numInput, int numHidden, int numOuput)
 
     network->hidden = randomMatrix(numHidden,numInput);
 	network->output = randomMatrix(numOuput,numHidden);
-	network->hiddenBias = randomMatrix(numHidden,1);
-	network->outputBias = randomMatrix(numOuput,1);
+	network->hiddenBias = randomMatrix(1,numHidden);
+	network->outputBias = randomMatrix(1,numOuput);
 
 	network->numHidden = numHidden;
 	network->numOuput = numOuput;

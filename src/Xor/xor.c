@@ -2,13 +2,14 @@
 #include "Struct/neuralNetwork.h"
 #include "Xor/function.h"
 
-NeuralNetwork* trainXor(NeuralNetwork* net)
+NeuralNetwork* trainXor(NeuralNetwork* net, float (*activ)(float))
 {
 	int learning_rate = 0.1;
 	int max_iter = 3500;
 	int training_set = 4;
     
-    int training_list[4][2] = {{0,0},{0,1},{1,0},{1,1}};
+    float training_list[4][2] = {{0,0},{0,1},{1,0},{1,1}};
+    //float training_soluce[4][1] = {{0},{1},{1},{1}};
 
 	int dW1 = 0;
 	int dW2 = 0;
@@ -16,6 +17,10 @@ NeuralNetwork* trainXor(NeuralNetwork* net)
 	int dB1 = 0;
 	int dB2 = 0;
 
+	Matrix* z1;
+	Matrix* z2;
+	printMatrix(net->output);
+	
 	for(int i = 0; i < max_iter; i++)
 	{
 
@@ -24,22 +29,30 @@ NeuralNetwork* trainXor(NeuralNetwork* net)
 
 	    dB1 = 0;
 	    dB2 = 0;
+
 	    for(int j = 0; j < training_set; j++)
 		{
 	        // Forward Prop.
 	        Matrix* a0 = initMatrix(2,1);
+
             a0->value[0][0] = training_list[j][0];
             a0->value[0][1] = training_list[j][1];
-           /* 
-            Matrix* z1 = addMatrix(W1.dot(a0),B1);
-	        Matrix* a1 = sigmoid(z1)
+            z1 = mulMatrix(a0,net->hidden);
+            printMatrix(net->hiddenBias);
+            addMatrix(z1,net->hiddenBias);
+            printf("next");
 
-	        z2 = W2.dot(a1) + B2
-	        a2 = sigmoid(z2)
+ 	        Matrix* a1 = applyFunctionMatrix(z1,activ);
+			z2 = mulMatrix(a1,net->output);
+            printMatrix(z2);
+	        addMatrix(z2,net->outputBias);
 
+            
+	        /*Matrix* a3 = applyFunctionMatrix(z2,activ);
+	        
 	        // Back prop.
-	        dz2 = a2 - y[j];
-	        dW2 += dz2 * transpose(a1); 
+	        Matrix* dz2 = subMatrix(a2,training_soluce[j]);
+	        dW2 += mulMatrix(dz2,transpose(a1)); 
 
 	        dz1 = np.multiply((transpose(W2) * dz2), sigmoid(a1, derivation=True))
 	        dW1 += dz1.dot(transpose(a0));
@@ -60,5 +73,10 @@ NeuralNetwork* trainXor(NeuralNetwork* net)
 	    addScalarMatrix(net->outputBias, - learning_rate);
 	    mulScalarMatrix(net->outputBias,(dB2 / training_set));
 	}
+    /*
+	printMatrix(z1);
+	printMatrix(z2);
+	printf("ttest");
+    */
     return net;
 }

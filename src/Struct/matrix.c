@@ -102,8 +102,9 @@ void mulScalarMatrix(Matrix* matrix, float scalar)
 
 void addMatrix(Matrix* m1, Matrix* m2)
 {
+
     if (m1->height != m2->height || m1->width != m2->width)
-        exit(-10);
+        errx(-10,"The size of the matrix is not correct");
     for(int i = 0; i < m1->height; i++)
     {
         for(int j = 0; j < m1->width; j++)
@@ -111,10 +112,19 @@ void addMatrix(Matrix* m1, Matrix* m2)
     }
 }
 
+void subMatrix(Matrix* m1, Matrix* m2)
+{
+    if (m1->height != m2->height || m1->width != m2->width)
+        errx(-10,"The size of the matrix is not correct");
+    for(int i = 0; i < m1->height; i++)
+    {
+        for(int j = 0; j < m1->width; j++)
+            m1->value[i][j] -= m2->value[i][j];
+    }
+}
+
 Matrix* mulMatrix(Matrix* m1, Matrix* m2)
 {
-    if (m2->height != m1->width)
-        exit(-11);
     Matrix* result = initMatrix(m1->height,m2->width);
     for(int i = 0; i < m1->height; i++)
     {
