@@ -9,13 +9,13 @@ NeuralNetwork* trainXor(NeuralNetwork* net, float (*activ)(float),float (*deriv)
 	int training_set = 4;
     
     float training_list[4][2] = {{0,0},{0,1},{1,0},{1,1}};
-    //float training_soluce[4][1] = {{0},{1},{1},{1}};
+    float training_soluce[4][1] = {{0},{1},{1},{1}};
 
-	int dW1 = 0;
-	int dW2 = 0;
+	Matrix* dW1 = NULL;
+	Matrix* dW2 = NULL;
 
-	int dB1 = 0;
-	int dB2 = 0;
+	Matrix* dB1 = NULL;
+	Matrix* dB2 = NULL;
 
 	Matrix* z1;
 	Matrix* z2;
@@ -23,11 +23,11 @@ NeuralNetwork* trainXor(NeuralNetwork* net, float (*activ)(float),float (*deriv)
 	for(int i = 0; i < max_iter; i++)
 	{
 
-	    dW1 = 0;
-	    dW2 = 0;
+	    dW1 = NULL;
+	    dW2 = NULL;
 
-	    dB1 = 0;
-	    dB2 = 0;
+	    dB1 = NULL;
+	    dB2 = NULL;
 
 	    for(int j = 0; j < training_set; j++)
 		{
@@ -44,34 +44,37 @@ NeuralNetwork* trainXor(NeuralNetwork* net, float (*activ)(float),float (*deriv)
 	        addMatrix(z2,net->outputBias);
 
             
-	        Matrix* a3 = applyFunctionMatrix(z2,activ);
-	        /*
-	        // Back prop.
-	        Matrix* dz2 = subMatrix(a2,training_soluce[j]);
-	        dW2 += mulMatrix(dz2,transpose(a1)); 
+	        Matrix* a2 = applyFunctionMatrix(z2,activ);
+	        
+	        Matrix* dz2 = addScalarMatrix(a2,-training_soluce[j][0]);
+	        
+	        addMatrix(dW2,mulMatrix(dz2,transpose(a1))); 
+	        
+	        Matrix* dz1 = multiplyMatrix(mulMatrix(transpose(net->output),a2), applyFunctionMatrix(a1, deriv));
+	        addMatrix(dW1,mulMatrix(dz1,transpose(a0)));
 
-	        dz1 = np.multiply((transpose(W2) * dz2), sigmoid(a1, derivation=True))
-	        dW1 += dz1.dot(transpose(a0));
-
-	        dB1 += dz1
-	        dB2 += dz2;
-            */
-
+	        addMatrix(dB1,dz1); 
+	        addMatrix(dB2,a2);
 	    }
 	    addScalarMatrix(net->hidden, - learning_rate);
-	    mulScalarMatrix(net->hidden,(dW1 / training_set));
+	    mulScalarMatrix(dW1,1 / training_set);
+	    net->hidden = mulMatrix(net->hidden,dW1);
 	    addScalarMatrix(net->output, - learning_rate);
-	    mulScalarMatrix(net->output,(dW2 / training_set));
+	    mulScalarMatrix(dW2,1 / training_set);
+	    net->output = mulMatrix(net->output,dW2);
 
 	    addScalarMatrix(net->hiddenBias, - learning_rate);
-	    mulScalarMatrix(net->hiddenBias,(dB1 / training_set));
+	    mulScalarMatrix(dB1,1 / training_set);
+	    net->hiddenBias = mulMatrix(net->hiddenBias,dB1);
 	    addScalarMatrix(net->outputBias, - learning_rate);
-	    mulScalarMatrix(net->outputBias,(dB2 / training_set));
+	    mulScalarMatrix(dB2,1 / training_set);
+	    net->outputBias = mulMatrix(net->outputBias,dB2);
 	}
     /*
 	printMatrix(z1);
 	printMatrix(z2);
 	printf("ttest");
     */
+    printf("Fin train\n");
     return net;
 }

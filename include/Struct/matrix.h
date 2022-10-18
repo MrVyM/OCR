@@ -19,11 +19,13 @@ Matrix* transpose(Matrix* matrix);
 
 void freeMatrix(Matrix* matrix);
 
-void addScalarMatrix(Matrix* matrix, float scalar);
+Matrix* addScalarMatrix(Matrix* matrix, float scalar);
 
 void mulScalarMatrix(Matrix* matrix, float scalar);
 
 void addMatrix(Matrix* m1, Matrix* m2);
+
+Matrix* multiplyMatrix(Matrix* m1, Matrix* m2);
 
 void subMatrix(Matrix* m1, Matrix* m2);
 

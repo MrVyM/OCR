@@ -83,13 +83,26 @@ void freeMatrix(Matrix* matrix)
     free(matrix);
 }
 
-void addScalarMatrix(Matrix* matrix, float scalar)
+Matrix* multiplyMatrix(Matrix* m1, Matrix* m2)
 {
+    Matrix* res = initMatrix(m1->width,m2->height);
+    for(int i = 0; i < m1->height; i++)
+    {
+        for(int j = 0; j < m1->width; j++)
+            res->value[i][j] = m1->value[i][j] * m2->value[i][j];
+    }
+    return res;
+}
+
+Matrix* addScalarMatrix(Matrix* matrix, float scalar)
+{
+    Matrix* res = initMatrix(matrix->width,matrix->height);
     for(int i = 0; i < matrix->height; i++)
     {
         for(int j = 0; j < matrix->width; j++)
-            matrix->value[i][j] += scalar;
+            res->value[i][j] += scalar;
     }
+    return res;
 }
 void mulScalarMatrix(Matrix* matrix, float scalar)
 {
