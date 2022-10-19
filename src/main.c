@@ -9,15 +9,15 @@
 #include "Treatment/thresolding.h"
 #include <err.h>
 
-int main(int argc, char **argv)
+int main(/*int argc, char **argv*/)
 {
-    if (argc != 2)
-        errx(EXIT_FAILURE, "Usage: image-file");
+    /*if (argc != 2)
+        errx(EXIT_FAILURE, "Usage: image-file");*/
 
     if (SDL_Init(SDL_INIT_VIDEO) != 0)
         errx(EXIT_FAILURE, "%s", SDL_GetError());
 
-    Image *image = importImage(argv[1]);
+    Image *image = importImage("ugo.jpeg");
     image = resizeImage(image);
     grayscaleImage(image);
     saveImage(image, "grayscale.bmp");

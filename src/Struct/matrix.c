@@ -7,12 +7,18 @@ Matrix *initMatrix(int width, int height)
     Matrix *matrix = malloc(sizeof(Matrix));
     matrix->width = width;
     matrix->height = height;
-    float **data = malloc(sizeof(float *) * height);
-    for (int x = 0; x < height; x++)
+    float **mat = (float **)malloc(height * sizeof(float *));
+    for (int i = 0; i < height; i++)
+        mat[i] = (float *)malloc(width * sizeof(float));
+    matrix->value = mat;
+    for(int x = 0; x < matrix->height; x++)
     {
-        data[x] = calloc(width, sizeof(float));
+        for(int y = 0; y < matrix->width; y++)
+        {
+            //printf("x : %5d | y : %5d\n ", x, y);
+            matrix->value[x][y] = 0;
+        }
     }
-    matrix->value = data;
     return matrix;
 }
 

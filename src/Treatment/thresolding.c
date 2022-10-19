@@ -6,19 +6,37 @@
 
 Matrix *generateHistogram(Image *image)
 {
-    Matrix *histogram = initMatrix(1, 256);
-
+    Matrix *histogram = initMatrix(1,256);
+    size_t a = 0;
     for (int x = 0; x < image->width; x++)
     {
         for (int y = 0; y < image->height; y++)
-            histogram->value[0][image->pixels[x][y].red] += 1;
+        {
+            
+            //printPixel(&image->pixels[x][y]);
+            Pixel *pixel = &(image->pixels[x][y]);
+            a = 0;
+            a = pixel->blue;
+
+            //printf("%zu\n ", a);
+            if (a == 66)
+            {
+                printf("x : %5d | y : %5d\n ", x, y);
+                printPixel(&(image->pixels[x][y]));
+                float x = histogram->value[0][a] + 1.0;
+                printf("\n%f -- ",x);
+                histogram->value[0][a] = histogram->value[0][a] + 1.0;
+            }
+            //printMatrix(histogram);
+        
+            //histogram->value[0][a] = histogram->value[0][a] + (float)(1.0);
+        }
     }
 
-    /*
-    printf("color,numbers\n");
+    /*printf("color,numbers\n");
     for(int index = 0; index < 256; index++)
-        printf("%3d,%7d\n", index, (int) histogram->value[0][index]);
-    */
+        printf("%3d,%7d\n", index, (int) histogram->value[0][index]);*/
+
     return histogram;
 }
 
@@ -81,5 +99,6 @@ void otsuTresolding(Image *image)
 {
     Matrix *histogram = generateHistogram(image);
     applyThresolding(image, findThresholdOtsu(histogram, image));
-    //freeMatrix(histogram);
+    printMatrix(histogram);
+    freeMatrix(histogram);
 }
