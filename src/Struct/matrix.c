@@ -137,10 +137,26 @@ void subMatrix(Matrix* m1, Matrix* m2)
 
 Matrix* mulMatrix(Matrix* m1, Matrix* m2)
 {
+    
+    printMatrix(m1);
+    printf("\n");
+    printMatrix(m2);
+    printf("\n\n");
+    if (m1->width != m2->height)
+        errx(-10,"The matrix cannot be calculate.");
     Matrix* res = initMatrix(m2->width,m1->height);
-    for(int i = 0; i < m2->width; i++)
-        for(int j = 0; j < m1->height; j++)
-            for(int k = 0; k < m1->width; k++)
-                res->value[i][j] += m1->value[i][k] * m2->value[k][j];
-    return res;
+    printMatrix(res);
+    for(int x = 0; x < m1->height; x++)
+    {
+        for(int y = 0; y < m2->width; y++)
+        {
+            for(int i = 0; i < m2->width; i++)
+            { 
+                printf("%d , %d , %d\n",x,y,i);
+                printf("%f = %f , %f\n",res->value[x][y],m1->value[i][y],m2->value[i][x]);   
+                res->value[x][y] += m1->value[i][y] * m2->value[i][x];
+            }
+        }
+    }
+    return res; 
 }

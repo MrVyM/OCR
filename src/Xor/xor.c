@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "Struct/neuralNetwork.h"
 #include "Xor/function.h"
+#include <stdlib.h>
 
 NeuralNetwork* trainXor(NeuralNetwork* net, float (*activ)(float),float (*deriv)(float))
 {
@@ -8,7 +9,7 @@ NeuralNetwork* trainXor(NeuralNetwork* net, float (*activ)(float),float (*deriv)
 	int max_iter = 3500;
 	int training_set = 4;
     
-    float training_list[4][2] = {{0,0},{0,1},{1,0},{1,1}};
+    float training_list[4][2] = {{1,4},{0,1},{1,0},{1,1}};
     float training_soluce[4][1] = {{0},{1},{1},{1}};
 
 	Matrix* dW1 = NULL;
@@ -43,13 +44,13 @@ NeuralNetwork* trainXor(NeuralNetwork* net, float (*activ)(float),float (*deriv)
 			z2 = mulMatrix(net->output,a1);
 	        addMatrix(z2,net->outputBias);
 
-            
+            printf("backWard\n");
 	        Matrix* a2 = applyFunctionMatrix(z2,activ);
 	        
 	        Matrix* dz2 = addScalarMatrix(a2,-training_soluce[j][0]);
-	        
-	        addMatrix(dW2,mulMatrix(dz2,transpose(a1))); 
-	        
+	        printf("mul matrix dw2\n");
+	        addMatrix(dW2,mulMatrix(transpose(a1),dz2)); 
+	        printf("dw2\n");
 	        Matrix* dz1 = multiplyMatrix(mulMatrix(transpose(net->output),a2), applyFunctionMatrix(a1, deriv));
 	        addMatrix(dW1,mulMatrix(dz1,transpose(a0)));
 
