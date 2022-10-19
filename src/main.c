@@ -6,6 +6,7 @@
 #include "Treatment/blur.h"
 #include "Treatment/rotation.h"
 #include "Treatment/resize.h"
+#include "Treatment/thresolding.h"
 #include <err.h>
 
 int main(int argc, char **argv)
@@ -20,6 +21,8 @@ int main(int argc, char **argv)
     image = resizeImage(image);
     grayscaleImage(image);
     saveImage(image, "grayscale.bmp");
+    otsuTresolding(image);
+    saveImage(image, "thresolding.bmp");
     applyGaussianBlur(image);
     saveImage(image, "blur.bmp");
     image = rotateImage(image, -95962);
