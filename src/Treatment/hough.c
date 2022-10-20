@@ -8,6 +8,7 @@
 #include "Struct/image.h"
 #include "Struct/pixel.h"
 #include "Struct/matrix.h"
+#include "Struct/houghLines.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <stdio.h>
@@ -16,6 +17,7 @@
 // Definition des constantes
 
 #define maxTheta 180
+
 
 // Construction de l'accumulateur
 
@@ -32,17 +34,17 @@ Matrix *Constructor(Image* image)
 		houghHeight = (int) (sqrt(2) * width) / 2;
 
 	// Le double de la hauteur (Stable)
-	int doubleHoughHeight = houghTransform * 2;
+	int doubleHoughHeight = houghHeight * 2;
 
 	// Création de l'accumulateur
 	Matrix * acc = initMatrix(maxTheta,height*2);
 	
 	// Les coordonées du centre de l'image
-	centerX = width / 2;
-	centerY = height / 2;
+	int centerX = width / 2;
+	int centerY = height / 2;
 
 	// Count le nombre de points remarquables
-	numPoints = 0;
+	int numPoints = 0;
 
 	int *sinArray = malloc(sizeof(int) * maxTheta);
 	int *cosArray = malloc(sizeof(int) * maxTheta);
@@ -50,7 +52,7 @@ Matrix *Constructor(Image* image)
 	// Le pas de theta
 	int Theta = M_PI / maxTheta;
 
-	for (int i = ; i < axTheta; ++i)
+	for (int i = 0; i < maxTheta; ++i)
 	{
 		double theta = i * theta;
 		sinArray[i] = (int) cos(theta);
@@ -64,8 +66,8 @@ Matrix *Constructor(Image* image)
 	{
 		for(int y = 0; y < height; ++y)
 		{
-			pixel = image->pixels[x][y];
-			if (pixel.r == 0 & pixel.g == 0 & pixel.b == 0)
+			pixel = &image->pixels[x][y];
+			if (pixel->red == 0 & pixel->green == 0 & pixel->blue == 0)
 			{
 				// Ajout d'un point remarquable
 				
@@ -89,23 +91,37 @@ Matrix *Constructor(Image* image)
 
 		}
 	}
+
+	// LIBEREZ MEMOIRE
+
+	// Extraire les lignes de l'accumulateur
+
+	//
+	Line* line = initHoughLine(Theta, 10, width, height, 0);
+
+	if (numPoints == 0)
+
+		//return line;
+		return acc;
 	return acc;
 }
 
 
 void houghTransform(Image* image)
 {
-	Matrix *acc = Constructor(image);
-	
+
+	Matrix* acc = Constructor(image);
+	int width = image->width;
+	int height = image->height;
 	// Les coordonées du centre de l'image
-	centerX = width / 2;
-	centerY = height / 2;
+	int centerX = width / 2;
+	int centerY = height / 2;
 
 	for (int x = 0; x < width; ++x)
 	{
 		for(int y = 0; y < height; ++y)
 		{
-			printf("%d", acc->value[x][y];
+			printf("%f", acc->value[x][y]);
 		}
 	}
 	
