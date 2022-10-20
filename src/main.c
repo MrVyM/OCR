@@ -9,23 +9,23 @@
 #include "Treatment/thresolding.h"
 #include <err.h>
 
-int main(/*int argc, char **argv*/)
+int main(int argc, char **argv)
 {
-    /*if (argc != 2)
-        errx(EXIT_FAILURE, "Usage: image-file");*/
+    if (argc != 2)
+        errx(EXIT_FAILURE, "Usage: image-file");
 
     if (SDL_Init(SDL_INIT_VIDEO) != 0)
         errx(EXIT_FAILURE, "%s", SDL_GetError());
 
-    Image *image = importImage("ugo.jpeg");
+    Image *image = importImage(argv[1]);
     image = resizeImage(image);
     grayscaleImage(image);
     saveImage(image, "grayscale.bmp");
+    /*applyGaussianBlur(image);
+    saveImage(image, "blur.bmp");*/
     otsuTresolding(image);
     saveImage(image, "thresolding.bmp");
-    applyGaussianBlur(image);
-    saveImage(image, "blur.bmp");
-    image = rotateImage(image, -95962);
+    image = rotateImage(image, 15);
     saveImage(image, "rotation.bmp");
     freeImage(image);
     SDL_Quit();

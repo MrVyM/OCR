@@ -4,33 +4,12 @@
 
 // https://www.youtube.com/watch?v=jUUkMaNuHP8
 
-Matrix *generateHistogram(Image *image)
+void *generateHistogram(Image *image, int histogram[])
 {
-    Matrix *histogram = initMatrix(1,256);
-    size_t a = 0;
     for (int x = 0; x < image->width; x++)
     {
         for (int y = 0; y < image->height; y++)
-        {
-            
-            //printPixel(&image->pixels[x][y]);
-            Pixel *pixel = &(image->pixels[x][y]);
-            a = 0;
-            a = pixel->blue;
-
-            //printf("%zu\n ", a);
-            if (a == 66)
-            {
-                printf("x : %5d | y : %5d\n ", x, y);
-                printPixel(&(image->pixels[x][y]));
-                float x = histogram->value[0][a] + 1.0;
-                printf("\n%f -- ",x);
-                histogram->value[0][a] = histogram->value[0][a] + 1.0;
-            }
-            //printMatrix(histogram);
-        
-            //histogram->value[0][a] = histogram->value[0][a] + (float)(1.0);
-        }
+            histogram[image->pixels[x][y].red] += 1;
     }
 
     /*printf("color,numbers\n");
@@ -46,7 +25,7 @@ void applyThresolding(Image *image, int thresold)
     {
         for (int y = 0; y < image->height; y++)
         {
-            if (image->pixels[x][y].red < thresold)
+            if (image->pixels[x][y].red < thresold/1.05)
                 updateSameColorPixel(&image->pixels[x][y], 0);
             else
                 updateSameColorPixel(&image->pixels[x][y], 255);
@@ -54,7 +33,7 @@ void applyThresolding(Image *image, int thresold)
     }
 }
 
-double computeOtsuVariance(Matrix *histogram, Image *image, int thresold)
+double computeOtsuVariance(int histogram[], Image *image, int thresold)
 {
     double wb = 0, wf = 0, mb = 0, mf = 0;
     int totalPixels = image->width * image->height;
@@ -63,13 +42,13 @@ double computeOtsuVariance(Matrix *histogram, Image *image, int thresold)
     {
         if (counter < thresold)
         {
-            wb += histogram->value[0][counter];
-            mb += counter * histogram->value[0][counter];
+            wb += histogram[counter];
+            mb += counter * histogram[counter];
         }
         else
         {
-            wf += histogram->value[0][counter];
-            mf += counter * histogram->value[0][counter];
+            wf += histogram[counter];
+            mf += counter * histogram[counter];
         }
     }
     mb = wb != 0 ? mb / wb : 0;
@@ -79,7 +58,7 @@ double computeOtsuVariance(Matrix *histogram, Image *image, int thresold)
     return wb * wf * (mb - mf) * (mb - mf);
 }
 
-int findThresholdOtsu(Matrix *histogram, Image *image)
+int findThresholdOtsu(int histogram[], Image *image)
 {
     double thresoldingMax = -1;
     int thresoldIntensityMax = -1;
@@ -97,8 +76,7 @@ int findThresholdOtsu(Matrix *histogram, Image *image)
 
 void otsuTresolding(Image *image)
 {
-    Matrix *histogram = generateHistogram(image);
+    int histogram[256] = {0};
+    generateHistogram(image, histogram);
     applyThresolding(image, findThresholdOtsu(histogram, image));
-    printMatrix(histogram);
-    freeMatrix(histogram);
 }
