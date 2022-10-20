@@ -5,6 +5,7 @@
 #include "Treatment/grayscale.h"
 #include "Treatment/blur.h"
 #include "Treatment/rotation.h"
+#include "Treatment/hough.h"
 #include <err.h>
 
 int main(int argc, char **argv)
@@ -21,9 +22,10 @@ int main(int argc, char **argv)
     grayscaleImage(image);
     saveImage(image, "grayscale.bmp");
     applyGaussianBlur(image);
+    houghTransform(image);
     saveImage(image, "blur.bmp");
-    image = rotateImage(image, 25);
-    saveImage(image, "rotation.bmp");
+    //image = rotateImage(image, 25);
+    //saveImage(image, "rotation.bmp");
     freeImage(image);
     SDL_Quit();
 

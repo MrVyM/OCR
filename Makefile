@@ -6,7 +6,7 @@ SRC_DIR = src
 INCLUDE_DIR = include
 BUILD_DIR = build
 # add -g argument just after the = of the CFLAGS for debugging with GDB
-CFLAGS = `pkg-config --cflags sdl2 SDL2_image` -Wall -Wextra -Werror -I $(INCLUDE_DIR)/
+CFLAGS = `pkg-config --cflags sdl2 SDL2_image` -Wextra -I $(INCLUDE_DIR)/
 LFLAGS = `pkg-config --libs sdl2 SDL2_image`
 
 # find source file
