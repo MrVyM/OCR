@@ -21,7 +21,7 @@ float twoDimensionalGaussian(int x, int y)
 
 void applyGaussianBlur(Image *image)
 {
-    Filter *filter = createFilter(4, twoDimensionalGaussian, 1);
+    Filter *filter = createFilter(2, twoDimensionalGaussian, 1);
     applyFilter(filter, image);
     freeFilter(filter);
 }
