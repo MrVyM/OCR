@@ -39,13 +39,18 @@ Matrix* randomMatrix(int width, int height) {
 
 void printMatrix(Matrix* matrix)
 {
-    printf("h : %d w : %d\n",matrix->height,matrix->width);
-    for(int i = 0; i < matrix->height; i++)
+    if (matrix == NULL)
+        printf("This matrix is NULL\n");
+    else
     {
-        printf("%d : ",i);
-        for(int j = 0; j < matrix->width; j++)
-            printf("%f ",matrix->value[i][j]);
-        printf("\n");
+        printf("h : %d w : %d\n",matrix->height,matrix->width);
+        for(int i = 0; i < matrix->height; i++)
+        {
+            printf("%d : ",i);
+            for(int j = 0; j < matrix->width; j++)
+                printf("%f ",matrix->value[i][j]);
+            printf("\n");
+        }
     }
 }
 
@@ -69,7 +74,8 @@ Matrix* transpose(Matrix* matrix)
         for(int y = 0; y < matrix->width; y++)
             result->value[y][x] = matrix->value[x][y];  
     }
-    freeMatrix(matrix);
+    result->width = matrix->height;
+    result->height = matrix->width;
     return result;
 }
 
@@ -85,6 +91,10 @@ void freeMatrix(Matrix* matrix)
 
 Matrix* multiplyMatrix(Matrix* m1, Matrix* m2)
 {
+    /*printMatrix(m1);
+    printf("\n");
+    printMatrix(m2);
+    printf("\n\n");*/
     Matrix* res = initMatrix(m1->width,m2->height);
     for(int i = 0; i < m1->height; i++)
     {
@@ -113,14 +123,28 @@ void mulScalarMatrix(Matrix* matrix, float scalar)
     }
 }
 
-void addMatrix(Matrix* m1, Matrix* m2)
+Matrix* addMatrix(Matrix* m1, Matrix* m2)
 {
-    if (m1->height != m2->height || m1->width != m2->width)
-        errx(-10,"addMatrix : The size of the matrix is not correct");
-    for(int i = 0; i < m1->height; i++)
+    if (m1 == NULL)
     {
-        for(int j = 0; j < m1->width; j++)
-            m1->value[i][j] += m2->value[i][j];
+        m1 = initMatrix(m2->width,m2->height);
+        for(int i = 0; i < m2->height; i++)
+        {
+            for(int j = 0; j < m2->width; j++)
+                m1->value[i][j] *= m2->value[i][j];
+        }
+        return m1;
+    } 
+    else
+    {
+        if (m1->height != m2->height || m1->width != m2->width)
+            errx(-10,"addMatrix : The size of the matrix is not correct");
+        for(int i = 0; i < m1->height; i++)
+        {
+            for(int j = 0; j < m1->width; j++)
+                m1->value[i][j] += m2->value[i][j];
+        }
+        return m1;
     }
 }
 
@@ -137,26 +161,24 @@ void subMatrix(Matrix* m1, Matrix* m2)
 
 Matrix* mulMatrix(Matrix* m1, Matrix* m2)
 {
-    
-    printMatrix(m1);
-    printf("\n");
-    printMatrix(m2);
-    printf("\n\n");
-    if (m1->width != m2->height)
-        errx(-10,"The matrix cannot be calculate.");
+    //if (m1->width != m2->height)
+      //  errx(-10,"The matrix cannot be calculate.");
     Matrix* res = initMatrix(m2->width,m1->height);
-    printMatrix(res);
-    for(int x = 0; x < m1->height; x++)
+    
+    for(int i = 0; i < m1->height; i++)
     {
-        for(int y = 0; y < m2->width; y++)
+        for(int j = 0; j < m2->width; j++)
         {
-            for(int i = 0; i < m2->width; i++)
+            for(int k = 0; k < m1->width; k++)
             { 
-                printf("%d , %d , %d\n",x,y,i);
-                printf("%f = %f , %f\n",res->value[x][y],m1->value[i][y],m2->value[i][x]);   
-                res->value[x][y] += m1->value[i][y] * m2->value[i][x];
+                //printf("%d , %d , %d\n",i,j,k);
+                float a = m1->value[i][k];
+                float b = m2->value[k][j];
+                res->value[i][j] += a * b;
             }
         }
     }
+    /*printf("Final :\n");
+    printMatrix(res);*/
     return res; 
 }
