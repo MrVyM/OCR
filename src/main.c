@@ -19,9 +19,9 @@ int main(int argc, char **argv)
     }
 
     Image *image = importImage(argv[1]);
-    grayscaleImage(image);
+    //grayscaleImage(image);
     saveImage(image, "grayscale.bmp");
-    applyGaussianBlur(image);
+    //applyGaussianBlur(image);
     houghTransform(image);
     saveImage(image, "blur.bmp");
     //image = rotateImage(image, 25);

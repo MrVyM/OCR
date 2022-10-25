@@ -1,6 +1,8 @@
 #ifndef LINE_H
 #define LINE_H
 
+#include "Struct/image.h"
+
 struct Line
 {
 	double theta;
@@ -13,6 +15,8 @@ struct Line
 };
 typedef struct Line Line;
 
-Line initHoughLine(double theta, double r, int width, int height, int score);
-void convertToCartesian(Line line);
+Line initHoughLine(double theta, double r, int score);
+void convertToCartesian(Line line, int width, int height);
+void drawHoughLine(Line line, int width, int height, Image *image);
+void drawAndConvert(Line line, int width, int height, Image* image);
 #endif
