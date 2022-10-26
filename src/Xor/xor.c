@@ -51,34 +51,20 @@ NeuralNetwork* trainXor(NeuralNetwork* net, float (*activ)(float),float (*deriv)
 	        dW1 = addMatrix(dW1,mulMatrix(dz1,transpose(a0)));
 	        dB1 = addMatrix(dB1,dz1); 
 	        dB2 = addMatrix(dB2,a2);
-	        printf("Fin boucle trainning\n");
 	    }
-	    printf("fin boucle\n");
-	    addScalarMatrix(net->hidden, - learning_rate);
-	    mulScalarMatrix(dW1,1 / training_set);
-	    printMatrix(dW1);
-	    printMatrix(net->hidden);
-	    net->hidden = mulMatrix(net->hidden,dW1);
-	    printf("hidden\n");
-	    addScalarMatrix(net->output, - learning_rate);
+	    subMatrix(net->hidden,addScalarMatrix(addScalarMatrix(dW1, 1 / training_set),learning_rate));
+	    subMatrix(net->output,addScalarMatrix(addScalarMatrix(dW2, 1 / training_set),learning_rate));
+	    //printMatrix(W2);
+	    subMatrix(net->hiddenBias,addScalarMatrix(addScalarMatrix(dB1, 1 / training_set),learning_rate));
+	    subMatrix(net->outputBias,addScalarMatrix(addScalarMatrix(dB2, 1 / training_set),learning_rate));
 	    
-	    mulScalarMatrix(dW2,1 / training_set);
-	    net->output = mulMatrix(net->output,dW2);
-
-	    printf("Bias\n");
-
-	    addScalarMatrix(net->hiddenBias, - learning_rate);
-	    mulScalarMatrix(dB1,1 / training_set);
-	    net->hiddenBias = mulMatrix(net->hiddenBias,dB1);
-	    addScalarMatrix(net->outputBias, - learning_rate);
-	    mulScalarMatrix(dB2,1 / training_set);
-	    net->outputBias = mulMatrix(net->outputBias,dB2);
 	}
     /*
 	printMatrix(z1);
 	printMatrix(z2);
 	printf("ttest");
     */
+    printNeural(net);
     printf("Fin train\n");
     return net;
 }
