@@ -252,7 +252,7 @@ void Constructor(Image* image)
 		//drawHoughLine(lines[i], width, height, image);
 	}
 	//free(line);
-	saveImage(image, "hough.bpm");
+	saveImage(image, "hough.bmp");
 	free(lines);
 	//return lines;
 	
