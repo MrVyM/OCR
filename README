@@ -1,4 +1,10 @@
 Use the make all command to compile and generate the main.out executable.
 
 ./main.out -> Start the XOR network.
-./main.out <filepath> [rotationAngle] -> Start the image treatment of the picture located at "filepath". If the rotationAngle isn't specified, we use a angle of 0.
+./main.out <filepath> [rotationAngle] -> Start the image treatment of the picture located at "filepath". If the rotationAngle isn't specified, we use an angle of 0.
+
+In case, the treatment will do : 
+ - resize (resize.bmp)
+ - grayscale (grayscale.bmp)
+ - binarization/threesholding (threesolding.bmp)
+ - rotation (rotation.bmp)
