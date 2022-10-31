@@ -114,13 +114,14 @@ Matrix* addScalarMatrix(Matrix* matrix, float scalar)
     }
     return res;
 }
-void mulScalarMatrix(Matrix* matrix, float scalar)
+Matrix* mulScalarMatrix(Matrix* matrix, float scalar)
 {
     for(int i = 0; i < matrix->height; i++)
     {
         for(int j = 0; j < matrix->width; j++)
             matrix->value[i][j] *= scalar;
     }
+    return matrix;
 }
 
 Matrix* addMatrix(Matrix* m1, Matrix* m2)

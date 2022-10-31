@@ -21,7 +21,7 @@ void freeMatrix(Matrix* matrix);
 
 Matrix* addScalarMatrix(Matrix* matrix, float scalar);
 
-void mulScalarMatrix(Matrix* matrix, float scalar);
+Matrix* mulScalarMatrix(Matrix* matrix, float scalar);
 
 Matrix* addMatrix(Matrix* m1, Matrix* m2);
 

@@ -5,9 +5,9 @@
 
 NeuralNetwork* trainXor(NeuralNetwork* net, float (*activ)(float),float (*deriv)(float))
 {
-	int learning_rate = 0.1;
+	float learning_rate = 0.1;
 	int max_iter = 3500;
-	int training_set = 4;
+	float training_set = 4.0;
     printNeural(net);
     float training_list[4][2] = {{1,4},{0,1},{1,0},{1,1}};
     float training_soluce[4][1] = {{0},{1},{1},{1}};
@@ -52,11 +52,13 @@ NeuralNetwork* trainXor(NeuralNetwork* net, float (*activ)(float),float (*deriv)
 	        dB1 = addMatrix(dB1,dz1); 
 	        dB2 = addMatrix(dB2,a2);
 	    }
-	    subMatrix(net->hidden,addScalarMatrix(addScalarMatrix(dW1, 1 / training_set),learning_rate));
-	    subMatrix(net->output,addScalarMatrix(addScalarMatrix(dW2, 1 / training_set),learning_rate));
+	    //printf("%f",1 / training_set);
+	    //printMatrix(dW1);
+	    subMatrix(net->hidden,mulScalarMatrix(mulScalarMatrix(dW1, 1 / training_set),learning_rate));
+	    subMatrix(net->output,mulScalarMatrix(mulScalarMatrix(dW2, 1 / training_set),learning_rate));
 	    //printMatrix(W2);
-	    subMatrix(net->hiddenBias,addScalarMatrix(addScalarMatrix(dB1, 1 / training_set),learning_rate));
-	    subMatrix(net->outputBias,addScalarMatrix(addScalarMatrix(dB2, 1 / training_set),learning_rate));
+	    subMatrix(net->hiddenBias,mulScalarMatrix(mulScalarMatrix(dB1, 1 / training_set),learning_rate));
+	    subMatrix(net->outputBias,mulScalarMatrix(mulScalarMatrix(dB2, 1 / training_set),learning_rate));
 	    
 	}
     /*
