@@ -11,11 +11,7 @@ int main(void)
     NeuralNetwork* net = initNetwork(2,3,1);
     //printNeural(net);
     trainXor(net,sigmoid);  
-    Matrix* m = initMatrix(3,2);
-    addScalarMatrix(m,2);
-    Matrix* m1 = randomMatrix(2,3);
-    //printMatrix(mulMatrix(m,m1));
-
+    showResult(net,sigmoid);
     freeNetwork(net);
     return 0;
 }

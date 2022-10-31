@@ -3,14 +3,34 @@
 #include "Xor/function.h"
 #include <stdlib.h>
 
+
+Matrix* useNetwork(NeuralNetwork* net,float (*activ)(float), float a, float b)
+{
+	Matrix* a0 = initMatrix(1,2);
+    a0->value[0][0] = a;
+    a0->value[1][0] = b;    
+    Matrix* z1 = mulMatrix(net->hidden,a0);
+ 	Matrix* a1 = applyFunctionMatrix(z1,activ);
+	Matrix* z2 = mulMatrix(net->output,a1);    
+	addMatrix(z2,net->outputBias);    
+	Matrix* a2 = applyFunctionMatrix(z2,activ);
+	return a2;
+}
+
+void showResult(NeuralNetwork* net, float (*activ)(float))
+{
+	for(int i = 0; i <= 1; i++)
+		for(int j = 0; j <=1; j++)
+			printf("%d %d %f\n",i,j,(useNetwork(net,activ,i,j))->value[0][0]);
+}
+
 NeuralNetwork* trainXor(NeuralNetwork* net, float (*activ)(float),float (*deriv)(float))
 {
 	float learning_rate = 0.1;
-	int max_iter = 3500;
+	int max_iter = 5000;
 	float training_set = 4.0;
-    printNeural(net);
-    float training_list[4][2] = {{1,4},{0,1},{1,0},{1,1}};
-    float training_soluce[4][1] = {{0},{1},{1},{1}};
+    float training_list[4][2] = {{0,0},{0,1},{1,0},{1,1}};
+    float training_soluce[4][1] = {{0},{1},{1},{0}};
 
 	Matrix* dW1 = NULL;
 	Matrix* dW2 = NULL;
@@ -34,10 +54,11 @@ NeuralNetwork* trainXor(NeuralNetwork* net, float (*activ)(float),float (*deriv)
 		{
 	        // Forward Prop.
             Matrix* a0 = initMatrix(1,2);
-
+            
+            printf("%f\n",training_soluce[j][0]);
             a0->value[0][0] = training_list[j][0];
             a0->value[1][0] = training_list[j][1];
-           
+           	printMatrix(a0);
             z1 = mulMatrix(net->hidden,a0);
 
  	        Matrix* a1 = applyFunctionMatrix(z1,activ);
@@ -45,6 +66,8 @@ NeuralNetwork* trainXor(NeuralNetwork* net, float (*activ)(float),float (*deriv)
 	        addMatrix(z2,net->outputBias);
 	        Matrix* a2 = applyFunctionMatrix(z2,activ);
 	        
+	        // Backward Prop
+
 	        Matrix* dz2 = addScalarMatrix(a2,-training_soluce[j][0]);
 	        dW2 = addMatrix(dW2,mulMatrix(dz2,transpose(a1))); 
 	        Matrix* dz1 = multiplyMatrix(mulMatrix(transpose(net->output),a2), applyFunctionMatrix(a1, deriv));
@@ -52,8 +75,7 @@ NeuralNetwork* trainXor(NeuralNetwork* net, float (*activ)(float),float (*deriv)
 	        dB1 = addMatrix(dB1,dz1); 
 	        dB2 = addMatrix(dB2,a2);
 	    }
-	    //printf("%f",1 / training_set);
-	    //printMatrix(dW1);
+	    exit(10);
 	    subMatrix(net->hidden,mulScalarMatrix(mulScalarMatrix(dW1, 1 / training_set),learning_rate));
 	    subMatrix(net->output,mulScalarMatrix(mulScalarMatrix(dW2, 1 / training_set),learning_rate));
 	    //printMatrix(W2);
@@ -66,7 +88,7 @@ NeuralNetwork* trainXor(NeuralNetwork* net, float (*activ)(float),float (*deriv)
 	printMatrix(z2);
 	printf("ttest");
     */
-    printNeural(net);
+    //printNeural(net);
     printf("Fin train\n");
     return net;
 }
