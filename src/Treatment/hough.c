@@ -46,7 +46,8 @@ Line *topScoring(Line* lines, int n, int len)
 	
 	for (int i = 0; i < n; ++i)
 	{
-		line[i] = lines[len - i + 1];
+		line[i] = lines[len - i - 1];
+		printf("| value = %f |\n", line[i].score);
 	}
 	return line;
 }
@@ -85,7 +86,7 @@ Line *Constructor(Image* image)
 {
 	int width = image->width;
 	int height = image->height;
-	printf("width = %d et height = %d \n", width, height);
+
 	// Hauteur maximale de l'accumulateur (Varaible)
 	int houghHeight;
 	if (height > width)
@@ -127,7 +128,7 @@ Line *Constructor(Image* image)
 		for(int y = 0; y < height; ++y)
 		{
 			pixel = &image->pixels[x][y];
-			if (!(pixel->red == 0 & pixel->green == 0 && pixel->blue == 0))
+			if ((pixel->red == 0 & pixel->green == 0 && pixel->blue == 0) != 0)
 			{
 				// Ajout d'un point remarquable
 				
@@ -147,6 +148,7 @@ Line *Constructor(Image* image)
 					}
 
 					acc->value[t][r]++;
+					//printf("acc value t = %d et r = %ld : %f \n", t, r, acc->value[t][r]);
 				}
 				numPoints ++;
 			}
@@ -157,9 +159,9 @@ Line *Constructor(Image* image)
 	// LIBEREZ MEMOIRE
 
 	// Extraire les lignes de l'accumulateur
-	printf("HERE\n");
+	//printf("HERE\n");
 	// Le seuil pour les maximums locaux
-	double threshold = 0.42;
+	double threshold = 0;
 
 	// Pointeur contenant les hough lines
 	//printf("%ld", numPoints);
@@ -185,15 +187,15 @@ Line *Constructor(Image* image)
 			{
 				
 				// Initialisation de la valeur max
-				int peak = acc->value[t][r];
-
+				int peak = (int) acc->value[t][r];
+				
 				if (findMaximum(neighbourRadius, t, r, acc, peak))
 				{
 					// Calcule de la bonne valeur de theta
 					double realTheta = t * Theta;
 					// Ajoute la line au pointeur
 					//
-					printf("| value = %f |\n", acc->value[t][r]);
+					//printf("| value = %f |\n", acc->value[t][r]);
 					lines[indexLine] = initHoughLine(realTheta, r, acc->value[t][r]);
 					indexLine += 1;
 				}
@@ -208,7 +210,7 @@ Line *Constructor(Image* image)
 		//convertToCartesian(lines[i],width,height);
 		//x1 = %d et y1 = %d\nx2 = %d et y2 =%d\n
 		//, lines[i].x1, lines[i].y1, lines[i].x2, lines[i].y2
-		printf("rho = %f theta = %f score = %f\n",lines[i].r,lines[i].theta, line[i].score);
+		//printf("rho = %f theta = %f score = %f\n",lines[i].r,lines[i].theta, line[i].score);
 		drawAndConvert(line[i], width, height, image);
 		//drawHoughLine(lines[i], width, height, image);
 	}

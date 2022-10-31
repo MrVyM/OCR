@@ -44,6 +44,9 @@ void drawAndConvert(Line line, int width, int height, Image* image)
     float centerX = width / 2;
     float centerY = height / 2;
 
+    double tsin = sin(line.theta);
+    double tcos = cos(line.theta);
+
     if (line.theta < M_PI * 0.25 || line.theta > M_PI * 0.75)
     {
         // Calcul des coordonées cartésiennes
@@ -54,9 +57,9 @@ void drawAndConvert(Line line, int width, int height, Image* image)
         line.y2 = height - 1;
 
         // Calcul sur l'axe x
-        line.x1 = (int)((((line.r - houghHeight) - ((line.y1 - centerY) * sin(line.theta))) / cos(line.theta)) + centerX);
-        line.x2 = (int)((((line.r - houghHeight) - ((line.y2 - centerY) * sin(line.theta))) / cos(line.theta)) + centerX);
-        printf("x1 = %d x2 = %d SUS \n", line.x1, line.x2);
+        line.x1 = (int) ((((line.r - houghHeight) - ((line.y1 - centerY) * tsin)) / tcos) + centerX);
+        line.x2 = (int) ((((line.r - houghHeight) - ((line.y2 - centerY) * tsin)) / tcos) + centerX);
+        //printf("x1 = %d x2 = %d SUS \n", line.x1, line.x2);
     }
     else
     {
@@ -68,9 +71,9 @@ void drawAndConvert(Line line, int width, int height, Image* image)
         line.y2 = 0;
 
         // Calcul sur l'axe y
-        line.y1 = (int)((((line.r - houghHeight) - ((line.x1 - centerX) * cos(line.theta))) / sin(line.theta)) + centerY);
-        line.y2 = (int)((((line.r - houghHeight) - ((line.x2 - centerX) * cos(line.theta))) / sin(line.theta)) + centerY);
-        printf("y1 = %d y2 = %d SUS \n", line.y1, line.y2);
+        line.y1 = (int) ((((line.r - houghHeight) - ((line.x1 - centerX) * tcos)) / tsin) + centerY);
+        line.y2 = (int) ((((line.r - houghHeight) - ((line.x2 - centerX) * tcos)) / tsin) + centerY);
+        //printf("y1 = %d y2 = %d SUS \n", line.y1, line.y2);
     }
     Pixel* pixel;
 
@@ -111,7 +114,7 @@ void drawAndConvert(Line line, int width, int height, Image* image)
         y = line.y1;
     }
     int lengthOfLine;
-    if (dx > dy)
+    if (dx < dy)
         lengthOfLine = abs(dx);
     else
         lengthOfLine = abs(dy);
