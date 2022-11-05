@@ -31,8 +31,93 @@ void setPixel(Image* image, int x, int y)
 
 }
 
+void setPixel1(Image* image, int x, int y)
+{
+    Pixel* pixel;
+    pixel = &image->pixels[x][y];
+    pixel->red = 0;
+    pixel->green = 0;
+    pixel->blue = 255;
+
+}
+
+void draw_line(Image* image, int w, int h, Line line, Pixel* color,
+    int thickness, int draw)
+{
+    //printf("Drawing line\n");
+    int x0 = line.x1;
+    int y0 = line.y1;
+
+    int x1 = line.x2;
+    int y1 = line.y2;
+
+    int dx = abs(x1 - x0);
+    int sx = x0 < x1 ? 1 : -1;
+    int dy = -abs(y1 - y0);
+    int sy = y0 < y1 ? 1 : -1;
+
+    int err = dx + dy;
+
+    while (1)
+    {
+        if (0 <= x0 && x0 < w && 0 <= y0 && y0 < h)
+        {
+            if (draw)
+            {
+                setPixel(image,x0, y0);
+
+                if (thickness == 2)
+                {
+                    if (0 <= (x0 + 1) && (x0 + 1) < w && 0 <= (y0 + 1)
+                        && (y0 + 1) < h)
+                    {
+                        setPixel(image, x0 + 1, y0 + 1);
+                    }
+                    if (0 <= (x0 - 1) && (x0 - 1) < w && 0 <= (y0 - 1)
+                        && (y0 - 1) < h)
+                    {
+                        setPixel(image, x0 - 1, y0 - 1);
+                    }
+                }
+            }
+        }
+
+        if (x0 == x1 && y0 == y1)
+            break;
+
+        int e2 = 2 * err;
+
+        if (e2 >= dy)
+        {
+            err += dy;
+            x0 += sx;
+        }
+        if (e2 <= dx)
+        {
+            err += dx;
+            y0 += sy;
+        }
+    }
+}
+
 void drawAndConvert(Line line, int width, int height, Image* image)
 {
+    /*
+    double diagonal = sqrt(width * width + height * height);
+
+    line.x1 = (int)(cos(line.theta) * line.r) + (int)(diagonal * (-sin(line.theta)));
+    line.y1 = (int)(sin(line.theta) * line.r) + (int)(diagonal * cos(line.theta));
+
+    line.x2 = (int)(cos(line.theta) * line.r) - (int)(diagonal * (-sin(line.theta)));
+    line.y2 = (int)(sin(line.theta) * line.r) - (int)(diagonal * cos(line.theta));
+    
+    Pixel* pixel;
+    pixel = initPixel(255, 0, 0);
+    printf("| 1 | x1 = % d et y1 = % d\nx2 = % d et y2 = % d\n", line.x1, line.y1, line.x2, line.y2);
+    draw_line(image, width, height, line, pixel, 1, 1);
+    */
+    
+    
     // Hauteur maximale de l'accumulateur
     int houghHeight;
     if (height > width)
@@ -75,10 +160,70 @@ void drawAndConvert(Line line, int width, int height, Image* image)
         line.y2 = (int) ((((line.r - houghHeight) - ((line.x2 - centerX) * tcos)) / tsin) + centerY);
         //printf("y1 = %d y2 = %d SUS \n", line.y1, line.y2);
     }
+    
+    Pixel* pixel;
+    pixel = initPixel(255, 0, 0);
+    printf("| 2 | x1 = % d et y1 = % d\nx2 = % d et y2 = % d\n", line.x1, line.y1, line.x2, line.y2);
+    draw_line(image, width, height, line, pixel, 1, 1);
+    
+    /*
+
     Pixel* pixel;
 
     printf("x1 = % d et y1 = % d\nx2 = % d et y2 = % d\n", line.x1, line.y1, line.x2, line.y2);
+    /*
+    SDL_Surface* surface = SDL_CreateRGBSurface(0, image->width, image->height, 32, 0, 0, 0, 0);
 
+    if (surface == NULL)
+        errx(EXIT_FAILURE, "%s", SDL_GetError());
+
+    surface = SDL_ConvertSurfaceFormat(surface, SDL_PIXELFORMAT_RGB888, 0);
+
+    if (surface == NULL)
+        errx(EXIT_FAILURE, "%s", SDL_GetError());
+
+    SDL_PixelFormat* format = surface->format;
+    Uint32* pixels = surface->pixels;
+
+    if (SDL_LockSurface(surface) != 0)
+        errx(EXIT_FAILURE, "%s", SDL_GetError());
+
+    for (int x = 0; x < image->width; x++)
+    {
+        for (int y = 0; y < image->height; y++)
+        {
+            Pixel* pixel = &image->pixels[x][y];
+            pixels[y * image->width + x] = SDL_MapRGB(format, pixel->red, pixel->green, pixel->blue);
+        }
+    }
+
+
+
+    SDL_UnlockSurface(surface);
+
+    if (surface == NULL)
+        errx(EXIT_FAILURE, "%s", SDL_GetError());
+
+    Image* image = createEmptyImage(surface->w, surface->h);
+    Uint32* pixels = surface->pixels;
+    SDL_PixelFormat* format = surface->format;
+
+    if (SDL_LockSurface(surface) != 0)
+        errx(EXIT_FAILURE, "%s", SDL_GetError());
+
+    for (int x = 0; x < image->width; x++)
+    {
+        for (int y = 0; y < image->height; y++)
+        {
+            Pixel* pixel = &image->pixels[x][y];
+            SDL_GetRGB(pixels[y * image->width + x], format, &pixel->red, &pixel->green, &pixel->blue);
+        }
+    }
+
+    SDL_UnlockSurface(surface);
+    SDL_FreeSurface(surface);
+    */
+    /*
     int dx;
     int dy;
     int x;
@@ -129,7 +274,7 @@ void drawAndConvert(Line line, int width, int height, Image* image)
     {
         return;
     }
-
+    
 
     if (!(x >= width || x < 0 || y >= height || y < 0))
         setPixel(image, x, y);
@@ -144,6 +289,7 @@ void drawAndConvert(Line line, int width, int height, Image* image)
 
         i += 1;
     }
+    */
 }
 
 void convertToCartesian(Line line, int width, int height)

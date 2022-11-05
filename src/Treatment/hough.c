@@ -17,6 +17,7 @@
 // Definition des constantes
 
 #define maxTheta 180
+#define minTheta 0
 
 
 void swap(Line* xp, Line* yp)
@@ -46,7 +47,7 @@ Line *topScoring(Line* lines, int n, int len)
 	
 	for (int i = 0; i < n; ++i)
 	{
-		line[i] = lines[len - i - 1];
+		line[i] = lines[i];
 		printf("| value = %f |\n", line[i].score);
 	}
 	return line;
@@ -79,27 +80,24 @@ int findMaximum(int neighbourRadius, int t, int r, Matrix* acc, int peak)
 	return 1;
 }
 
-
 // Construction de l'accumulateur
 
 Line *Constructor(Image* image)
 {
+	
 	int width = image->width;
 	int height = image->height;
 
-	// Hauteur maximale de l'accumulateur (Varaible)
+	// Hauteur maximale de l'accumulateur
 	int houghHeight;
 	if (height > width)
-		houghHeight = (int) (sqrt(2) * height) / 2;
+		houghHeight = (int)(sqrt(2) * height) / 2;
 	else
-		houghHeight = (int) (sqrt(2) * width) / 2;
+		houghHeight = (int)(sqrt(2) * width) / 2;
 
-	// Le double de la hauteur (Stable)
-	int doubleHoughHeight = houghHeight * 2;
+	int doubleHoughHeight = 2 * houghHeight;
+	Matrix* acc = initMatrix(maxTheta, doubleHoughHeight);
 
-	// Création de l'accumulateur
-	Matrix * acc = initMatrix(maxTheta,doubleHoughHeight);
-	
 	// Les coordonées du centre de l'image
 	int centerX = width / 2;
 	int centerY = height / 2;
@@ -120,7 +118,9 @@ Line *Constructor(Image* image)
 		cosArray[t] = cos(realTheta);
 	}
 
+	unsigned int max = 0;
 	// Add points
+	// In the same time, we search for the max value in the accumulator
 
 	Pixel *pixel;
 	for (int x = 0; x < width; ++x)
@@ -128,17 +128,19 @@ Line *Constructor(Image* image)
 		for(int y = 0; y < height; ++y)
 		{
 			pixel = &image->pixels[x][y];
-			if ((pixel->red == 0 & pixel->green == 0 && pixel->blue == 0) != 0)
+			if ((pixel->red == 0 && pixel->blue == 0 && pixel->red == 0) != 0)
 			{
 				// Ajout d'un point remarquable
 				
 				// Parcours tous les Theta compris entre 0 et 180
 				for (int t = 0; t < maxTheta; t++)
 				{
-					
-					// Calcul de rho pour chaque theta
-					long int r = (int) (((x - centerX) * cosArray[t]) + ((y - centerY) * sinArray[t]));
 
+					// Calcul de rho pour chaque theta
+					//long int r = (int) (((x - centerX) * cosArray[t]) + ((y - centerY) * sinArray[t]));
+					long int r = (int)((x * cosArray[t]) - (y * sinArray[t]));
+
+					//long int r = (int)(x * cos(t * Theta) + y * sin(t * Theta));
 					// r peut être négatif
 					r += houghHeight;
 
@@ -148,6 +150,10 @@ Line *Constructor(Image* image)
 					}
 
 					acc->value[t][r]++;
+					if (acc->value[t][r] > max)
+					{
+						max = acc->value[t][r];
+					}
 					//printf("acc value t = %d et r = %ld : %f \n", t, r, acc->value[t][r]);
 				}
 				numPoints ++;
@@ -161,7 +167,10 @@ Line *Constructor(Image* image)
 	// Extraire les lignes de l'accumulateur
 	//printf("HERE\n");
 	// Le seuil pour les maximums locaux
-	double threshold = 0;
+	
+	
+	double threshold = 0.42 * max;
+	printf("max = %d \n threshold = %f\n", max, threshold);
 
 	// Pointeur contenant les hough lines
 	//printf("%ld", numPoints);
@@ -172,7 +181,7 @@ Line *Constructor(Image* image)
 	if (numPoints == 0)
 		return lines;
 
-	// Recherche des maximums locau
+	// Recherche des maximums locaux
 	for (int t = 0; t < maxTheta; ++t)
 	{
 		//printf("1t = %d |\n", t);
@@ -185,7 +194,7 @@ Line *Constructor(Image* image)
 			// Seulement les valeurs en dessous du seuil
 			if (acc->value[t][r] > threshold)
 			{
-				
+				//printf("val = %f \n", acc->value[t][r]);
 				// Initialisation de la valeur max
 				int peak = (int) acc->value[t][r];
 				
@@ -199,29 +208,33 @@ Line *Constructor(Image* image)
 					lines[indexLine] = initHoughLine(realTheta, r, acc->value[t][r]);
 					indexLine += 1;
 				}
+				
 			}
 		}
 	}
-	int resize = 100;
-	Line *line = topScoring(lines, resize, indexLine);
+	//int resize = 100;
+	//Line *line = topScoring(lines, resize, indexLine);
 	// Calcul de chaque point en cartésien
-	for (int i = 0; i < resize; ++i)
+	for (int i = 0; i < indexLine; ++i)
 	{
 		//convertToCartesian(lines[i],width,height);
 		//x1 = %d et y1 = %d\nx2 = %d et y2 =%d\n
 		//, lines[i].x1, lines[i].y1, lines[i].x2, lines[i].y2
 		//printf("rho = %f theta = %f score = %f\n",lines[i].r,lines[i].theta, line[i].score);
-		drawAndConvert(line[i], width, height, image);
+		drawAndConvert(lines[i], width, height, image);
 		//drawHoughLine(lines[i], width, height, image);
 	}
+	//free(line);
+	printf("image");
 	saveImage(image, "hough.bpm");
-	return line;
+	free(lines);
+	return lines;
+	
 }
 
 void houghTransform(Image* image)
 {
 	Line* lines = Constructor(image);
-	free(lines);
 	return;
 
 }
