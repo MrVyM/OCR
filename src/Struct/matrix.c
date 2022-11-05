@@ -152,15 +152,17 @@ Matrix* addMatrix(Matrix* m1, Matrix* m2)
     }
 }
 
-void subMatrix(Matrix* m1, Matrix* m2)
+Matrix* subMatrix(Matrix* m1, Matrix* m2)
 {
     if (m1->height != m2->height || m1->width != m2->width)
         errx(-10,"subMatrix : The size of the matrix is not correct");
+    Matrix* res = initMatrix(m2->width,m2->height);
     for(int i = 0; i < m1->height; i++)
     {
         for(int j = 0; j < m1->width; j++)
-            m1->value[i][j] -= m2->value[i][j];
+            res->value[i][j] = m1->value[i][j] - m2->value[i][j];
     }
+    return res;
 }
 
 Matrix* mulMatrix(Matrix* m1, Matrix* m2)

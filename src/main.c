@@ -10,9 +10,6 @@ int main(void)
     printf("test\n");
     NeuralNetwork* net = initNetwork(2,3,1);
     //printNeural(net);
-    Matrix* res = randomMatrix(2,3);
-    printMatrix(res);
-    printMatrix(transpose(res));
     trainXor(net,sigmoid,deriv_sigmoid);  
     showResult(net,sigmoid);
     freeNetwork(net);
