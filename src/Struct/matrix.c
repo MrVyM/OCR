@@ -110,7 +110,7 @@ Matrix* addScalarMatrix(Matrix* matrix, float scalar)
     for(int i = 0; i < matrix->height; i++)
     {
         for(int j = 0; j < matrix->width; j++)
-            res->value[i][j] += scalar;
+            res->value[i][j] = matrix->value[i][j] + scalar;
     }
     return res;
 }
@@ -128,24 +128,26 @@ Matrix* addMatrix(Matrix* m1, Matrix* m2)
 {
     if (m1 == NULL)
     {
-        m1 = initMatrix(m2->width,m2->height);
+        Matrix* res = initMatrix(m2->width,m2->height);
         for(int i = 0; i < m2->height; i++)
         {
             for(int j = 0; j < m2->width; j++)
-                m1->value[i][j] *= m2->value[i][j];
+                res->value[i][j] = m2->value[i][j];
         }
-        return m1;
+        return res;
     } 
     else
     {
         if (m1->height != m2->height || m1->width != m2->width)
             errx(-10,"addMatrix : The size of the matrix is not correct");
+        
+        Matrix* res = initMatrix(m2->width,m2->height);
         for(int i = 0; i < m1->height; i++)
         {
             for(int j = 0; j < m1->width; j++)
-                m1->value[i][j] += m2->value[i][j];
+                res->value[i][j] = m1->value[i][j] + m2->value[i][j];
         }
-        return m1;
+        return res;
     }
 }
 
