@@ -3,6 +3,6 @@
 
 #include "Struct/image.h"
 
-Image *resizeImage(Image *image);
+Image *resizeImage(Image *image, int resizedValue);
 
 #endif

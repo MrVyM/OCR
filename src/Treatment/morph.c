@@ -8,12 +8,12 @@
 
 Image *dilate(Image *image, uint kernelSize)
 {
-    return morph(image, kernelSize, 1);
+    return morph(image, kernelSize, -1);
 }
 
 Image *erode(Image *image, uint kernelSize)
 {
-    return morph(image, kernelSize, -1);
+    return morph(image, kernelSize, 1);
 }
 
 Image *morph(Image *image, uint kernelSize, int mode)

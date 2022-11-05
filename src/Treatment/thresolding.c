@@ -14,7 +14,7 @@ void *generateHistogram(Image *image, int histogram[])
 
     /*printf("color,numbers\n");
     for(int index = 0; index < 256; index++)
-        printf("%3d,%7d\n", index, (int) histogram->value[0][index]);*/
+        printf("%3d,%7d\n", index, (int) histogram[index]);*/
 
     return histogram;
 }
