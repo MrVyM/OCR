@@ -28,7 +28,7 @@ void showResult(NeuralNetwork* net, float (*activ)(float))
 NeuralNetwork* trainXor(NeuralNetwork* net, float (*activ)(float),float (*deriv)(float))
 {
 	float learning_rate = 0.1;
-	int max_iter = 3500;
+	int max_iter = 5000;
 	float training_set = 4.0;
     float training_list[4][2] = {{0,0},{0,1},{1,0},{1,1}};
     float training_soluce[4][1] = {{0},{1},{1},{0}};
@@ -58,11 +58,11 @@ NeuralNetwork* trainXor(NeuralNetwork* net, float (*activ)(float),float (*deriv)
             a0->value[0][0] = training_list[j][0];
             a0->value[1][0] = training_list[j][1];
             z1 = mulMatrix(net->hidden,a0);
-            addMatrix(z1,net->hiddenBias);
+            z1 = addMatrix(z1,net->hiddenBias);
  	        Matrix* a1 = applyFunctionMatrix(z1,activ);
 
 			z2 = mulMatrix(net->output,a1);
-	        addMatrix(z2,net->outputBias);
+	        z2 = addMatrix(z2,net->outputBias);
 	        Matrix* a2 = applyFunctionMatrix(z2,activ);
 	        
 	        // Backward Prop
