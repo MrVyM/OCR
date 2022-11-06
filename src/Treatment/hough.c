@@ -144,9 +144,9 @@ Line *Constructor(Image* image)
 					long int r = (int) (x * cosArray[t] + y * sinArray[t]);
 					// r peut être négatif
 					//r += diagonal;
-
 					if(r < 0 || r >= doubleHoughHeight)
 					{
+						
 						continue;
 					}
 
@@ -170,8 +170,8 @@ Line *Constructor(Image* image)
 	// Le seuil pour les maximums locaux
 	
 	
-	//double threshold = 0.85 * max;
-	double threshold = 0.42 * max;
+	//double threshold = 0;
+	double threshold = 0.7 * max;
 	printf("max = %d \n threshold = %f\n", max, threshold);
 
 	// Pointeur contenant les hough lines
@@ -200,6 +200,7 @@ Line *Constructor(Image* image)
 				// Initialisation de la valeur max
 				int peak = (int) acc->value[t][r];
 				printf("%d\n", peak);
+				/*
 				if (findMaximum(neighbourRadius, t, r, acc, peak))
 				{
 					// Calcule de la bonne valeur de theta
@@ -209,7 +210,13 @@ Line *Constructor(Image* image)
 					//printf("| value = %f |\n", acc->value[t][r]);
 					lines[indexLine] = initHoughLine(realTheta, r, acc->value[t][r]);
 					indexLine += 1;
-				}
+				}*/
+				double realTheta = t * Theta;
+				// Ajoute la line au pointeur
+				//
+				//printf("| value = %f |\n", acc->value[t][r]);
+				lines[indexLine] = initHoughLine(realTheta, r, acc->value[t][r]);
+				indexLine += 1;
 				
 			}
 		}
