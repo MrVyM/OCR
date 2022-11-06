@@ -93,7 +93,6 @@ Matrix* transpose(Matrix* matrix)
 }
 
 void freeMatrix(Matrix* matrix)
->>>>>>> XOR
 {
     for (int h = 0; h < matrix->height; h++)
     {

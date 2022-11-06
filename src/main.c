@@ -19,40 +19,41 @@
 int main(int argc, char **argv)
 {
     if (argc != 2 && argc != 3)
-        errx(EXIT_FAILURE, "Usage: ./main \"filename\" [angle]");
+        printf("Usage: ./main \"filename\" [angle]\n");
+    else {
+        if (SDL_Init(SDL_INIT_VIDEO) != 0)
+            errx(EXIT_FAILURE, "%s", SDL_GetError());
+        
+        Image *image = importImage(argv[1]);
 
-    if (SDL_Init(SDL_INIT_VIDEO) != 0)
-        errx(EXIT_FAILURE, "%s", SDL_GetError());
-    
-    Image *image = importImage(argv[1]);
+        double angleRotation = 0;
+        if(argc == 3)
+            angleRotation = strtod(argv[2], NULL);
+        
+        printf("The image will be rotate with a angle of %.0f degrees.\n", angleRotation);
 
-    double angleRotation = 0;
-    if(argc == 3)
-        angleRotation = strtod(argv[2], NULL);
-    
-    printf("The image will be rotate with a angle of %.0f degrees.\n", angleRotation);
-
-    image = resizeImage(image, 750);
-    saveImage(image, "resize.bmp");
-    grayscaleImage(image);
-    saveImage(image, "grayscale.bmp");
-    // Les tests ci-dessous sont des essais qui ont été non-concluants.
-    // applyGamma(image, 255);
-    // saveImage(image, "gamma.bmp");
-    // applyContrast(image, 128);
-    // saveImage(image, "contrast.bmp");
-    // applyGaussianBlur(image);
-    // saveImage(image, "blur.bmp");
-    // dilate(image, 5);
-    // saveImage(image, "dilate.bmp");
-    // erode(image, 5);
-    // saveImage(image, "erode.bmp");
-    otsuTresolding(image);
-    saveImage(image, "thresolding.bmp");
-    image = rotateImage(image, 15);
-    saveImage(image, "rotation.bmp");
-    freeImage(image);
-    SDL_Quit();
+        image = resizeImage(image, 750);
+        saveImage(image, "resize.bmp");
+        grayscaleImage(image);
+        saveImage(image, "grayscale.bmp");
+        // Les tests ci-dessous sont des essais qui ont été non-concluants.
+        // applyGamma(image, 255);
+        // saveImage(image, "gamma.bmp");
+        // applyContrast(image, 128);
+        // saveImage(image, "contrast.bmp");
+        // applyGaussianBlur(image);
+        // saveImage(image, "blur.bmp");
+        // dilate(image, 5);
+        // saveImage(image, "dilate.bmp");
+        // erode(image, 5);
+        // saveImage(image, "erode.bmp");
+        otsuTresolding(image);
+        saveImage(image, "thresolding.bmp");
+        image = rotateImage(image, 15);
+        saveImage(image, "rotation.bmp");
+        freeImage(image);
+        SDL_Quit(); 
+    }   
 
     NeuralNetwork* net = initNetwork(2,3,1);
     //printNeural(net);

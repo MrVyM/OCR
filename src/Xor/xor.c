@@ -34,6 +34,7 @@ NeuralNetwork* trainXor(NeuralNetwork* net, float (*activ)(float),float (*deriv)
     float training_list[4][2] = {{0,0},{0,1},{1,0},{1,1}};
     float training_soluce[4][1] = {{0},{1},{1},{0}};
     printNeural(net);
+    printf("\n");
 	Matrix* dW1 = NULL;
 	Matrix* dW2 = NULL;
 
@@ -98,6 +99,5 @@ NeuralNetwork* trainXor(NeuralNetwork* net, float (*activ)(float),float (*deriv)
 	printf("ttest");
     */
     //printNeural(net);
-    printf("Fin train\n");
     return net;
 }
