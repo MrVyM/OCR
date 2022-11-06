@@ -1,4 +1,3 @@
-
 EXE = solver.out
 CC = gcc
 PROJET_NAME = Solver
@@ -25,3 +24,4 @@ clean:
 	@rm -f $(EXE)
 	@echo -e "\t$(EXE) delete." 
 	@echo -e "\nClean Finish.\n"
+

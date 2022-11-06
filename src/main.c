@@ -11,6 +11,10 @@
 #include "Treatment/contrast.h"
 #include "Treatment/gamma.h"
 #include <err.h>
+#include "Struct/neuralNetwork.h"
+#include "Xor/xor.h"
+#include "Struct/matrix.h"
+#include "Xor/function.h"
 
 int main(int argc, char **argv)
 {
@@ -50,5 +54,10 @@ int main(int argc, char **argv)
     freeImage(image);
     SDL_Quit();
 
+    NeuralNetwork* net = initNetwork(2,3,1);
+    //printNeural(net);
+    trainXor(net,sigmoid,deriv_sigmoid);  
+    showResult(net,sigmoid);
+    freeNetwork(net);
     return EXIT_SUCCESS;
 }
