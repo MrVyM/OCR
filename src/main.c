@@ -19,7 +19,13 @@
 int main(int argc, char **argv)
 {
     if (argc != 2 && argc != 3)
-        printf("Usage: ./main \"filename\" [angle]\n");
+    {
+        NeuralNetwork* net = initNetwork(2,3,1);
+        //printNeural(net);
+        trainXor(net,sigmoid,deriv_sigmoid);  
+        showResult(net,sigmoid);
+        freeNetwork(net);
+    }
     else {
         if (SDL_Init(SDL_INIT_VIDEO) != 0)
             errx(EXIT_FAILURE, "%s", SDL_GetError());
@@ -53,12 +59,7 @@ int main(int argc, char **argv)
         saveImage(image, "rotation.bmp");
         freeImage(image);
         SDL_Quit(); 
-    }   
 
-    NeuralNetwork* net = initNetwork(2,3,1);
-    //printNeural(net);
-    trainXor(net,sigmoid,deriv_sigmoid);  
-    showResult(net,sigmoid);
-    freeNetwork(net);
+    }   
     return EXIT_SUCCESS;
 }
