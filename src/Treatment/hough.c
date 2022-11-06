@@ -141,13 +141,13 @@ Line *Constructor(Image* image)
 					//long int r = (int) (((x - centerX) * cosArray[t]) + ((y - centerY) * sinArray[t]));
 					//long int r = (int)((x * cosArray[t]) + (y * sinArray[t]));
 
-					long int r = (int) (x * cosArray[t] + y * sinArray[t]);
+					long int r = (int)( (x * cosArray[t] + y * sinArray[t]));
 					// r peut être négatif
 					//r += diagonal;
-					if(r < 0 || r >= doubleHoughHeight)
+					if(r < 0 || r >= diagonal)
 					{
 						
-						continue;
+						break;
 					}
 
 					acc->value[t][r]++;
@@ -164,7 +164,8 @@ Line *Constructor(Image* image)
 	}
 
 	// LIBEREZ MEMOIRE
-
+	free(cosArray);
+	free(sinArray);
 	// Extraire les lignes de l'accumulateur
 	//printf("HERE\n");
 	// Le seuil pour les maximums locaux
@@ -183,6 +184,20 @@ Line *Constructor(Image* image)
 	if (numPoints == 0)
 		return lines;
 
+	for (int t = 0; t < maxTheta; ++t)
+	{
+		for (size_t r = 0; r <= max; ++r)
+		{
+			if (acc->value[t][r] > threshold)
+			{
+				double realTheta = t * Theta;
+				lines[indexLine] = initHoughLine(realTheta, r, acc->value[t][r]);
+				indexLine += 1;
+			}
+		}
+	}
+
+	/*
 	// Recherche des maximums locaux
 	for (int t = 0; t < maxTheta; ++t)
 	{
@@ -200,7 +215,7 @@ Line *Constructor(Image* image)
 				// Initialisation de la valeur max
 				int peak = (int) acc->value[t][r];
 				printf("%d\n", peak);
-				/*
+				
 				if (findMaximum(neighbourRadius, t, r, acc, peak))
 				{
 					// Calcule de la bonne valeur de theta
@@ -210,7 +225,8 @@ Line *Constructor(Image* image)
 					//printf("| value = %f |\n", acc->value[t][r]);
 					lines[indexLine] = initHoughLine(realTheta, r, acc->value[t][r]);
 					indexLine += 1;
-				}*/
+				}
+				/*
 				double realTheta = t * Theta;
 				// Ajoute la line au pointeur
 				//
@@ -220,7 +236,7 @@ Line *Constructor(Image* image)
 				
 			}
 		}
-	}
+	}*/
 	//int resize = 12;
 	//Line *line = topScoring(lines, resize, indexLine);
 	// Calcul de chaque point en cartésien

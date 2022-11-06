@@ -104,36 +104,32 @@ void drawAndConvert(Line line, int width, int height, Image* image)
 {
     
     double diagonal = sqrt(width * width + height * height);
-
+    
     line.x1 = (int)(cos(line.theta) * line.r) + (int)(diagonal * (-sin(line.theta)));
     line.y1 = (int)(sin(line.theta) * line.r) + (int)(diagonal * cos(line.theta));
     line.x2 = (int)(cos(line.theta) * line.r) - (int)(diagonal * (-sin(line.theta)));
     line.y2 = (int)(sin(line.theta) * line.r) - (int)(diagonal * cos(line.theta)) ;
-    /*
+    
     if (line.x1 < 0)
-        line.x1 = line.x1 * (-1);
+        line.x1 = 0;
     if(line.y1 < 0)
-        line.y1 = line.y1 * (-1);
+        line.y1 = 0;
 
     if (line.x2 < 0)
-        line.x2 = line.x2 * (-1);
+        line.x2 = 0;
     if (line.y2 < 0)
-        line.y2 = line.y2 * (-1);
-    */
+        line.y2 = 0;
+        
    
     Pixel* pixel;
-    pixel = initPixel(255, 0, 0);
+    pixel = initPixel(0, 0, 255);
     printf("| 1 | x1 = % d et y1 = % d\nx2 = % d et y2 = % d\n", line.x1, line.y1, line.x2, line.y2);
     if(line.x1 == line.x2 || line.y1 == line.y2)
         draw_line(image, width, height, line, pixel, 1, 1);
     
     /*
     // Hauteur maximale de l'accumulateur
-    int houghHeight;
-    if (height > width)
-        houghHeight = (int)(sqrt(2) * height) / 2;
-    else
-        houghHeight = (int)(sqrt(2) * width) / 2;
+    double diagonal = sqrt(width * width + height * height);
 
     // Centre de l'image
     float centerX = width / 2;
@@ -152,8 +148,8 @@ void drawAndConvert(Line line, int width, int height, Image* image)
         line.y2 = height - 1;
 
         // Calcul sur l'axe x
-        line.x1 = (int) ((((line.r - houghHeight) - ((line.y1 - centerY) * tsin)) / tcos) + centerX);
-        line.x2 = (int) ((((line.r - houghHeight) - ((line.y2 - centerY) * tsin)) / tcos) + centerX);
+        line.x1 = (int)(cos(line.theta) * line.r) + (int)(diagonal * (-sin(line.theta)));
+        line.x2 = (int)(cos(line.theta) * line.r) - (int)(diagonal * (-sin(line.theta)));
         //printf("x1 = %d x2 = %d SUS \n", line.x1, line.x2);
     }
     else
@@ -166,8 +162,8 @@ void drawAndConvert(Line line, int width, int height, Image* image)
         line.y2 = 0;
 
         // Calcul sur l'axe y
-        line.y1 = (int) ((((line.r - houghHeight) - ((line.x1 - centerX) * tcos)) / tsin) + centerY);
-        line.y2 = (int) ((((line.r - houghHeight) - ((line.x2 - centerX) * tcos)) / tsin) + centerY);
+        line.y1 = (int)(sin(line.theta) * line.r) + (int)(diagonal * cos(line.theta));
+        line.y2 = (int)(sin(line.theta) * line.r) - (int)(diagonal * cos(line.theta));
         //printf("y1 = %d y2 = %d SUS \n", line.y1, line.y2);
     }
     
