@@ -17,7 +17,6 @@
 // Definition des constantes
 
 #define maxTheta 180
-#define minTheta 0
 
 
 void swap(Line* xp, Line* yp)
@@ -47,7 +46,7 @@ Line *topScoring(Line* lines, int n, int len)
 	
 	for (int i = 0; i < n; ++i)
 	{
-		line[i] = lines[i];
+		line[i] = lines[n - i -1];
 		printf("| value = %f |\n", line[i].score);
 	}
 	return line;
@@ -89,13 +88,15 @@ Line *Constructor(Image* image)
 	int height = image->height;
 
 	// Hauteur maximale de l'accumulateur
-	int houghHeight;
+	int diagonal = sqrt(width * width + height * height);
+	/*
+	int diagonal;
 	if (height > width)
-		houghHeight = (int)(sqrt(2) * height) / 2;
+		diagonal = (int)(sqrt(2) * height) / 2;
 	else
-		houghHeight = (int)(sqrt(2) * width) / 2;
-
-	int doubleHoughHeight = 2 * houghHeight;
+		diagonal = (int)(sqrt(2) * width) / 2;
+	*/
+	int doubleHoughHeight = 2 * diagonal;
 	Matrix* acc = initMatrix(maxTheta, doubleHoughHeight);
 
 	// Les coordonées du centre de l'image
@@ -110,7 +111,7 @@ Line *Constructor(Image* image)
 
 	// Le pas de theta
 	double Theta = M_PI / maxTheta;
-
+	//double Theta = maxTheta / doubleHoughHeight;
 	for (int t = 0; t < maxTheta; ++t)
 	{
 		double realTheta = t * Theta;
@@ -128,7 +129,7 @@ Line *Constructor(Image* image)
 		for(int y = 0; y < height; ++y)
 		{
 			pixel = &image->pixels[x][y];
-			if ((pixel->red == 0 && pixel->blue == 0 && pixel->red == 0) != 0)
+			if (pixel->red == 0 && pixel->blue == 0 && pixel->red == 0)
 			{
 				// Ajout d'un point remarquable
 				
@@ -138,11 +139,11 @@ Line *Constructor(Image* image)
 
 					// Calcul de rho pour chaque theta
 					//long int r = (int) (((x - centerX) * cosArray[t]) + ((y - centerY) * sinArray[t]));
-					long int r = (int)((x * cosArray[t]) - (y * sinArray[t]));
+					//long int r = (int)((x * cosArray[t]) + (y * sinArray[t]));
 
-					//long int r = (int)(x * cos(t * Theta) + y * sin(t * Theta));
+					long int r = (int) (x * cosArray[t] + y * sinArray[t]);
 					// r peut être négatif
-					r += houghHeight;
+					//r += diagonal;
 
 					if(r < 0 || r >= doubleHoughHeight)
 					{
@@ -169,6 +170,7 @@ Line *Constructor(Image* image)
 	// Le seuil pour les maximums locaux
 	
 	
+	//double threshold = 0.85 * max;
 	double threshold = 0.42 * max;
 	printf("max = %d \n threshold = %f\n", max, threshold);
 
@@ -197,7 +199,7 @@ Line *Constructor(Image* image)
 				//printf("val = %f \n", acc->value[t][r]);
 				// Initialisation de la valeur max
 				int peak = (int) acc->value[t][r];
-				
+				printf("%d\n", peak);
 				if (findMaximum(neighbourRadius, t, r, acc, peak))
 				{
 					// Calcule de la bonne valeur de theta
@@ -212,7 +214,7 @@ Line *Constructor(Image* image)
 			}
 		}
 	}
-	//int resize = 100;
+	//int resize = 12;
 	//Line *line = topScoring(lines, resize, indexLine);
 	// Calcul de chaque point en cartésien
 	for (int i = 0; i < indexLine; ++i)
@@ -225,7 +227,6 @@ Line *Constructor(Image* image)
 		//drawHoughLine(lines[i], width, height, image);
 	}
 	//free(line);
-	printf("image");
 	saveImage(image, "hough.bpm");
 	free(lines);
 	return lines;

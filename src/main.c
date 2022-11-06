@@ -22,7 +22,9 @@ int main(int argc, char **argv)
     //grayscaleImage(image);
     saveImage(image, "grayscale.bmp");
     //applyGaussianBlur(image);
+    //image = rotateImage(image, 25);
     houghTransform(image);
+
     saveImage(image, "blur.bmp");
     //image = rotateImage(image, 25);
     //saveImage(image, "rotation.bmp");

@@ -102,22 +102,32 @@ void draw_line(Image* image, int w, int h, Line line, Pixel* color,
 
 void drawAndConvert(Line line, int width, int height, Image* image)
 {
-    /*
+    
     double diagonal = sqrt(width * width + height * height);
 
     line.x1 = (int)(cos(line.theta) * line.r) + (int)(diagonal * (-sin(line.theta)));
     line.y1 = (int)(sin(line.theta) * line.r) + (int)(diagonal * cos(line.theta));
-
     line.x2 = (int)(cos(line.theta) * line.r) - (int)(diagonal * (-sin(line.theta)));
-    line.y2 = (int)(sin(line.theta) * line.r) - (int)(diagonal * cos(line.theta));
-    
+    line.y2 = (int)(sin(line.theta) * line.r) - (int)(diagonal * cos(line.theta)) ;
+    /*
+    if (line.x1 < 0)
+        line.x1 = line.x1 * (-1);
+    if(line.y1 < 0)
+        line.y1 = line.y1 * (-1);
+
+    if (line.x2 < 0)
+        line.x2 = line.x2 * (-1);
+    if (line.y2 < 0)
+        line.y2 = line.y2 * (-1);
+    */
+   
     Pixel* pixel;
     pixel = initPixel(255, 0, 0);
     printf("| 1 | x1 = % d et y1 = % d\nx2 = % d et y2 = % d\n", line.x1, line.y1, line.x2, line.y2);
-    draw_line(image, width, height, line, pixel, 1, 1);
-    */
+    if(line.x1 == line.x2 || line.y1 == line.y2)
+        draw_line(image, width, height, line, pixel, 1, 1);
     
-    
+    /*
     // Hauteur maximale de l'accumulateur
     int houghHeight;
     if (height > width)
