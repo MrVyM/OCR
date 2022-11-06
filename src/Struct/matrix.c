@@ -19,7 +19,7 @@ Matrix* initMatrix(int width, int height) {
     return matrix;
 }
 
-Matrix* randomMatrix(int width, int height) {
+Matrix* randomMatrix(int width, int height, int negative) {
     Matrix* matrix = malloc(sizeof(Matrix));
     if (matrix == NULL)
         errx(-1,"randomMatrix : the matrix cannot be initialize");
@@ -28,10 +28,23 @@ Matrix* randomMatrix(int width, int height) {
     float** data = malloc(sizeof(float*) * height); 
     if (data == NULL)
         errx(-1,"randomMatrix : the line cannot be initialize");
-    for(int x = 0; x < height; x++){
-        data[x] = calloc(width, sizeof(float));
-        for(int y = 0; y < width; y++)
-            data[x][y] = (float)rand()/RAND_MAX;
+    if (negative) 
+    {
+        for(int x = 0; x < height; x++)
+        {
+            data[x] = calloc(width, sizeof(float));
+            for(int y = 0; y < width; y++)
+                data[x][y] = ((float)rand()/(RAND_MAX/2)) - 1;
+        }
+    } 
+    else
+    {
+        for(int x = 0; x < height; x++)
+        {
+            data[x] = calloc(width, sizeof(float));
+            for(int y = 0; y < width; y++)
+                data[x][y] = ((float)rand()/RAND_MAX);
+        }
     }
     matrix->value = data;
     return matrix;
@@ -114,13 +127,25 @@ Matrix* addScalarMatrix(Matrix* matrix, float scalar)
     }
     return res;
 }
+
+
+Matrix* divScalarMatrix(Matrix* matrix, float scalar)
+{
+    Matrix* res = initMatrix(matrix->width,matrix->height);
+    for(int i = 0; i < matrix->height; i++)
+    {
+        for(int j = 0; j < matrix->width; j++)
+            res->value[i][j] = matrix->value[i][j] / scalar;
+    }
+    return res;
+}
 Matrix* mulScalarMatrix(Matrix* matrix, float scalar)
 {
     Matrix* res = initMatrix(matrix->width,matrix->height);
     for(int i = 0; i < matrix->height; i++)
     {
         for(int j = 0; j < matrix->width; j++)
-            res->value[i][j] *= scalar;
+            res->value[i][j] = matrix->value[i][j] * scalar;
     }
     return res;
 }
