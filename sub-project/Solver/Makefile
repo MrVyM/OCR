@@ -19,9 +19,12 @@ clean:
 	@echo -e "\n---- Projet $(PROJET_NAME) ----\n"
 	@rm -rf *.o
 	@echo -e "\t*.o delete."
-	@rm -rf *.result
+	@rm -rf grids/*.result
 	@echo -e "\t*.result delete."
 	@rm -f $(EXE)
 	@echo -e "\t$(EXE) delete." 
 	@echo -e "\nClean Finish.\n"
 
+tests: clean all
+	@chmod a+x tests.sh 
+	./tests.sh
