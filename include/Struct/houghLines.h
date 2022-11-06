@@ -19,5 +19,5 @@ Line initHoughLine(double theta, double r, int score);
 void convertToCartesian(Line line, int width, int height);
 void drawHoughLine(Line line, int width, int height, Image *image);
 void drawAndConvert(Line line, int width, int height, Image* image);
-void draw_line(Image* image, int w, int h, Line line, Pixel* color, int thickness, int draw);
+void draw_line(Image* image, int w, int h, Line line, int thickness, int draw);
 #endif

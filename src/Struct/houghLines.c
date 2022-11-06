@@ -12,10 +12,6 @@ Line initHoughLine (double theta, double r, int score)
     line.theta = theta ;
     line.r = r;
     line.score = score;
-    line.x1;
-    line.y1;
-    line.x2;
-    line.y2;
 
     return line;
 }
@@ -41,7 +37,7 @@ void setPixel1(Image* image, int x, int y)
 
 }
 
-void draw_line(Image* image, int w, int h, Line line, Pixel* color,
+void draw_line(Image* image, int w, int h, Line line,
     int thickness, int draw)
 {
     //printf("Drawing line\n");
@@ -120,184 +116,12 @@ void drawAndConvert(Line line, int width, int height, Image* image)
     if (line.y2 < 0)
         line.y2 = 0;
         
-   
-    Pixel* pixel;
-    pixel = initPixel(0, 0, 255);
     //printf("| 1 | x1 = % d et y1 = % d\nx2 = % d et y2 = % d\n", line.x1, line.y1, line.x2, line.y2);
     if(line.x1 == line.x2 || line.y1 == line.y2)
-        draw_line(image, width, height, line, pixel, 1, 1);
+        draw_line(image, width, height, line, 1, 1);
     
-    /*
-    // Hauteur maximale de l'accumulateur
-    double diagonal = sqrt(width * width + height * height);
-
-    // Centre de l'image
-    float centerX = width / 2;
-    float centerY = height / 2;
-
-    double tsin = sin(line.theta);
-    double tcos = cos(line.theta);
-
-    if (line.theta < M_PI * 0.25 || line.theta > M_PI * 0.75)
-    {
-        // Calcul des coordonées cartésiennes
-        line.x1 = 0;
-        line.y1 = 0;
-
-        line.x2 = 0;
-        line.y2 = height - 1;
-
-        // Calcul sur l'axe x
-        line.x1 = (int)(cos(line.theta) * line.r) + (int)(diagonal * (-sin(line.theta)));
-        line.x2 = (int)(cos(line.theta) * line.r) - (int)(diagonal * (-sin(line.theta)));
-        //printf("x1 = %d x2 = %d SUS \n", line.x1, line.x2);
-    }
-    else
-    {
-        // Calcul des coordonées cartésiennes
-        line.x1 = 0;
-        line.y1 = 0;
-
-        line.x2 = width - 1;
-        line.y2 = 0;
-
-        // Calcul sur l'axe y
-        line.y1 = (int)(sin(line.theta) * line.r) + (int)(diagonal * cos(line.theta));
-        line.y2 = (int)(sin(line.theta) * line.r) - (int)(diagonal * cos(line.theta));
-        //printf("y1 = %d y2 = %d SUS \n", line.y1, line.y2);
-    }
-    
-    Pixel* pixel;
-    pixel = initPixel(255, 0, 0);
-    printf("| 2 | x1 = % d et y1 = % d\nx2 = % d et y2 = % d\n", line.x1, line.y1, line.x2, line.y2);
-    draw_line(image, width, height, line, pixel, 1, 1);
-    
-    /*
-
-    Pixel* pixel;
-
-    printf("x1 = % d et y1 = % d\nx2 = % d et y2 = % d\n", line.x1, line.y1, line.x2, line.y2);
-    /*
-    SDL_Surface* surface = SDL_CreateRGBSurface(0, image->width, image->height, 32, 0, 0, 0, 0);
-
-    if (surface == NULL)
-        errx(EXIT_FAILURE, "%s", SDL_GetError());
-
-    surface = SDL_ConvertSurfaceFormat(surface, SDL_PIXELFORMAT_RGB888, 0);
-
-    if (surface == NULL)
-        errx(EXIT_FAILURE, "%s", SDL_GetError());
-
-    SDL_PixelFormat* format = surface->format;
-    Uint32* pixels = surface->pixels;
-
-    if (SDL_LockSurface(surface) != 0)
-        errx(EXIT_FAILURE, "%s", SDL_GetError());
-
-    for (int x = 0; x < image->width; x++)
-    {
-        for (int y = 0; y < image->height; y++)
-        {
-            Pixel* pixel = &image->pixels[x][y];
-            pixels[y * image->width + x] = SDL_MapRGB(format, pixel->red, pixel->green, pixel->blue);
-        }
-    }
-
-
-
-    SDL_UnlockSurface(surface);
-
-    if (surface == NULL)
-        errx(EXIT_FAILURE, "%s", SDL_GetError());
-
-    Image* image = createEmptyImage(surface->w, surface->h);
-    Uint32* pixels = surface->pixels;
-    SDL_PixelFormat* format = surface->format;
-
-    if (SDL_LockSurface(surface) != 0)
-        errx(EXIT_FAILURE, "%s", SDL_GetError());
-
-    for (int x = 0; x < image->width; x++)
-    {
-        for (int y = 0; y < image->height; y++)
-        {
-            Pixel* pixel = &image->pixels[x][y];
-            SDL_GetRGB(pixels[y * image->width + x], format, &pixel->red, &pixel->green, &pixel->blue);
-        }
-    }
-
-    SDL_UnlockSurface(surface);
-    SDL_FreeSurface(surface);
-    */
-    /*
-    int dx;
-    int dy;
-    int x;
-    int y;
-    if (line.x1 < 0 || line.x2 < 0 || line.y1 < 0 || line.y2 < 0)
-        return;
-    if (line.x1 > line.x2 && line.y1 > line.y2)
-    {
-        dx = line.x1 - line.x2;
-        dy = line.y1 - line.y2;
-        x = line.x2;
-        y = line.y2;
-    }
-    else if (line.x1 < line.x2 && line.y1 > line.y2)
-    {
-        dx = line.x2 - line.x1;
-        dy = line.y1 - line.y2;
-        x = line.x1;
-        y = line.y2;
-    }
-    else if (line.x1 < line.x2 && line.y1 < line.y2)
-    {
-        dx = line.x2 - line.x1;
-        dy = line.y2 - line.y1;
-        x = line.x1;
-        y = line.y1;
-    }
-    else
-    {
-        dx = line.x1 - line.x2;
-        dy = line.y2 - line.y1;
-        x = line.x2;
-        y = line.y1;
-    }
-    int lengthOfLine;
-    if (dx < dy)
-        lengthOfLine = abs(dx);
-    else
-        lengthOfLine = abs(dy);
-    int deltaX;
-    int deltaY;
-    if (lengthOfLine != 0)
-    {
-        deltaX = dx / lengthOfLine;
-        deltaY = dy / lengthOfLine;
-    }
-    else
-    {
-        return;
-    }
-    
-
-    if (!(x >= width || x < 0 || y >= height || y < 0))
-        setPixel(image, x, y);
-    int i = 0;
-    while (i <= lengthOfLine)
-    {
-        x = x + deltaX;
-        y = y + deltaY;
-        if (!(x >= width || x < 0 || y >= height || y < 0))
-     //   printf("x = %d and y = %d \n", x, y);
-            setPixel(image, x, y);
-
-        i += 1;
-    }
-    */
 }
-
+/*
 void convertToCartesian(Line line, int width, int height)
 {
     // Hauteur maximale de l'accumulateur
@@ -415,7 +239,7 @@ void drawHoughLine(Line line, int width, int height, Image *image)
 
         i += 1;
     }
-    /*
+    
     if (line.x1 < line.x2)
     {
         for (int x = line.x1; x < line.x2; ++x)
@@ -443,5 +267,6 @@ void drawHoughLine(Line line, int width, int height, Image *image)
                 pixel->blue = 0;
             }
         }
-    }*/
+    }
 }
+*/

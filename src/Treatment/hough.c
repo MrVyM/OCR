@@ -81,7 +81,7 @@ int findMaximum(int neighbourRadius, int t, int r, Matrix* acc, int peak)
 
 // Construction de l'accumulateur
 
-Line *Constructor(Image* image)
+void Constructor(Image* image)
 {
 	
 	int width = image->width;
@@ -100,8 +100,8 @@ Line *Constructor(Image* image)
 	Matrix* acc = initMatrix(maxTheta, doubleHoughHeight);
 
 	// Les coordonées du centre de l'image
-	int centerX = width / 2;
-	int centerY = height / 2;
+	//int centerX = width / 2;
+	//int centerY = height / 2;
 
 	// Count le nombre de points remarquables
 	long int numPoints = 0;
@@ -182,7 +182,8 @@ Line *Constructor(Image* image)
 	int indexLine = 0;
 
 	if (numPoints == 0)
-		return lines;
+		return;
+		//return lines;
 
 	for (int t = 0; t < maxTheta; ++t)
 	{
@@ -227,7 +228,7 @@ Line *Constructor(Image* image)
 					lines[indexLine] = initHoughLine(realTheta, r, acc->value[t][r]);
 					indexLine += 1;
 				}
-				/*
+				
 				double realTheta = t * Theta;
 				// Ajoute la line au pointeur
 				//
@@ -253,13 +254,14 @@ Line *Constructor(Image* image)
 	//free(line);
 	saveImage(image, "hough.bpm");
 	free(lines);
-	return lines;
+	//return lines;
 	
 }
 
 void houghTransform(Image* image)
 {
-	Line* lines = Constructor(image);
+	//Line* lines = Constructor(image);
+	Constructor(image);
 	return;
 
 }
