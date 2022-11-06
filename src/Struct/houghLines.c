@@ -123,7 +123,7 @@ void drawAndConvert(Line line, int width, int height, Image* image)
    
     Pixel* pixel;
     pixel = initPixel(0, 0, 255);
-    printf("| 1 | x1 = % d et y1 = % d\nx2 = % d et y2 = % d\n", line.x1, line.y1, line.x2, line.y2);
+    //printf("| 1 | x1 = % d et y1 = % d\nx2 = % d et y2 = % d\n", line.x1, line.y1, line.x2, line.y2);
     if(line.x1 == line.x2 || line.y1 == line.y2)
         draw_line(image, width, height, line, pixel, 1, 1);
     

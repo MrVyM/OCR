@@ -88,7 +88,7 @@ Line *Constructor(Image* image)
 	int height = image->height;
 
 	// Hauteur maximale de l'accumulateur
-	int diagonal = sqrt(width * width + height * height);
+	double diagonal = sqrt(width * width + height * height);
 	/*
 	int diagonal;
 	if (height > width)
@@ -96,7 +96,7 @@ Line *Constructor(Image* image)
 	else
 		diagonal = (int)(sqrt(2) * width) / 2;
 	*/
-	int doubleHoughHeight = 2 * diagonal;
+	double doubleHoughHeight = 2 * diagonal;
 	Matrix* acc = initMatrix(maxTheta, doubleHoughHeight);
 
 	// Les coordonées du centre de l'image
@@ -173,7 +173,7 @@ Line *Constructor(Image* image)
 	
 	//double threshold = 0;
 	double threshold = 0.7 * max;
-	printf("max = %d \n threshold = %f\n", max, threshold);
+	//printf("max = %d \n threshold = %f\n", max, threshold);
 
 	// Pointeur contenant les hough lines
 	//printf("%ld", numPoints);
@@ -186,10 +186,11 @@ Line *Constructor(Image* image)
 
 	for (int t = 0; t < maxTheta; ++t)
 	{
-		for (size_t r = 0; r <= max; ++r)
+		for (int r = 0; r < (int)(diagonal * 2); ++r)
 		{
 			if (acc->value[t][r] > threshold)
 			{
+				//printf("ALED t %d r %d\n",t,r);
 				double realTheta = t * Theta;
 				lines[indexLine] = initHoughLine(realTheta, r, acc->value[t][r]);
 				indexLine += 1;
