@@ -5,10 +5,10 @@
 
 // Include
 #include <stdlib.h>
-#include "Struct/image.h"
-#include "Struct/pixel.h"
-#include "Struct/matrix.h"
-#include "Struct/houghLines.h"
+#include "../../include/Struct/image.h"
+#include "../../include/Struct/pixel.h"
+#include "../../include/Struct/matrix.h"
+#include "../../include/Struct/houghLines.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <stdio.h>

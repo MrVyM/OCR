@@ -1,14 +1,7 @@
 // Include
-#include <stdlib.h>
-#include "Struct/image.h"
-#include "Struct/pixel.h"
-#include "Struct/matrix.h"
-#include "Struct/houghLines.h"
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-#include <stdio.h>
-#include <math.h>
-#include hough.c
+#include "../../include/Struct/image.h"
+#include "../../include/Struct/pixel.h"
+#include "../../include/Struct/houghLines.h"
 
 
 Image* image = importImage("../../Assets/image_01.png");
@@ -28,37 +21,7 @@ Image *extractSquare(Image *image, int x1, int y1, int x2, int y2)
     return square;
 }
 
-// ici findSquare ne prend pas en compte les lignes renvoyé par houghTransform
-void findSquare(Image *image, int *x1, int *y1, int *x2, int *y2)
-{
-    int xMin = image->width;
-    int xMax = 0;
-    int yMin = image->height;
-    int yMax = 0;
-    for (int i = 0; i < image->height; i++)
-    {
-        for (int j = 0; j < image->width; j++)
-        {
-            if (image->pixels[i][j].r == 0)
-            {
-                if (i < yMin)
-                    yMin = i;
-                if (i > yMax)
-                    yMax = i;
-                if (j < xMin)
-                    xMin = j;
-                if (j > xMax)
-                    xMax = j;
-            }
-        }
-    }
-    *x1 = xMin;
-    *y1 = yMin;
-    *x2 = xMax;
-    *y2 = yMax;
-}
-
-Line findSquare2(Line listeline[]){
+Line findSquare(Line listeline[]){
     int xmin = 0;
     int xmax = 0;
     int ymin = 0;
@@ -99,12 +62,11 @@ Line findSquare2(Line listeline[]){
 
 
 
-void square()
+void main()
 {
-    int x1, y1, x2, y2;
+    //int x1, y1, x2, y2;
     //findSquare(image, &x1, &y1, &x2, &y2);
-    Image image = importImage("../../assets/do.png");
-    Image *square = extractSquare(image, 100, 100, 100, 100);
+    Image *square = extractSquare(image, x1, y1, x2, y2);
     saveImage(square, "square.png");
 }
 

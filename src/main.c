@@ -1,12 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "Struct/pixel.h"
-#include "Struct/image.h"
-#include "Treatment/grayscale.h"
-#include "Treatment/blur.h"
-#include "Treatment/rotation.h"
-#include "Treatment/hough.h"
-#include "Treatment/square.h"
+#include "../../include/Struct/pixel.h"
+#include "../../include/Struct/image.h"
+#include "../../include/Treatment/grayscale.h"
+#include "../../include/Treatment/blur.h"
+#include "../../include/Treatment/rotation.h"
+#include "../../include/Treatment/hough.h"
+#include "../../include/Treatment/square.h"
 #include <err.h>
 
 int main(int argc, char **argv)

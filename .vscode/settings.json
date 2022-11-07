@@ -1,0 +1,16 @@
+{
+    "files.associations": {
+        "filter.h": "c",
+        "image.h": "c",
+        "houghlines.h": "c",
+        "pixel.h": "c",
+        "matrix.h": "c",
+        "point.h": "c",
+        "vector.h": "c",
+        "grayscale.h": "c",
+        "blur.h": "c",
+        "rotation.h": "c",
+        "hough.h": "c",
+        "square.h": "c"
+    }
+}

@@ -1,4 +1,4 @@
-#include "Struct/point.h"
+#include "../../include/Struct/point.h"
 
 #include <stdio.h>
 #include <stdlib.h>
