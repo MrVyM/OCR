@@ -99,11 +99,12 @@ Line findSquare2(Line listeline[]){
 
 
 
-void main()
+void square()
 {
-    //int x1, y1, x2, y2;
+    int x1, y1, x2, y2;
     //findSquare(image, &x1, &y1, &x2, &y2);
-    Image *square = extractSquare(image, x1, y1, x2, y2);
+    Image image = importImage("../../assets/do.png");
+    Image *square = extractSquare(image, 100, 100, 100, 100);
     saveImage(square, "square.png");
 }
 

@@ -1,4 +1,4 @@
-#include "Struct/filter.h"
+#include "../../include/Struct/filter.h"
 #include "Struct/image.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
