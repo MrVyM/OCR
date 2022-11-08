@@ -3,6 +3,7 @@ build/
 
 # Picture .bmp
 *.bmp
+dataset_*
 
 # Directory for testing file
 test/
