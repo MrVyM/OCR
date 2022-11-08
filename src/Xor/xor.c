@@ -59,33 +59,28 @@ NeuralNetwork* trainXor(NeuralNetwork* net, float (*activ)(float),float (*deriv)
             Matrix* a0 = initMatrix(1,2);
             a0->value[0][0] = training_list[j][0];
             a0->value[1][0] = training_list[j][1];
-            //printMatrix(a0);
             z1 = mulMatrix(net->hidden,a0);
-            //printMatrix(z1);
             z1 = addMatrix(z1,net->hiddenBias);
-            //printMatrix(z1);
  	        Matrix* a1 = applyFunctionMatrix(z1,activ);
- 	        //printMatrix(a1);
 			z2 = mulMatrix(net->output,a1);
-			//printMatrix(z2);
 	        z2 = addMatrix(z2,net->outputBias);
-	        //printMatrix(z2);
 	        Matrix* a2 = applyFunctionMatrix(z2,activ);
-	        //printMatrix(a2);
+
 	        // Backward Prop
 
 	        Matrix* dz2 = addScalarMatrix(a2,-training_soluce[j][0]);
-	        //printMatrix(dz2);
 	        dW2 = addMatrix(dW2,mulMatrix(dz2,transpose(a1))); 
-	        //printMatrix(dW2);
 	        Matrix* dz1 = multiplyMatrix(mulMatrix(transpose(net->output),dz2), applyFunctionMatrix(a1, deriv));
-	        //printMatrix(dz1);
 	        dW1 = addMatrix(dW1,mulMatrix(dz1,transpose(a0)));
-	        //printMatrix(dW1);
 	        dB1 = addMatrix(dB1,dz1);
-	        //printMatrix(dB1);
+
 	        dB2 = addMatrix(dB2,dz2);
-	        //printMatrix(dB2);
+
+	        freeMatrix(a1);
+	        freeMatrix(a2);
+	        freeMatrix(dz1);
+	        freeMatrix(dz2);
+
 	    }
 	    net->hidden = subMatrix(net->hidden,mulScalarMatrix(divScalarMatrix(dW1, training_set),learning_rate));
 	    net->output = subMatrix(net->output,mulScalarMatrix(divScalarMatrix(dW2, training_set),learning_rate));
@@ -93,11 +88,14 @@ NeuralNetwork* trainXor(NeuralNetwork* net, float (*activ)(float),float (*deriv)
 	    net->outputBias = subMatrix(net->outputBias,mulScalarMatrix(divScalarMatrix(dB2, training_set),learning_rate));
 	    //showResult(net,activ);
 	}
-	/*
-	printMatrix(z1);
-	printMatrix(z2);
-	printf("ttest");
-    */
-    //printNeural(net);
+    freeMatrix(z1);
+    freeMatrix(z2);
+
+    freeMatrix(dB1);
+    freeMatrix(dB2);
+
+    freeMatrix(dW1);
+    freeMatrix(dW2);
+
     return net;
 }
