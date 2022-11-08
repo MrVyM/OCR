@@ -1,5 +1,5 @@
-#include "../../include/Struct/image.h"
-#include "../../include/Struct/pixel.h"
+#include "Struct/image.h"
+#include "Struct/pixel.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 

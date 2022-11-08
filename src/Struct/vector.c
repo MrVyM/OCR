@@ -1,4 +1,4 @@
-#include "../../include/Struct/vector.h"
+#include "Struct/vector.h"
 #include <stdio.h>
 #include <stdlib.h>
 

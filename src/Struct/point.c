@@ -3,9 +3,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-Point *initPixel(int x,int y)
+/*
+Point *initPoint(int x,int y)
 {
-    Point point = (x,y)
-
+    Point point;
     return point;
 }
+*/

@@ -1,11 +1,7 @@
 // Include
-#include "../../include/Struct/image.h"
-#include "../../include/Struct/pixel.h"
-#include "../../include/Struct/houghLines.h"
-
-
-Image* image = importImage("../../Assets/image_01.png");
-Line listeline[] = houghTransform(image);
+#include "Struct/image.h"
+#include "Struct/pixel.h"
+#include "Struct/houghLines.h"
 
 
 Image *extractSquare(Image *image, int x1, int y1, int x2, int y2)
@@ -21,28 +17,32 @@ Image *extractSquare(Image *image, int x1, int y1, int x2, int y2)
     return square;
 }
 
-Line findSquare(Line listeline[]){
+Line* findSquare(Line* listeline){
     int xmin = 0;
     int xmax = 0;
     int ymin = 0;
     int ymax = 0;
-    for(size_t i = 0; i < listeline.lenght;i++){
+    int i = 0;
+    int size = sizeof(listeline);
+    while(size > i){
         if (listeline[i].x1 < xmin){
-            xmin = listeline[i].x1
+            xmin = listeline[i].x1;
         }
         if (listeline[i].x2 > xmax){
-            xmax = listeline[i].x2
+            xmax = listeline[i].x2;
         }
         if (listeline[i].y1 < ymin){
-            ymin = listeline[i].y1
+            ymin = listeline[i].y1;
         }
         if (listeline[i].y2 > ymax){
-            ymax = listeline[i].y2
+            ymax = listeline[i].y2;
         }
+	i+=1;
     }
     //on cherche maintenant les 4 lignes
     Line result[3];
-    for(size_t i = 0; i < listeline.lenght;i++){
+    i = 0;
+    while(size > i){
         if (listeline[i].x1 == xmin && listeline[i].y1 == ymin){
             result[0] = listeline[i];
         }
@@ -55,6 +55,7 @@ Line findSquare(Line listeline[]){
         if (listeline[i].x2 == xmax && listeline[i].y2 == ymax){
             result[3] = listeline[i];
         }
+	i += 1;
     }
     return result;
 
@@ -62,12 +63,12 @@ Line findSquare(Line listeline[]){
 
 
 
-void main()
+Image* square(Image* image,Line* listeline )
 {
     //int x1, y1, x2, y2;
     //findSquare(image, &x1, &y1, &x2, &y2);
-    Image *square = extractSquare(image, x1, y1, x2, y2);
-    saveImage(square, "square.png");
+    Image *squareresult= extractSquare(image, 50, 50, 50, 50);
+    return squareresult;
 }
 
 

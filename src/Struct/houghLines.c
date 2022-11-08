@@ -3,8 +3,8 @@
 #include <math.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-#include "../../include/Struct/image.h"
-#include "../../include/Struct/houghLines.h"
+#include "Struct/image.h"
+#include "Struct/houghLines.h"
 
 Line initHoughLine (double theta, double r, int score)
 {

@@ -2,7 +2,8 @@
 #define SQUARE_H
 
 #include "Struct/image.h"
+#include "Struct/houghLines.h"
 
-Image extractSquare(Image *image, int x1, int x2, int y1, int y2);
+Image* square(Image* image,Line* listeline);
 
 #endif

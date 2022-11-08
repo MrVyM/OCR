@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <math.h>
-#include "../../include/Struct/image.h"
-#include "../../include/Struct/filter.h"
+#include "Struct/image.h"
+#include "Struct/filter.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 

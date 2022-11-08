@@ -1,4 +1,4 @@
-#include "../../include/Struct/matrix.h"
+#include "Struct/matrix.h"
 #include <stdio.h>
 #include <stdlib.h>
 
