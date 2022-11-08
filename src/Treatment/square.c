@@ -7,9 +7,9 @@
 Image *extractSquare(Image *image, int x1, int y1, int x2, int y2)
 {
     Image *square = createEmptyImage(x2 - x1, y2 - y1);
-    for (int i = 0; i < square->height; i++) // -> équivalent . mais en pointeur
+    for (int i = 0; i < x2-x1; i++) // -> équivalent . mais en pointeur
     {
-        for (int j = 0; j < square->width; j++)
+        for (int j = 0; j < y2-y1; j++)
         {
             square->pixels[i][j] = image->pixels[i + y1][j + x1];
         }
@@ -67,7 +67,7 @@ Image* square(Image* image,Line* listeline )
 {
     //int x1, y1, x2, y2;
     //findSquare(image, &x1, &y1, &x2, &y2);
-    Image *squareresult= extractSquare(image, 50, 50, 50, 50);
+    Image *squareresult= extractSquare(image, 50, 50, 150, 150);
     return squareresult;
 }
 
