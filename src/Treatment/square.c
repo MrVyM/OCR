@@ -2,7 +2,7 @@
 #include "Struct/image.h"
 #include "Struct/pixel.h"
 #include "Struct/houghLines.h"
-
+#include <stdio.h>
 
 Image *extractSquare(Image *image, int x1, int y1, int x2, int y2)
 {
@@ -17,13 +17,13 @@ Image *extractSquare(Image *image, int x1, int y1, int x2, int y2)
     return square;
 }
 
-Line* findSquare(Line* listeline){
+Line* findSquare(Line* listeline, int len){
     int xmin = 0;
     int xmax = 0;
     int ymin = 0;
     int ymax = 0;
     int i = 0;
-    int size = sizeof(listeline);
+    int size = len;
     while(size > i){
         if (listeline[i].x1 < xmin){
             xmin = listeline[i].x1;
@@ -60,15 +60,43 @@ Line* findSquare(Line* listeline){
     return result;
 
 }
-
-
+int* findSquare2(Line* listeline, int len){
+    printf("here is findsquare\n");
+    int xmin, xmax, ymin, ymax;
+    int i = 0;
+    printf("next");
+    Line test = (*(listeline + 0));
+    printf("stp marche");
+    printf("ln : %d", test.x1);
+    while(i<len){
+        if ((*(listeline + i)).x1 < xmin){
+            xmin = listeline[i].x1;
+        }
+        if (listeline[i].x2 > xmax){
+            xmax = listeline[i].x2;
+        }
+        if (listeline[i].y1 < ymin){
+            ymin = listeline[i].y1;
+        }
+        if (listeline[i].y2 > ymax){
+            ymax = listeline[i].y2;
+        }
+	i+=1;
+    }
+    int liste[4] = {xmin, xmax, ymin, ymax};
+    return liste;
+}
 
 Image* square(Image* image,Line* listeline )
 {
+    printf("here dbut\n");
     //int x1, y1, x2, y2;
     //findSquare(image, &x1, &y1, &x2, &y2);
-    Image *squareresult= extractSquare(image, 50, 50, 150, 150);
-    return squareresult;
+    //int* l = findSquare2(listeline,30);
+    //printf("int %d",l[0]);
+    //Image *result= extractSquare(image, l[0], l[1], l[2], l[3]);
+    Image *result= extractSquare(image,50,50,200,200);
+    return result;
 }
 
 

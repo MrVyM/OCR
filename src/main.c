@@ -29,6 +29,7 @@ int main(int argc, char **argv)
     //saveImage(image, "rotation.bmp");
     Image* image2 = square(image,houghTransform(image));
     saveImage(image2,"test.bmp");
+    free(image2);
     freeImage(image);
     SDL_Quit();
 
