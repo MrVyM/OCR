@@ -20,35 +20,35 @@
 #define maxTheta 180
 
 
-void swap(Line* xp, Line* yp)
+void swap(Line xp, Line yp)
 {
-	Line temp = *xp;
-	*xp = *yp;
-	*yp = temp;
+	Line temp = xp;
+	xp = yp;
+	yp = temp;
 }
 
-Line *topScoring(Line* lines, int n, int len)
+LineArray topScoring(LineArray lines, int resize)
 {
-	Line* line = malloc(sizeof(Line) * n);
+	LineArray line = initLinesArray(lines.index + 1);
 	int min_idx;
-	for (int i = 0; i < len - 1; ++i)
+	for (int i = 0; i < lines.index; ++i)
 	{
 		min_idx = i;
-		for (int j = i + 1; j < len; ++j)
+		for (int j = i + 1; j < lines.index + 1; ++j)
 		{
-			if (lines[j].score < lines[min_idx].score)
+			if (lines.value[j].score < lines.value[min_idx].score)
 			{
 				min_idx = j;
 			}
 		}
 		if(min_idx != i)
-			swap(&lines[min_idx], &lines[i]);
+			swap(lines.value[min_idx], lines.value[i]);
 	}
 	
-	for (int i = 0; i < n; ++i)
+	for (int i = 0; i < resize; ++i)
 	{
-		line[i] = lines[n - i -1];
-		printf("| value = %f |\n", line[i].score);
+		line.value[i] = lines.value[resize - i -1];
+		//printf("| value = %f |\n", line[i].score);
 	}
 	return line;
 }
@@ -90,7 +90,8 @@ LineArray Constructor(Image* image)
 
 	// Hauteur maximale de l'accumulateur
 	
-	int diagonal;
+	double diagonal;// = sqrt(height * height + width * width);
+	
 	if (height > width)
 		diagonal = (int)((sqrt(2) * height) / 2);
 	else
@@ -124,12 +125,12 @@ LineArray Constructor(Image* image)
 	// In the same time, we search for the max value in the accumulator
 
 	Pixel *pixel;
-	for (int x = 0; x < width; ++x)
+	for(int y = 0; y < height; ++y)
 	{
-		for(int y = 0; y < height; ++y)
+		for (int x = 0; x < width; ++x)
 		{
 			pixel = &image->pixels[x][y];
-			if ((pixel->red == 255 && pixel->blue == 255 && pixel->red == 255))
+			if (pixel->red == 255)
 			{
 				// Ajout d'un point remarquable
 				
@@ -146,21 +147,19 @@ LineArray Constructor(Image* image)
 					r += diagonal;
 					if(r < 0 || r >= doubleHoughHeight)
 					{
-						
-						continue;
+						break;
 					}
-
 					acc->value[t][r]++;
 					if (acc->value[t][r] > max)
 					{
 						max = acc->value[t][r];
+						printf("t %d r %d \n",t,r);
 					}
 					//printf("acc value t = %d et r = %ld : %f \n", t, r, acc->value[t][r]);
 					numPoints++;
 				}
 				//numPoints ++;
 			}
-
 		}
 	}
 
@@ -173,12 +172,15 @@ LineArray Constructor(Image* image)
 	
 	
 	//double threshold = 0;
-	double threshold = 0.42 * max;
+	double threshold = 0.7* max;
 	//printf("max = %d \n threshold = %f\n", max, threshold);
 
 	// Pointeur contenant les hough lines
 	//printf("%ld", numPoints);
 	LineArray lineArray = initLinesArray(numPoints + 1);
+
+//	printf("%f",acc->value[90][216]);
+//	drawAndConvert(initHoughLine(90, 216, acc->value[90][216]), width, height, image);
 
 	if (numPoints == 0)
 		return lineArray;
@@ -204,7 +206,7 @@ LineArray Constructor(Image* image)
 				if (findMaximum(neighbourRadius, t, r, acc, peak))
 				{
 					// Calcule de la bonne valeur de theta
-					double realTheta = (t -10) * Theta;
+					double realTheta = (t) * Theta;
 					// Ajoute la line au pointeur
 					//
 					//printf("| value = %d |\n", lineArray.index);
@@ -215,18 +217,18 @@ LineArray Constructor(Image* image)
 	}
 
 	
-	//int resize = 12;
-	//Line *line = topScoring(lines, resize, indexLine);
+	int resize = 30;
+	LineArray lines = topScoring(lineArray, resize);
 	// Calcul de chaque point en cartésien
 	//printf("index = %d length = %d\n", lineArray.index,lineArray.length);
-	for (int i = 0; i < lineArray.index; ++i)
+	for (int i = 0; i < resize; ++i)
 	{
 		//convertToCartesian(lines[i],width,height);
 		//x1 = %d et y1 = %d\nx2 = %d et y2 =%d\n
 		//, lines[i].x1, lines[i].y1, lines[i].x2, lines[i].y2
 		//printf("rho = %f theta = %f score = %f\n",lines[i].r,lines[i].theta, line[i].score);
-		drawAndConvert(lineArray.value[i], width, height, image);
-		//drawHoughLine(lines[i], width, height, image);
+		drawAndConvert(lines.value[i], width, height, image);
+		//drawHoughLine(lines.value[i], width, height, image);
 	}
 	//free(line);
 	saveImage(image, "hough.bmp");

@@ -121,10 +121,10 @@ void drawAndConvert(Line line, int width, int height, Image* image)
     //printf("| 1 | x1 = % d et y1 = % d\nx2 = % d et y2 = % d\n", line.x1, line.y1, line.x2, line.y2);
     //if(line.x1 == line.x2 || line.y1 == line.y2)
         draw_line(image, width, height, line, 1, 1);
-    */
-
+    
+*/
     // Hauteur maximale de l'accumulateur
-    int houghHeight;
+    int houghHeight;// = sqrt(width * width + height * height);
     if (height > width)
         houghHeight = (int)((sqrt(2) * height) / 2);
     else
@@ -138,7 +138,7 @@ void drawAndConvert(Line line, int width, int height, Image* image)
     double tcos = cos(line.theta);
 
 
-    if ((line.theta < M_PI * 0.25 || line.theta > M_PI * 0.75))
+    if((line.theta < M_PI * 0.25 || line.theta > M_PI * 0.75))
     {
         // Calcul des coordonées cartésiennes
         line.x1 = 0;
@@ -148,9 +148,12 @@ void drawAndConvert(Line line, int width, int height, Image* image)
         line.y2 = height - 1;
 
         // Calcul sur l'axe x
-        line.x1 = (int)((((line.r - houghHeight) - ((line.y1 - centerY) * tsin)) / tcos) + centerX);
-        line.x2 = (int)((((line.r - houghHeight) - ((line.y2 - centerY) * tsin)) / tcos) + centerX);
-        //printf("x1 = %d x2 = %d SUS \n", line.x1, line.x2);
+	
+	line.x1 =(int) line.r / tcos;
+	line.x2 =(int) line.r / tcos - line.y2 * tsin / tcos;
+        //line.x1 = (int)((((line.r - houghHeight) - ((line.y1 - centerY) * tsin)) / tcos) + centerX);
+        //line.x2 = (int)((((line.r - houghHeight) - ((line.y2 - centerY) * tsin)) / tcos) + centerX);
+        printf("x1 = %d x2 = %d \n", line.x1, line.x2);
     }
     else
     {
@@ -162,11 +165,17 @@ void drawAndConvert(Line line, int width, int height, Image* image)
         line.y2 = 0;
 
         // Calcul sur l'axe y
-        line.y1 = (int)((((line.r - houghHeight) - ((line.x1 - centerX) * tcos)) / tsin) + centerY);
-        line.y2 = (int)((((line.r - houghHeight) - ((line.x2 - centerX) * tcos)) / tsin) + centerY);
-        //printf("y1 = %d y2 = %d SUS \n", line.y1, line.y2);
+	printf("%f",line.r - houghHeight);
+	printf("%f",(line.r - houghHeight) - ((line.x1 - centerX) * tcos));
+//	y = cos(t)/sin(t) * x + rho /sin(t)
+	line.y1 =(int) line.r/tsin;
+	line.y2 =(int) line.r/tsin - tcos / tsin * line.x2;
+
+  //      line.y1 = (int)((((line.r - houghHeight) - ((line.x1 - centerX) * tcos)) / tsin) + centerY);
+    //    line.y2 = (int)((((line.r - houghHeight) - ((line.x2 - centerX) * tcos)) / tsin) + centerY);
+        printf("y1 = %d y2 = %d \n", line.y1, line.y2);
     }
-    /*
+    
     if (line.x1 < 0)
         line.x1 = 0;
     if (line.y1 < 0)
@@ -176,7 +185,7 @@ void drawAndConvert(Line line, int width, int height, Image* image)
         line.x2 = 0;
     if (line.y2 < 0)
         line.y2 = 0;
-        */
+       
     /*
     if (line.x1 > width)
         line.x1 = width - 1;
@@ -186,8 +195,9 @@ void drawAndConvert(Line line, int width, int height, Image* image)
     if (line.x2 > width)
         line.x2 = width - 1;
     if (line.y2 > height)
-        line.y2 = height - 1;*/
-    draw_line(image, width, height, line, 1, 1);
+        line.y2 = height - 1;
+*/
+    draw_line(image, width, height, line, 1, 5);
 }
 /*
 void convertToCartesian(Line line, int width, int height)
