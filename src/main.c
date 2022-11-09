@@ -21,7 +21,7 @@ int main(int argc, char **argv)
 
     Image *image = importImage(argv[1]);
     //grayscaleImage(image);
-    saveImage(image, "grayscale.bmp");
+    //saveImage(image, "grayscale.bmp");
     //applyGaussianBlur(image);
     //houghTransform(image);
     //saveImage(image, "blur.bmp");
@@ -30,7 +30,7 @@ int main(int argc, char **argv)
     Image* image2 = square(image,houghTransform(image));
     saveImage(image2,"test.bmp");
     free(image2);
-    freeImage(image);
+    //freeImage(image);
     SDL_Quit();
 
     return EXIT_SUCCESS;

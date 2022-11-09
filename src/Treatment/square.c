@@ -64,12 +64,12 @@ int* findSquare2(Line* listeline, int len){
     printf("here is findsquare\n");
     int xmin, xmax, ymin, ymax;
     int i = 0;
-    printf("next");
-    Line test = (*(listeline + 0));
-    printf("stp marche");
-    printf("ln : %d", test.x1);
+    printf("next\n");
+    Line test = listeline[5];
+    printf("stp marche\n");
+    printf("ln : %d\n", test.x1);
     while(i<len){
-        if ((*(listeline + i)).x1 < xmin){
+        if (listeline[i].x1 < xmin){
             xmin = listeline[i].x1;
         }
         if (listeline[i].x2 > xmax){
@@ -83,7 +83,11 @@ int* findSquare2(Line* listeline, int len){
         }
 	i+=1;
     }
-    int liste[4] = {xmin, xmax, ymin, ymax};
+    int* liste = malloc(sizeof(int)*4);
+    liste[0] = xmin;
+    liste[1] = xmax;
+    liste[2] = ymin;
+    liste[3] = ymax;
     return liste;
 }
 
@@ -92,10 +96,10 @@ Image* square(Image* image,Line* listeline )
     printf("here dbut\n");
     //int x1, y1, x2, y2;
     //findSquare(image, &x1, &y1, &x2, &y2);
-    //int* l = findSquare2(listeline,30);
-    //printf("int %d",l[0]);
-    //Image *result= extractSquare(image, l[0], l[1], l[2], l[3]);
-    Image *result= extractSquare(image,50,50,200,200);
+    int* l = findSquare2(listeline,5);
+    printf("int %d\n",l[1]);
+    Image *result= extractSquare(image, l[0], l[1], l[2], l[3]);
+    //Image *result= extractSquare(image,50,50,200,200);
     return result;
 }
 

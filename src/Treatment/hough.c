@@ -221,13 +221,14 @@ Line *Constructor(Image* image)
 		//x1 = %d et y1 = %d\nx2 = %d et y2 =%d\n
 		//, lines[i].x1, lines[i].y1, lines[i].x2, lines[i].y2
 		//printf("rho = %f theta = %f score = %f\n",lines[i].r,lines[i].theta, line[i].score);
-		drawAndConvert(lines[i], width, height, image);
+		lines[i] = drawAndConvert(lines[i], width, height, image);
 		//drawHoughLine(lines[i], width, height, image);
 	}
 	//free(line);
-	printf("image");
-	saveImage(image, "hough.bpm");
-	free(lines);
+	//printf("image");
+	//saveImage(image, "hough.bpm");
+//	free(lines);
+	printf("lines 5 %d\n", lines[5].x2);
 	return lines;
 	
 }
@@ -235,6 +236,7 @@ Line *Constructor(Image* image)
 Line* houghTransform(Image* image)
 {
 	Line* lines = Constructor(image);
+	printf("lines 5 %d\n", lines[5].x1);
 	return lines;
 
 }

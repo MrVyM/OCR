@@ -100,7 +100,7 @@ void draw_line(Image* image, int w, int h, Line line, Pixel* color,
     }
 }
 
-void drawAndConvert(Line line, int width, int height, Image* image)
+Line drawAndConvert(Line line, int width, int height, Image* image)
 {
     /*
     double diagonal = sqrt(width * width + height * height);
@@ -165,7 +165,7 @@ void drawAndConvert(Line line, int width, int height, Image* image)
     pixel = initPixel(255, 0, 0);
     printf("| 2 | x1 = % d et y1 = % d\nx2 = % d et y2 = % d\n", line.x1, line.y1, line.x2, line.y2);
     draw_line(image, width, height, line, pixel, 1, 1);
-    
+    return line;
     /*
 
     Pixel* pixel;
