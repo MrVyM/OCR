@@ -2,7 +2,8 @@
 #define HOUGH_H
 
 #include "Struct/image.h"
+#include "Struct/houghLines.h"
 
-void houghTransform(Image *image);
+Line* houghTransform(Image *image);
 
 #endif

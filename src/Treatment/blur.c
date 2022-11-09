@@ -8,7 +8,7 @@
 #define max(a, b) ((a) > (b) ? (a) : (b))
 #define min(a, b) ((a) < (b) ? (a) : (b))
 
-#define SIGMA 6
+#define SIGMA 10
 #define SIGMA2 SIGMA *SIGMA
 #define TWO_PI 6.28318530718
 
@@ -21,7 +21,7 @@ float twoDimensionalGaussian(int x, int y)
 
 void applyGaussianBlur(Image *image)
 {
-    Filter *filter = createFilter(2, twoDimensionalGaussian, 1);
+    Filter *filter = createFilter(3, twoDimensionalGaussian, 1);
     applyFilter(filter, image);
     freeFilter(filter);
 }

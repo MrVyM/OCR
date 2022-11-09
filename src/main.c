@@ -5,61 +5,33 @@
 #include "Treatment/grayscale.h"
 #include "Treatment/blur.h"
 #include "Treatment/rotation.h"
-#include "Treatment/resize.h"
-#include "Treatment/thresolding.h"
-#include "Treatment/morph.h"
-#include "Treatment/contrast.h"
-#include "Treatment/gamma.h"
 #include "Treatment/hough.h"
+#include "Treatment/square.h"
 #include <err.h>
-#include "Struct/neuralNetwork.h"
-#include "Xor/xor.h"
-#include "Struct/matrix.h"
-#include "Xor/function.h"
 
 int main(int argc, char **argv)
 {
-    if (argc != 2 && argc != 3)
+    if (argc != 2)
+        errx(EXIT_FAILURE, "Usage: image-file");
+
+    if (SDL_Init(SDL_INIT_VIDEO) != 0)
     {
-        NeuralNetwork* net = initNetwork(2,3,1);
-        //printNeural(net);
-        trainXor(net,sigmoid,deriv_sigmoid);  
-        showResult(net,sigmoid);
-        freeNetwork(net);
+        errx(EXIT_FAILURE, "%s", SDL_GetError());
     }
-    else {
-        if (SDL_Init(SDL_INIT_VIDEO) != 0)
-            errx(EXIT_FAILURE, "%s", SDL_GetError());
 
-        double angleRotation = 0;
-        if(argc == 3)
-            angleRotation = strtod(argv[2], NULL);
-        
-        printf("The image will be rotate with a angle of %.0f degrees.\n", angleRotation);
-        Image *image = importImage(argv[1]);
-        image = resizeImage(image, 750);
-        saveImage(image, "resize.bmp");
-        grayscaleImage(image);
-        saveImage(image, "grayscale.bmp");
-        houghTransform(image);
-        // Les tests ci-dessous sont des essais qui ont été non-concluants.
-        // applyGamma(image, 255);
-        // saveImage(image, "gamma.bmp");
-        // applyContrast(image, 128);
-        // saveImage(image, "contrast.bmp");
-        // applyGaussianBlur(image);
-        // saveImage(image, "blur.bmp");
-        // dilate(image, 5);
-        // saveImage(image, "dilate.bmp");
-        // erode(image, 5);
-        // saveImage(image, "erode.bmp");
-        otsuTresolding(image);
-        saveImage(image, "thresolding.bmp");
-        image = rotateImage(image, 15);
-        saveImage(image, "rotation.bmp");
-        freeImage(image);
-        SDL_Quit(); 
+    Image *image = importImage(argv[1]);
+    //grayscaleImage(image);
+    saveImage(image, "grayscale.bmp");
+    //applyGaussianBlur(image);
+    //houghTransform(image);
+    //saveImage(image, "blur.bmp");
+    //image = rotateImage(image, 25);
+    //saveImage(image, "rotation.bmp");
+    Image* image2 = square(image,houghTransform(image));
+    saveImage(image2,"test.bmp");
+    free(image2);
+    freeImage(image);
+    SDL_Quit();
 
-    }   
     return EXIT_SUCCESS;
 }
