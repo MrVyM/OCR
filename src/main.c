@@ -7,6 +7,7 @@
 #include "Treatment/rotation.h"
 #include "Treatment/resize.h"
 #include "Treatment/thresolding.h"
+#include "Treatment/sobel.h"
 #include "Treatment/morph.h"
 #include "Treatment/contrast.h"
 #include "Treatment/gamma.h"
@@ -36,11 +37,13 @@ int main(int argc, char **argv)
             angleRotation = strtod(argv[2], NULL);
         
         printf("The image will be rotate with a angle of %.0f degrees.\n", angleRotation);
+        
         Image *image = importImage(argv[1]);
-        image = resizeImage(image, 750);
+        //image = resizeImage(image, 750);
         saveImage(image, "resize.bmp");
         grayscaleImage(image);
         saveImage(image, "grayscale.bmp");
+        sobelOperator(image);
         houghTransform(image);
         // Les tests ci-dessous sont des essais qui ont été non-concluants.
         // applyGamma(image, 255);

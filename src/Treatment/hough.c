@@ -9,6 +9,7 @@
 #include "Struct/pixel.h"
 #include "Struct/matrix.h"
 #include "Struct/houghLines.h"
+#include "Struct/linesArray.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <stdio.h>
@@ -81,27 +82,26 @@ int findMaximum(int neighbourRadius, int t, int r, Matrix* acc, int peak)
 
 // Construction de l'accumulateur
 
-void Constructor(Image* image)
+LineArray Constructor(Image* image)
 {
 	
 	int width = image->width;
 	int height = image->height;
 
 	// Hauteur maximale de l'accumulateur
-	double diagonal = sqrt(width * width + height * height);
-	/*
+	
 	int diagonal;
 	if (height > width)
-		diagonal = (int)(sqrt(2) * height) / 2;
+		diagonal = (int)((sqrt(2) * height) / 2);
 	else
-		diagonal = (int)(sqrt(2) * width) / 2;
-	*/
-	double doubleHoughHeight = 2 * diagonal;
+		diagonal = (int)((sqrt(2) * width) / 2);
+	
+	int doubleHoughHeight = 2 * diagonal;
 	Matrix* acc = initMatrix(maxTheta, doubleHoughHeight);
 
 	// Les coordonées du centre de l'image
-	//int centerX = width / 2;
-	//int centerY = height / 2;
+	float centerX = width / 2;
+	float centerY = height / 2;
 
 	// Count le nombre de points remarquables
 	long int numPoints = 0;
@@ -129,7 +129,7 @@ void Constructor(Image* image)
 		for(int y = 0; y < height; ++y)
 		{
 			pixel = &image->pixels[x][y];
-			if (pixel->red == 0 && pixel->blue == 0 && pixel->red == 0)
+			if ((pixel->red == 255 && pixel->blue == 255 && pixel->red == 255))
 			{
 				// Ajout d'un point remarquable
 				
@@ -138,16 +138,16 @@ void Constructor(Image* image)
 				{
 
 					// Calcul de rho pour chaque theta
-					//long int r = (int) (((x - centerX) * cosArray[t]) + ((y - centerY) * sinArray[t]));
+					long int r = (int) (((x - centerX) * cosArray[t]) + ((y - centerY) * sinArray[t]));
 					//long int r = (int)((x * cosArray[t]) + (y * sinArray[t]));
 
-					long int r = (int)( (x * cosArray[t] + y * sinArray[t]));
+					//long int r = (int)( (x * cosArray[t] + y * sinArray[t]));
 					// r peut être négatif
-					//r += diagonal;
-					if(r < 0 || r >= diagonal)
+					r += diagonal;
+					if(r < 0 || r >= doubleHoughHeight)
 					{
 						
-						break;
+						continue;
 					}
 
 					acc->value[t][r]++;
@@ -156,8 +156,9 @@ void Constructor(Image* image)
 						max = acc->value[t][r];
 					}
 					//printf("acc value t = %d et r = %ld : %f \n", t, r, acc->value[t][r]);
+					numPoints++;
 				}
-				numPoints ++;
+				//numPoints ++;
 			}
 
 		}
@@ -172,34 +173,17 @@ void Constructor(Image* image)
 	
 	
 	//double threshold = 0;
-	double threshold = 0.7 * max;
+	double threshold = 0.42 * max;
 	//printf("max = %d \n threshold = %f\n", max, threshold);
 
 	// Pointeur contenant les hough lines
 	//printf("%ld", numPoints);
-	Line* lines = malloc(sizeof(Line) * numPoints);
-
-	int indexLine = 0;
+	LineArray lineArray = initLinesArray(numPoints + 1);
 
 	if (numPoints == 0)
-		return;
-		//return lines;
+		return lineArray;
 
-	for (int t = 0; t < maxTheta; ++t)
-	{
-		for (int r = 0; r < (int)(diagonal * 2); ++r)
-		{
-			if (acc->value[t][r] > threshold)
-			{
-				//printf("ALED t %d r %d\n",t,r);
-				double realTheta = t * Theta;
-				lines[indexLine] = initHoughLine(realTheta, r, acc->value[t][r]);
-				indexLine += 1;
-			}
-		}
-	}
-
-	/*
+	
 	// Recherche des maximums locaux
 	for (int t = 0; t < maxTheta; ++t)
 	{
@@ -209,59 +193,51 @@ void Constructor(Image* image)
 
 		for (int r = neighbourRadius; r < doubleHoughHeight - neighbourRadius; ++r)
 		{
-			//printf("2t = %d |\n", t);
 			// Seulement les valeurs en dessous du seuil
 			if (acc->value[t][r] > threshold)
 			{
 				//printf("val = %f \n", acc->value[t][r]);
 				// Initialisation de la valeur max
 				int peak = (int) acc->value[t][r];
-				printf("%d\n", peak);
+				//printf("%d\n", peak);
 				
 				if (findMaximum(neighbourRadius, t, r, acc, peak))
 				{
 					// Calcule de la bonne valeur de theta
-					double realTheta = t * Theta;
+					double realTheta = (t -10) * Theta;
 					// Ajoute la line au pointeur
 					//
-					//printf("| value = %f |\n", acc->value[t][r]);
-					lines[indexLine] = initHoughLine(realTheta, r, acc->value[t][r]);
-					indexLine += 1;
+					//printf("| value = %d |\n", lineArray.index);
+					lineArray = appendLinesValue(initHoughLine(realTheta, r, (acc)->value[t][r]), lineArray);
 				}
-				
-				double realTheta = t * Theta;
-				// Ajoute la line au pointeur
-				//
-				//printf("| value = %f |\n", acc->value[t][r]);
-				lines[indexLine] = initHoughLine(realTheta, r, acc->value[t][r]);
-				indexLine += 1;
-				
 			}
 		}
-	}*/
+	}
+
+	
 	//int resize = 12;
 	//Line *line = topScoring(lines, resize, indexLine);
 	// Calcul de chaque point en cartésien
-	for (int i = 0; i < indexLine; ++i)
+	//printf("index = %d length = %d\n", lineArray.index,lineArray.length);
+	for (int i = 0; i < lineArray.index; ++i)
 	{
 		//convertToCartesian(lines[i],width,height);
 		//x1 = %d et y1 = %d\nx2 = %d et y2 =%d\n
 		//, lines[i].x1, lines[i].y1, lines[i].x2, lines[i].y2
 		//printf("rho = %f theta = %f score = %f\n",lines[i].r,lines[i].theta, line[i].score);
-		drawAndConvert(lines[i], width, height, image);
+		drawAndConvert(lineArray.value[i], width, height, image);
 		//drawHoughLine(lines[i], width, height, image);
 	}
 	//free(line);
 	saveImage(image, "hough.bmp");
-	free(lines);
-	//return lines;
+	free(acc);
+	return lineArray;
 	
 }
 
-void houghTransform(Image* image)
+LineArray houghTransform(Image* image)
 {
-	//Line* lines = Constructor(image);
-	Constructor(image);
-	return;
+	LineArray lines = Constructor(image);
+	return lines;
 
 }
