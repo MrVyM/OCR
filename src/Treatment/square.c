@@ -4,6 +4,11 @@
 #include "Struct/houghLines.h"
 #include <stdio.h>
 
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+
+#include "Struct/resize.h"
+
 Image *extractSquare(Image *image, int x1, int y1, int x2, int y2)
 {
     Image *square = createEmptyImage(x2 - x1, y2 - y1);
@@ -16,6 +21,13 @@ Image *extractSquare(Image *image, int x1, int y1, int x2, int y2)
     }
     return square;
 }
+
+int number(int l[]){
+	//on fera appel au reseau de neurone
+	return 0;
+}
+
+
 
 Line* findSquare(Line* listeline, int len){
     int xmin = 0;
@@ -91,16 +103,86 @@ int* findSquare2(Line* listeline, int len){
     return liste;
 }
 
-Image* square(Image* image,Line* listeline )
+int[784] caseInt(Image* image){
+	Image* newimage = resizeImage(image);
+	int pixel = newsimage->pixels;
+	int result[784];
+	for (int i = 0; i <= 28; i++){
+		for (int j = 0; j <= 28; j++){
+			// recup couleur ??
+			Uint8 color = get()
+			if (color = (0,0,0)){ //black
+				result[i*i + j] = 1;
+			}
+			else {
+				result[i*i + j] = 0;
+			}
+		}
+	}
+	return result;
+}
+
+
+Image* Cut(Image* image){
+	int width = image->width;
+	int height = image->height;
+	int pixel = image->pixels;
+	
+	int w = 0;
+	int h = 0;
+	int tempw = 0;
+	int temph = 0;
+	Image* listeCase[3][3];
+	
+	Image* img;
+	for (int i = 1; i <= 3; i++){
+		w = width* ((1/3)*(i-1));
+		
+		for (j = 1; j <= 3;j++){
+			h = height* ((1/3)*(i-1));
+			tempw = width*((1/3)*i);
+			temph = height*((1/3)*i);
+			img = extractSquare(image, w, tempw,h,temph);
+			listeCase[i-1][j-1] = img;
+		}
+	}
+	return listeCase;
+}
+
+int[9][9] result(Image* image){
+	
+	Image* listeimg = Cut(image);
+	int res[9][9];
+	int x = 1;
+	int temp;
+	for (int i = 0; i < 3;i++){
+		for (int j = 0; j < 3; j++){
+			Image* limg2 = Cut(listeimg[i][j]);
+			for (int i2 = 0; i2 < 3; i2++){
+				for (int j2 = 0; j2 < 3; j2++){
+					temp = number(caseInt(limg2[i2][j2]));
+					res[i2*x][j2*x] = temp;
+				}
+			}
+			x += 1;
+		}
+	}
+	return res;
+}
+
+
+int[9][9] square(Image* image,Line* listeline )
 {
     printf("here dbut\n");
     //int x1, y1, x2, y2;
     //findSquare(image, &x1, &y1, &x2, &y2);
     int* l = findSquare2(listeline,5);
     printf("int %d\n",l[1]);
-    Image *result= extractSquare(image, l[0], l[1], l[2], l[3]);
+    //Image *result= extractSquare(image, l[0], l[1], l[2], l[3]);
     //Image *result= extractSquare(image,50,50,200,200);
-    return result;
+    Image* image2 = extractSquare(image, l[0]. l[1], l[2], l[3]);
+    int[9][9] sudoku = result(image2);
+    return sudoku;
 }
 
 
