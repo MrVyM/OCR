@@ -104,7 +104,7 @@ int* findSquare2(Line* listeline, int len){
 }
 
 int[784] caseInt(Image* image){
-	Image* newimage = resizeImage(image);
+	Image* newimage = resizeImage(image,28*28);
 	int pixel = newsimage->pixels;
 	int result[784];
 	for (int i = 0; i <= 28; i++){
