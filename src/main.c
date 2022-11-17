@@ -58,7 +58,7 @@ int main(int argc, char **argv)
         otsuTresolding(image);
         saveImage(image, "thresolding.bmp");
         //houghTransform(image);
-        image = rotateImage(image, 15);
+        image = rotateImage(image, angleRotation);
         saveImage(image, "rotation.bmp");
         freeImage(image);
         SDL_Quit();
