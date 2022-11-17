@@ -172,7 +172,7 @@ Line *Constructor(Image* image)
 	
 	
 	//double threshold = 0;
-	double threshold = 0.7 * max;
+	double threshold = 0.65 * max;
 	//printf("max = %d \n threshold = %f\n", max, threshold);
 
 	// Pointeur contenant les hough lines
