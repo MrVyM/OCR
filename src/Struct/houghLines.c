@@ -153,7 +153,7 @@ void drawAndConvert(Line line, int width, int height, Image* image)
 	line.x2 =(int) line.r / tcos - line.y2 * tsin / tcos;
         //line.x1 = (int)((((line.r - houghHeight) - ((line.y1 - centerY) * tsin)) / tcos) + centerX);
         //line.x2 = (int)((((line.r - houghHeight) - ((line.y2 - centerY) * tsin)) / tcos) + centerX);
-        printf("x1 = %d x2 = %d \n", line.x1, line.x2);
+        //printf("x1 = %d x2 = %d \n", line.x1, line.x2);
     }
     else
     {
@@ -165,8 +165,8 @@ void drawAndConvert(Line line, int width, int height, Image* image)
         line.y2 = 0;
 
         // Calcul sur l'axe y
-	printf("%f",line.r - houghHeight);
-	printf("%f",(line.r - houghHeight) - ((line.x1 - centerX) * tcos));
+	//printf("%f",line.r - houghHeight);
+	//printf("%f",(line.r - houghHeight) - ((line.x1 - centerX) * tcos));
 //	y = cos(t)/sin(t) * x + rho /sin(t)
 	line.y1 =(int) line.r/tsin;
 	line.y2 =(int) line.r/tsin - tcos / tsin * line.x2;

@@ -5,7 +5,7 @@ build/
 *.bmp
 
 # Directory for testing file
-test/
+tests/
 
 # Prerequisites
 *.d

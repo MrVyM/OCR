@@ -1,17 +1,13 @@
-// Include
 #include <stdlib.h>
 #include "Struct/image.h"
 #include "Struct/pixel.h"
 #include "Struct/matrix.h"
-#include "Struct/houghLines.h"
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
 #include <stdio.h>
 #include <math.h>
 
-Image* sobelOperator(Image* image)
+Image *sobelOperator(Image *image)
 {
-	Matrix* Gx = initMatrix(3, 3);
+	Matrix *Gx = initMatrix(3, 3);
 	Gx->value[0][0] = 1;
 	Gx->value[1][0] = 0;
 	Gx->value[2][0] = -1;
@@ -24,7 +20,7 @@ Image* sobelOperator(Image* image)
 	Gx->value[1][2] = 0;
 	Gx->value[2][2] = -1;
 
-	Matrix* Gy = initMatrix(3, 3);
+	Matrix *Gy = initMatrix(3, 3);
 	Gy->value[0][0] = 1;
 	Gy->value[1][0] = 2;
 	Gy->value[2][0] = 1;
@@ -39,7 +35,6 @@ Image* sobelOperator(Image* image)
 
 	int height = image->height;
 	int width = image->width;
-	//printf("h = %d w = %d", height, width);
 
 	for (int col = 0; col < height; ++col)
 	{
@@ -60,7 +55,7 @@ Image* sobelOperator(Image* image)
 				}
 			}
 			int val = (int)sqrt((magX * magX) + (magY * magY));
-			if (val > 128) 
+			if (val > 128)
 				val = 255;
 			else
 				val = 0;
@@ -69,6 +64,5 @@ Image* sobelOperator(Image* image)
 			image->pixels[row][col].blue = val;
 		}
 	}
-	saveImage(image,"sobel.bmp");
 	return image;
 }

@@ -22,30 +22,29 @@ int main(int argc, char **argv)
 {
     if (argc != 2 && argc != 3)
     {
-        NeuralNetwork* net = initNetwork(2,3,1);
-        //printNeural(net);
-        trainXor(net,sigmoid,deriv_sigmoid);  
-        showResult(net,sigmoid);
+        NeuralNetwork *net = initNetwork(2, 3, 1);
+        trainXor(net, sigmoid, deriv_sigmoid);
+        showResult(net, sigmoid);
         freeNetwork(net);
     }
-    else {
+    else
+    {
         if (SDL_Init(SDL_INIT_VIDEO) != 0)
             errx(EXIT_FAILURE, "%s", SDL_GetError());
-
+        
         double angleRotation = 0;
-        if(argc == 3)
+        if (argc == 3)
             angleRotation = strtod(argv[2], NULL);
-        
+
         printf("The image will be rotate with a angle of %.0f degrees.\n", angleRotation);
-        
         Image *image = importImage(argv[1]);
-        //image = resizeImage(image, 750);
+        // image = resizeImage(image, 750);
         saveImage(image, "resize.bmp");
         grayscaleImage(image);
         saveImage(image, "grayscale.bmp");
-        sobelOperator(image);
-        houghTransform(image);
         // Les tests ci-dessous sont des essais qui ont été non-concluants.
+        // sobelOperator(image);
+        // saveImage(image,"sobel.bmp");
         // applyGamma(image, 255);
         // saveImage(image, "gamma.bmp");
         // applyContrast(image, 128);
@@ -58,11 +57,11 @@ int main(int argc, char **argv)
         // saveImage(image, "erode.bmp");
         otsuTresolding(image);
         saveImage(image, "thresolding.bmp");
+        //houghTransform(image);
         image = rotateImage(image, 15);
         saveImage(image, "rotation.bmp");
         freeImage(image);
-        SDL_Quit(); 
-
-    }   
+        SDL_Quit();
+    }
     return EXIT_SUCCESS;
 }
