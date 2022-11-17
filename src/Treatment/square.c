@@ -109,9 +109,9 @@ int[784] caseInt(Image* image){
 	int result[784];
 	for (int i = 0; i <= 28; i++){
 		for (int j = 0; j <= 28; j++){
-			// recup couleur ??
-			Uint8 color = get()
-			if (color = (0,0,0)){ //black
+			// recup couleur
+			int pi = pixel[i][j];
+			if (pi.red == 0 && pi.green == 0 && pi.blue == 0){
 				result[i*i + j] = 1;
 			}
 			else {

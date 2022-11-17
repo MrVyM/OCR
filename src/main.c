@@ -23,14 +23,14 @@ int main(int argc, char **argv)
     //grayscaleImage(image);
     //saveImage(image, "grayscale.bmp");
     //applyGaussianBlur(image);
-    //houghTransform(image);
-    //saveImage(image, "blur.bmp");
+    houghTransform(image);
+    saveImage(image, "blur.bmp");
     //image = rotateImage(image, 25);
     //saveImage(image, "rotation.bmp");
-    Image* image2 = square(image,houghTransform(image));
-    saveImage(image2,"test.bmp");
-    free(image2);
-    //freeImage(image);
+    //Image* image2 = square(image,houghTransform(image));
+    //saveImage(image2,"test.bmp");
+    //free(image2);
+    freeImage(image);
     SDL_Quit();
 
     return EXIT_SUCCESS;
