@@ -5,6 +5,7 @@ build/
 *.bmp
 dataset_*
 *.csv
+*.txt
 
 # Directory for testing file
 test/
