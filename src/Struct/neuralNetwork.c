@@ -2,6 +2,7 @@
 #include "Struct/neuralNetwork.h"
 #include <stdlib.h>
 #include <err.h>
+#include <string.h>
 
 NeuralNetwork* initNetwork(int numInput, int numHidden, int numOuput)
 {
@@ -21,6 +22,25 @@ NeuralNetwork* initNetwork(int numInput, int numHidden, int numOuput)
 	network->numInput = numInput;
 
 	return network;
+}
+
+void saveWeight(char filename[], NeuralNetwork* net)
+{
+    FILE *file = fopen(filename, "w");
+        
+    if (file == NULL)
+    {
+        printf("saveWeight : Can't save the network\n");
+        return ;
+    }
+    else 
+    {
+        printf("Saving the weight\n");
+        char s[50];
+        sprintf(s,"%d\n%d\n%d\n",net->numInput,net->numHidden,net->numOuput);
+        fputs(s,file);
+        fclose(file);
+    }
 }
 
 void printNeural(NeuralNetwork* net)
