@@ -11,8 +11,9 @@ typedef struct Matrix Matrix;
 
 Matrix *initMatrix(int width, int height);
 
-
 Matrix* randomMatrix(int width, int height, int negative);
+
+char* stringMatrix(Matrix* mat);
 
 void printMatrix(Matrix *matrix);
 

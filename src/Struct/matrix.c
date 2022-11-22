@@ -1,5 +1,6 @@
 #include "Struct/matrix.h"
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 #include <err.h>
 
@@ -17,6 +18,22 @@ Matrix* initMatrix(int width, int height) {
     }
     matrix->value = data;
     return matrix;
+}
+
+char* stringMatrix(Matrix* mat)
+{
+    if (mat == NULL)
+        return NULL;
+    char s[500];
+    int count = 0;
+    for(int i = 0; i < mat->height; i++)
+    {
+        for(int j = 0; j < mat->width; j++)
+            count += sprintf(s+count,"%f ",mat->value[i][j]);
+        count +=sprintf(s+count,"\n");
+    }
+    printf("%s",s);
+    return *s;
 }
 
 Matrix* randomMatrix(int width, int height, int negative) {
