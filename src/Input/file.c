@@ -5,52 +5,49 @@
 int readNumber(FILE *file)
 {
     int result = 0;
+
+    char sign = 1;
+
+    char readed = fgetc(file);
+    if (readed == '-')
+        sign = -1;
+    else if (readed == 10 || readed == 32)
+        return result;
+    else if (readed < 48 || readed > 57)
+        return result;
+    else 
+    {
+        result *= 10;
+        result += (readed - 48);
+    }
+    while ((readed = fgetc(file))!= EOF)
+    {
+        if (readed == 10 || readed == 32)
+            return result * sign;
+        if (readed < 48 || readed > 57)
+            break;
+        result *= 10;
+        result += (readed - 48);
+    }
+    return result * sign;
+}
+
+float readFloat(FILE *file)
+{
+    float result = readNumber(file);
     char readed;
+    float number = 1;
     while ((readed = fgetc(file))!= EOF)
     {
         if (readed == 10 || readed == 32)
             return result;
         if (readed < 48 || readed > 57)
             break;
-        result *= 10;
-        result += (readed - 48);
-    }
-    return result;
-}
-
-float readFloat(FILE *file)
-{
-    float result = 0.0;
-    char readed;
-    char number = 0;
-    while ((readed = fgetc(file))!= EOF)
-    {
-        printf("%c %d %f\n",readed,readed,result);
-        
-        if (readed == 10 || readed == 32)
-            return result;
-        if (readed != 46 && (readed < 48 || readed > 57))
-            break;
-        printf("num : %f\n",number);
-        if (readed == 46)
-        {
-            number = 1;   
-        }
-        else if (number)
-        {
-            number *= 1/10;
-            printf("res : %f\n",number);
-            printf("%f\n",number);
+        number /= 10.0;
+        if (result < 0)
+            result -= (float)(readed - 48) * number;        
+        else 
             result += (float)(readed - 48) * number;
-        }
-        else
-        {
-            printf("behind\n");
-            result *= 10.0;
-            result += (float)(readed - 48);
-        }
-
-        
     }
     return result;
 }
