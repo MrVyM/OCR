@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "Struct/neuralNetwork.h"
+#include "Input/file.h"
 #include <stdlib.h>
 #include <err.h>
 #include <string.h>
@@ -40,6 +41,24 @@ void saveWeight(char filename[], NeuralNetwork* net)
         sprintf(s,"%d\n%d\n%d\n",net->numInput,net->numHidden,net->numOuput);
         fputs(s,file);
         fclose(file);
+    }
+}
+
+NeuralNetwork* loadWeight(char filename[])
+{
+    FILE *file = fopen(filename, "r");
+
+    if (file == NULL) 
+    {
+        printf("loadWeight : Can't load the network\n");
+        return NULL;
+    }
+    else 
+    {
+        printf("1 : %d\n", readNumber(file)); 
+        printf("2 : %d\n", readNumber(file));
+        printf("3 : %d\n", readNumber(file));
+        return NULL;
     }
 }
 

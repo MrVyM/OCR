@@ -24,8 +24,13 @@ int main(int argc, char **argv)
         NeuralNetwork* net = initNetwork(2,3,1);
         //printNeural(net);
         trainXor(net,sigmoid,deriv_sigmoid);  
-        saveWeight("test.txt",net);
+        //saveWeight("test.txt",net);
         showResult(net,sigmoid);
+        
+        net = loadWeight("test.txt");
+        printf("\n");
+        if (net == NULL)
+            return EXIT_FAILURE;
         freeNetwork(net);
     }
     else {
