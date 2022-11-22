@@ -2,7 +2,9 @@
 #define HOUGH_H
 
 #include "Struct/image.h"
+#include "Struct/linesArray.h"
 
-void houghTransform(Image *image);
+LineArray houghTransform(Image *image);
+
 
 #endif

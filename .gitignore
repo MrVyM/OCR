@@ -7,8 +7,11 @@ dataset_*
 *.csv
 *.txt
 
+# VScode file
+.vscode/
+
 # Directory for testing file
-test/
+tests/
 
 # Prerequisites
 *.d
@@ -18,6 +21,8 @@ test/
 *.ko
 *.obj
 *.elf
+
+
 
 # Linker output
 *.ilk
