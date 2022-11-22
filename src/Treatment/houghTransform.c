@@ -22,8 +22,10 @@ double degreesToRadians(double degrees)
 Matrix *createAccumulator(Image *image)
 {
     int max_rho = ceil(sqrt(image->width * image->width + image->height * image->height));
-    Matrix *accumulator = initMatrix(max_rho + 1, MAX_THETA + 1);
+    Matrix *accumulator = initMatrix(MAX_THETA + 1,max_rho +1);
     printf("Accumulateur : max_rho : %5d | max_theta : %5d\n", accumulator->width, accumulator->height);
+    printf("Accumulateur : max_rho : %5d | max_theta : %5d\n", max_rho, MAX_THETA);
+    //printf("Accumulateur %f\n",accumulator->value[max_rho][MAX_THETA]);
     return accumulator;
 }
 
@@ -46,10 +48,8 @@ Matrix *fillHoughMatrix(Image *image, Matrix *accumulator)
                 if(theta > max_theta) max_theta = theta;
                 //printf("X : %5d | Y : %5d | RHO : %5d | THETA : %5f\n", x, y, rho, theta);
                 
-                if(rho < accumulator->width && rho >= 0 && (int) theta >= 0 && (int) theta < accumulator->height)
-                {
-                    printf("%d\n", accumulator->value[rho][(int) theta]);
-                }
+            
+                printf("%f\n", accumulator->value[rho][(int) theta]);
                     
             }
         }

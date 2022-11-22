@@ -6,6 +6,9 @@ build/
 dataset_*
 *.csv
 
+# VScode file
+.vscode/
+
 # Directory for testing file
 tests/
 
@@ -17,6 +20,8 @@ tests/
 *.ko
 *.obj
 *.elf
+
+
 
 # Linker output
 *.ilk
