@@ -85,15 +85,9 @@ LineArray Constructor(Image *image)
 
 	// Hauteur maximale de l'accumulateur
 
-	double diagonal; // = sqrt(height * height + width * width);
-
-	if (height > width)
-		diagonal = (int)((sqrt(2) * height) / 2);
-	else
-		diagonal = (int)((sqrt(2) * width) / 2);
-
+	double diagonal = sqrt(height * height + width * width);
 	int doubleHoughHeight = 2 * diagonal;
-	Matrix *acc = initMatrix(maxTheta, doubleHoughHeight);
+	Matrix *acc = initMatrix(maxTheta, diagonal);
 
 	// Les coordonées du centre de l'image
 	float centerX = width / 2;

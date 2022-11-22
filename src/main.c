@@ -12,6 +12,7 @@
 #include "Treatment/contrast.h"
 #include "Treatment/gamma.h"
 #include "Treatment/hough.h"
+#include "Treatment/houghTransform.h"
 #include <err.h>
 #include "Struct/neuralNetwork.h"
 #include "Xor/xor.h"
@@ -38,7 +39,7 @@ int main(int argc, char **argv)
 
         printf("The image will be rotate with a angle of %.0f degrees.\n", angleRotation);
         Image *image = importImage(argv[1]);
-        // image = resizeImage(image, 750);
+        //image = resizeImage(image, 750);
         saveImage(image, "resize.bmp");
         grayscaleImage(image);
         saveImage(image, "grayscale.bmp");
@@ -57,7 +58,8 @@ int main(int argc, char **argv)
         // saveImage(image, "erode.bmp");
         otsuTresolding(image);
         saveImage(image, "thresolding.bmp");
-        //houghTransform(image);
+        houghTransformBis(image);
+        saveImage(image, "hough.bmp");
         image = rotateImage(image, angleRotation);
         saveImage(image, "rotation.bmp");
         freeImage(image);
