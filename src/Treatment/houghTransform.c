@@ -48,7 +48,7 @@ Matrix *fillHoughMatrix(Image *image, Matrix *accumulator)
                 
                 if(rho < accumulator->width && rho >= 0 && (int) theta >= 0 && (int) theta < accumulator->height)
                 {
-                    accumulator->value[rho][(int) theta] += 1;
+                    printf("%d\n", accumulator->value[rho][(int) theta]);
                 }
                     
             }
