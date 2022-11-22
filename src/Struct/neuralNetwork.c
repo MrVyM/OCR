@@ -39,10 +39,15 @@ void saveWeight(char filename[], NeuralNetwork* net)
         char s[50];
         sprintf(s,"%d\n%d\n%d\n",net->numInput,net->numHidden,net->numOuput);
         fputs(s,file);
-        printf("hid\n");
+        printf("bias\n");
         fputs(stringMatrix(net->hidden),file); 
-        printf("out\n");
+        printf("bias\n");
         fputs(stringMatrix(net->output),file);
+        printf("bias\n");
+        fputs(stringMatrix(net->hiddenBias),file);
+        printf("bias\n");
+        fputs(stringMatrix(net->outputBias),file);
+        printf("bias\n");
         fclose(file);
     }
 }

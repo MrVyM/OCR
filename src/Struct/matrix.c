@@ -29,7 +29,12 @@ char* stringMatrix(Matrix* mat)
     for(int i = 0; i < mat->height; i++)
     {
         for(int j = 0; j < mat->width; j++)
-            count += sprintf(s+count,"%f ",mat->value[i][j]);
+        {
+            if (j < mat->width -1)
+                count += sprintf(s+count,"%f ",mat->value[i][j]);
+            else 
+                count += sprintf(s+count,"%f",mat->value[i][j]);
+        }
         count +=sprintf(s+count,"\n");
     }
     return s;
