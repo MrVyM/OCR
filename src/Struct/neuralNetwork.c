@@ -46,17 +46,18 @@ void saveWeight(char filename[], NeuralNetwork* net)
 NeuralNetwork* loadWeight(char filename[])
 {
 	FILE *file = fopen(filename,"r");
+	NeuralNetwork* net = NULL;
 	if (file == NULL)
 	{
 		printf("loadWeight : Can't load the network");
+		return net;
 	} 
 	else 
 	{
-		printf("loadWeight...\n");
-		printf("%d\n", readNumber(file));
-		printf("r : %f\n", readFloat(file));
+		net = initNetwork(readNumber(file),readNumber(file),readNumber(file));
+
 	}
-	return NULL;
+	return net;
 }
 
 void printNeural(NeuralNetwork* net)
