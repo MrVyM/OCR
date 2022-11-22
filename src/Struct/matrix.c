@@ -24,7 +24,7 @@ char* stringMatrix(Matrix* mat)
 {
     if (mat == NULL)
         return NULL;
-    char s[500];
+    char *s;
     int count = 0;
     for(int i = 0; i < mat->height; i++)
     {
@@ -32,8 +32,7 @@ char* stringMatrix(Matrix* mat)
             count += sprintf(s+count,"%f ",mat->value[i][j]);
         count +=sprintf(s+count,"\n");
     }
-    printf("%s",s);
-    return *s;
+    return s;
 }
 
 Matrix* randomMatrix(int width, int height, int negative) {
