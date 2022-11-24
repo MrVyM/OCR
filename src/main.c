@@ -11,7 +11,6 @@
 #include "Treatment/morph.h"
 #include "Treatment/contrast.h"
 #include "Treatment/gamma.h"
-#include "Treatment/hough.h"
 #include "Treatment/houghTransform.h"
 #include <err.h>
 #include "Struct/neuralNetwork.h"
@@ -58,7 +57,7 @@ int main(int argc, char **argv)
         // saveImage(image, "erode.bmp");
         otsuTresolding(image);
         saveImage(image, "thresolding.bmp");
-        houghTransformBis(image);
+        houghTransform(image);
         saveImage(image, "hough.bmp");
         image = rotateImage(image, angleRotation);
         saveImage(image, "rotation.bmp");
