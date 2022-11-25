@@ -9,7 +9,7 @@
 #define MAX_THETA 180
 #define STEP_THETA 1
 #define STEP_2_THETA 2
-#define THRESOLDING max * 0.5
+#define THRESOLDING (max * 0.50)
 
 double radiansToDegrees(double radians)
 {
@@ -30,6 +30,14 @@ Matrix *createAccumulator(Image *image)
 
 Line **fillHoughMatrix(Image *image, Matrix *accumulator)
 {
+    int max = 0;
+    double cosList[MAX_THETA + 1], sinList[MAX_THETA + 1];
+    for (int theta = 0; theta <= MAX_THETA; theta++)
+    {
+        cosList[theta] = cos(degreesToRadians(theta));
+        sinList[theta] = sin(degreesToRadians(theta));
+    }
+
     for (int x = 0; x < image->width; x++)
     {
         for (int y = 0; y < image->height; y++)
@@ -38,27 +46,18 @@ Line **fillHoughMatrix(Image *image, Matrix *accumulator)
                 continue;
             for (int theta = 0; theta <= MAX_THETA; theta++)
             {
-                int rho = x * cos(degreesToRadians(theta)) + y * sin(degreesToRadians(theta));
+                int rho = x * cosList[theta] + y * sinList[theta];
                 if (rho < 0)
                     continue;
                 accumulator->value[rho][theta]++;
+                if (accumulator->value[rho][theta] > max)
+                    max = accumulator->value[rho][theta];
             }
         }
     }
 
     // Counts number of lines detected
     int linesNumber = 0;
-    double max = 0;
-
-    for (int x = 0; x < accumulator->width; x++)
-    {
-        for (int y = 0; y < accumulator->height; y++)
-        {
-            if (accumulator->value[x][y] >= max)
-                max = accumulator->value[x][y];
-        }
-    }
-
     for (int x = 0; x < accumulator->width; x++)
     {
         for (int y = 0; y < accumulator->height; y++)
@@ -79,12 +78,11 @@ Line **fillHoughMatrix(Image *image, Matrix *accumulator)
         {
             if (accumulator->value[rho][theta] >= THRESOLDING)
             {
-                double a = cos(degreesToRadians(theta)), b = sin(degreesToRadians(theta));
+                double a = cosList[theta], b = sinList[theta];
                 int x0 = rho * a, y0 = rho * b;
                 int x1 = x0 + diagonale * (-b), y1 = y0 + diagonale * a;
                 int x2 = x0 - diagonale * (-b), y2 = y0 - diagonale * a;
                 Line *line = initLine(theta, rho, accumulator->value[rho][theta], x1, y1, x2, y2);
-                printf("x2 : %d, y2 : %d, x1 : %d, y1 : %d\n", x2, y2, x1, y1);
                 lines[linesNumber] = line;
                 linesNumber++;
             }

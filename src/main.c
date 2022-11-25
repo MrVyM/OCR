@@ -31,14 +31,14 @@ int main(int argc, char **argv)
     {
         if (SDL_Init(SDL_INIT_VIDEO) != 0)
             errx(EXIT_FAILURE, "%s", SDL_GetError());
-        
+
         double angleRotation = 0;
         if (argc == 3)
             angleRotation = strtod(argv[2], NULL);
 
         printf("The image will be rotate with a angle of %.0f degrees.\n", angleRotation);
         Image *image = importImage(argv[1]);
-        //image = resizeImage(image, 750);
+        // image = resizeImage(image, 750);
         saveImage(image, "resize.bmp");
         grayscaleImage(image);
         saveImage(image, "grayscale.bmp");
