@@ -82,8 +82,7 @@ Line **fillHoughMatrix(Image *image, Matrix *accumulator)
                 int x0 = rho * a, y0 = rho * b;
                 int x1 = x0 + diagonale * (-b), y1 = y0 + diagonale * a;
                 int x2 = x0 - diagonale * (-b), y2 = y0 - diagonale * a;
-                Line *line = initLine(theta, rho, accumulator->value[rho][theta], x1, y1, x2, y2);
-                lines[linesNumber] = line;
+                lines[linesNumber] = initLine(theta, rho, accumulator->value[rho][theta], x1, y1, x2, y2);
                 linesNumber++;
             }
         }
@@ -97,6 +96,6 @@ void houghTransform(Image *image)
     Matrix *accumulator = createAccumulator(image);
     Line **lines = fillHoughMatrix(image, accumulator);
     for (int index = 0; lines[index] != NULL; index++)
-        drawLine(image, lines[index], 0);
+        drawLine(image, lines[index]);
     free(accumulator);
 }

@@ -36,14 +36,21 @@ Line *initLine(double theta, double rho, double score, int x1, int y1, int x2, i
     return image;
 }*/
 
-void setPixel(Pixel *pixel)
+void setPixelRed(Pixel *pixel)
 {
     pixel->blue = 0;
     pixel->red = 255;
     pixel->green = 0;
 }
 
-Image *drawLine(Image *image, Line *line, int thickness)
+void setPixelGreen(Pixel *pixel)
+{
+    pixel->blue = 0;
+    pixel->red = 0;
+    pixel->green = 255;
+}
+
+Image *drawLine(Image *image, Line *line)
 {
     int x0 = line->x1;
     int y0 = line->y1;
@@ -62,18 +69,14 @@ Image *drawLine(Image *image, Line *line, int thickness)
     {
         if (0 <= x0 && x0 < image->width && 0 <= y0 && y0 < image->height)
         {
-            setPixel(&image->pixels[x0][y0]);
-
-            if (thickness == 1)
+            if (image->pixels[x0][y0].red == 0)
             {
-                if (0 <= (x0 + 1) && (x0 + 1) < image->width && 0 <= (y0 + 1) && (y0 + 1) < image->height)
-                {
-                    setPixel(&image->pixels[x0 + 1][y0 + 1]);
-                }
-                if (0 <= (x0 - 1) && (x0 - 1) < image->width && 0 <= (y0 - 1) && (y0 - 1) < image->height)
-                {
-                    setPixel(&image->pixels[x0 - 1][y0 - 1]);
-                }
+                setPixelRed(&image->pixels[x0][y0]);
+            }
+            else
+            {
+                if(image->pixels[x0][y0].green == 255 && image->pixels[x0][y0].green == 255)
+                setPixelGreen(&image->pixels[x0][y0]);
             }
         }
 
