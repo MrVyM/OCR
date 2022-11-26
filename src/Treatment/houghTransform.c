@@ -6,10 +6,9 @@
 #include <stdio.h>
 #include <math.h>
 
-#define MAX_THETA 180
-#define STEP_THETA 1
-#define STEP_2_THETA 2
-#define THRESOLDING (max * 0.50)
+#define MAX_THETA 360
+#define STEP_THETA 0.5
+#define THRESOLDING (max * 0.5)
 
 double radiansToDegrees(double radians)
 {
@@ -58,7 +57,7 @@ Line **fillHoughMatrix(Image *image, Matrix *accumulator)
 
     // Counts number of lines detected
     int linesNumber = 0;
-    for (int x = 0; x < accumulator->width; x++)
+    for (int x = 1; x < accumulator->width; x++)
     {
         for (int y = 0; y < accumulator->height; y++)
         {
@@ -72,7 +71,7 @@ Line **fillHoughMatrix(Image *image, Matrix *accumulator)
 
     linesNumber = 0;
     int diagonale = ceil(sqrt(image->width * image->width + image->height * image->height));
-    for (int rho = 0; rho < accumulator->height; rho++)
+    for (int rho = 1; rho < accumulator->height; rho++)
     {
         for (int theta = 0; theta < accumulator->width; theta++)
         {

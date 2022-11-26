@@ -69,13 +69,13 @@ Image *drawLine(Image *image, Line *line)
     {
         if (0 <= x0 && x0 < image->width && 0 <= y0 && y0 < image->height)
         {
-            if (image->pixels[x0][y0].red == 0)
+            if (image->pixels[x0][y0].red == 0 && image->pixels[x0][y0].green != 255)
             {
                 setPixelRed(&image->pixels[x0][y0]);
             }
             else
             {
-                if(image->pixels[x0][y0].green == 255 && image->pixels[x0][y0].green == 255)
+                if(!(image->pixels[x0][y0].green == 0 && image->pixels[x0][y0].blue == 0))
                 setPixelGreen(&image->pixels[x0][y0]);
             }
         }
