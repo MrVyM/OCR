@@ -15,9 +15,9 @@
 #include "Treatment/houghTransform.h"
 #include <err.h>
 #include "Struct/neuralNetwork.h"
-#include "Xor/xor.h"
 #include "Struct/matrix.h"
 #include "Xor/function.h"
+#include "Recognition/recognition.h"
 
 int main(int argc, char **argv)
 {
@@ -25,9 +25,9 @@ int main(int argc, char **argv)
     {
         NeuralNetwork* net = initNetwork(2,3,1);
         //printNeural(net);
-        trainXor(net,sigmoid,deriv_sigmoid);  
-        saveWeight("test.net",net);
-        loadWeight("test.net");
+        trainRecognition(net,sigmoid,deriv_sigmoid);  
+        //saveWeight("test.net",net);
+        //loadWeight("test.net");
         //showResult(net,sigmoid);
         freeNetwork(net);
     }
