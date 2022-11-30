@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include "Struct/matrix.h"
 
 int readNumber(FILE *file)
 {
@@ -50,4 +51,26 @@ float readFloat(FILE *file)
             result += (float)(readed - 48) * number;
     }
     return result;
+}
+
+Matrix* readData(char data[], char lines[])
+{
+    FILE* lines_file = fopen(lines, "r");
+    int number_lines = readNumber(lines_file);
+    fclose(lines_file);
+    Matrix* dataset = initMatrix(785, number_lines);
+
+    FILE* dataset_file = fopen(data, "r");
+    for(int i = 0; i < number_lines; i++)
+    {
+        for(int j = 0; j < 784; j++)
+        {
+            dataset->value[i][j] = fgetc(dataset_file) - 48.0;
+        }
+        dataset->value[i][784] = fgetc(dataset_file) - 48; // Thats the number in the image
+        fgetc(dataset_file); // jump the \n
+    }
+    fclose(dataset_file);
+    printMatrix(dataset);
+    return dataset;
 }
