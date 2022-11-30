@@ -13,6 +13,12 @@ if os.path.exists(image_path+"/data.txt") :
     os.remove(image_path + "/data.txt")
     print("Data remove...")
 
+
+if os.path.exists(image_path+"/lines.txt") : 
+    os.remove(image_path + "/lines.txt")
+    print("Lines remove...")
+
+
 def addFile(image,number) :
     filename = image_path + "/data.txt"
     f = open(filename, "a")
@@ -31,6 +37,7 @@ def noise(x,y,theta) :
 BLACK = (0, 0, 0)
 #draw.text((20, 20), "Cercle trigonométrique", fill=BLACK)
 ttf_files = glob.glob("Font/*.ttf")
+count = 0
 
 for ttf_file in ttf_files:
     name_font=(ttf_file.split("/")[-1]).split(".ttf")[0]
@@ -46,6 +53,11 @@ for ttf_file in ttf_files:
                         draw.text((9+x,1+y),str(number),fill=BLACK,font=font)
                     
                     noise(x,y,theta)
+                    count += 1
                     addFile(image,number)
                     #image = image.rotate(theta,fillcolor=WHITE)
                     image.save(f"{image_path}/dataset_{name_font}_({x},{y},{theta})_{number}","png")
+
+f = open(image_path +"/lines.txt","a")
+f.write(str(count))
+f.close()
