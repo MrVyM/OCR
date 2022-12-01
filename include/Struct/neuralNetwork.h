@@ -17,7 +17,7 @@ struct NeuralNetwork
 
 typedef struct NeuralNetwork NeuralNetwork;
 
-NeuralNetwork* initNetwork(int numInput, int numHidden, int numOuput);
+NeuralNetwork* initNetwork();
 
 void saveWeight(char filename[], NeuralNetwork* net);
 

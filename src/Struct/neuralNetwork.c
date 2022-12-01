@@ -5,7 +5,7 @@
 #include <err.h>
 #include <string.h>
 
-NeuralNetwork* initNetwork(int numInput, int numHidden, int numOuput)
+NeuralNetwork* initNetwork()
 {
 	NeuralNetwork* network = malloc(sizeof(NeuralNetwork));
 
@@ -13,14 +13,14 @@ NeuralNetwork* initNetwork(int numInput, int numHidden, int numOuput)
 		errx(-1,"NeuralNetwork cannot be initialize.");
 
 
-    network->hidden = randomMatrix(numInput,numHidden,1);
-	network->output = randomMatrix(numHidden,numOuput,1);
-	network->hiddenBias = randomMatrix(1,numHidden,0);
-	network->outputBias = randomMatrix(1,numOuput,0);
+    network->hidden = randomMatrix(1,30,1);
+	network->output = randomMatrix(1,10,1);
+	network->hiddenBias = randomMatrix(1,30,0);
+	network->outputBias = randomMatrix(1,10,0);
 
-	network->numHidden = numHidden;
-	network->numOuput = numOuput;
-	network->numInput = numInput;
+	network->numHidden = 30;
+	network->numOuput = 10;
+	network->numInput = 784;
 
 	return network;
 }

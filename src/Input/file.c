@@ -71,6 +71,5 @@ Matrix* readData(char data[], char lines[])
         fgetc(dataset_file); // jump the \n
     }
     fclose(dataset_file);
-    printMatrix(dataset);
     return dataset;
 }

@@ -23,7 +23,7 @@ int main(int argc, char **argv)
 {
     if (argc != 2 && argc != 3)
     {
-        NeuralNetwork* net = initNetwork(2,3,1);
+        NeuralNetwork* net = initNetwork();
         //printNeural(net);
         trainRecognition(net,sigmoid,deriv_sigmoid);  
         //saveWeight("test.net",net);

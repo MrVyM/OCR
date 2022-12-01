@@ -27,78 +27,52 @@ void showStat(NeuralNetwork* net, float (*activ)(float))
 			printf("%d %d %f\n",i,j,(recognized(net,activ,i,j))->value[0][0]);
 }
 
+void train(NeuralNetwork* net, Matrix* input, float soluce, float learning_rate, float (*activ)(float),float (*deriv)(float))
+{
+    Matrix* a0 = initMatrix(1,net->hidden->height); 
+    // Input -> Hidden
+    for(int i = 0; i < net->hidden->height; i++)
+    {
+        for(int j = 0; j < input->height; j++)
+        {
+            a0->value[i][0] += input->value[j][0]*net->hidden->value[i][0];
+        }
+        a0->value[i][0] += net->hiddenBias->value[i][0];
+    }
+    // hidden -> output
+    Matrix* a1 = initMatrix(1, net->output->height);
+    for(int i = 0; i < net->output->height; i++)
+    {
+        for(int j = 0; j < a1->height; j++)
+        {
+            a1->value[i][0] += a0->value[j][0]*net->output->value[i][0];
+        }
+        a1->value[i][0] += net->outputBias->value[i][0];
+    }
+
+    freeMatrix(a0);
+}
+
 NeuralNetwork* trainRecognition(NeuralNetwork* net, float (*activ)(float),float (*deriv)(float))
 {
 	float learning_rate = 0.2;
 	int max_iter = 3500;
-	float training_set = 4.0;
-
+    FILE* lines = fopen("assets/Dataset/lines.txt", "r");
+	float training_set = readNumber(lines);
+    fclose(lines);
     Matrix* training_list = readData("assets/Dataset/data.txt", "assets/Dataset/lines.txt");
-    printf("end read\n"); 
-    float training_soluce = 0.0;
-    printNeural(net);
-    printf("\n");
-	Matrix* dW1 = NULL;
-	Matrix* dW2 = NULL;
-
-	Matrix* dB1 = NULL;
-	Matrix* dB2 = NULL;
-
-	Matrix* z1;
-	Matrix* z2;
 	
 	for(int i = 0; i < max_iter; i++)
 	{
-
-	    dW1 = NULL;
-	    dW2 = NULL;
-
-	    dB1 = NULL;
-	    dB2 = NULL;
-
 	    for(int j = 0; j < training_set; j++)
 		{
 	        // Forward Prop.
-            Matrix* a0 = initMatrix(1,2);
-            // add the data of the network
-            z1 = mulMatrix(net->hidden,a0);
-            z1 = addMatrix(z1,net->hiddenBias);
- 	        Matrix* a1 = applyFunctionMatrix(z1,activ);
-			z2 = mulMatrix(net->output,a1);
-	        z2 = addMatrix(z2,net->outputBias);
-	        Matrix* a2 = applyFunctionMatrix(z2,activ);
-
-	        // Backward Prop
-
-	        Matrix* dz2 = addScalarMatrix(a2,0);
-	        //Matrix* dz2 = addScalarMatrix(a2,-training_soluce[j][0]);
-	        dW2 = addMatrix(dW2,mulMatrix(dz2,transpose(a1))); 
-	        Matrix* dz1 = multiplyMatrix(mulMatrix(transpose(net->output),dz2), applyFunctionMatrix(a1, deriv));
-	        dW1 = addMatrix(dW1,mulMatrix(dz1,transpose(a0)));
-	        dB1 = addMatrix(dB1,dz1);
-
-	        dB2 = addMatrix(dB2,dz2);
-
-	        freeMatrix(a1);
-	        freeMatrix(a2);
-	        freeMatrix(dz1);
-	        freeMatrix(dz2);
-
+            Matrix* input = initMatrix(1,784);
+            for(int i = 0; i < 784; i++)
+                input->value[i][0] = training_list->value[j][i];
+            train(net, input, training_list->value[i][784], learning_rate, activ, deriv);
+            freeMatrix(input);
 	    }
-	    net->hidden = subMatrix(net->hidden,mulScalarMatrix(divScalarMatrix(dW1, training_set),learning_rate));
-	    net->output = subMatrix(net->output,mulScalarMatrix(divScalarMatrix(dW2, training_set),learning_rate));
-	    net->hiddenBias = subMatrix(net->hiddenBias,mulScalarMatrix(divScalarMatrix(dB1, training_set),learning_rate));
-	    net->outputBias = subMatrix(net->outputBias,mulScalarMatrix(divScalarMatrix(dB2, training_set),learning_rate));
-	    //showResult(net,activ);
 	}
-    freeMatrix(z1);
-    freeMatrix(z2);
-
-    freeMatrix(dB1);
-    freeMatrix(dB2);
-
-    freeMatrix(dW1);
-    freeMatrix(dW2);
-
     return net;
 }
