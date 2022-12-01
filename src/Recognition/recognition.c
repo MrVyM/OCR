@@ -38,6 +38,7 @@ void train(NeuralNetwork* net, Matrix* input, float soluce, float learning_rate,
             a0->value[i][0] += input->value[j][0]*net->hidden->value[i][0];
         }
         a0->value[i][0] += net->hiddenBias->value[i][0];
+        a0->value[i][0] = activ(a0->value[i][0]);
     }
     // hidden -> output
     Matrix* a1 = initMatrix(1, net->output->height);
@@ -48,8 +49,11 @@ void train(NeuralNetwork* net, Matrix* input, float soluce, float learning_rate,
             a1->value[i][0] += a0->value[j][0]*net->output->value[i][0];
         }
         a1->value[i][0] += net->outputBias->value[i][0];
+        a1->value[i][0] = activ(a1->value[i][0]);
     }
 
+    
+    freeMatrix(a1);
     freeMatrix(a0);
 }
 
