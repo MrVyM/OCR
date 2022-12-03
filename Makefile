@@ -5,9 +5,12 @@ CC = gcc
 SRC_DIR = src
 INCLUDE_DIR = include
 BUILD_DIR = build
+TESTS_DIR = tests
+
 # add -g argument just after the = of the CFLAGS for debugging with GDB
-CFLAGS = `pkg-config --cflags sdl2 SDL2_image gtk+-3.0` -Wall -Wextra -Werror -I $(INCLUDE_DIR)/
-LFLAGS = `pkg-config --libs sdl2 SDL2_image gtk+-3.0`
+
+CFLAGS = -g `pkg-config --cflags sdl2 SDL2_image` -Wall -Wextra -I $(INCLUDE_DIR)/
+LFLAGS = `pkg-config --libs sdl2 SDL2_image`
 
 # find source file
 SRC = $(shell find $(SRC_DIR) -type f -name '*.c')
@@ -60,8 +63,14 @@ clean:
 	@echo -e "\n---- Projet $(PROJET_NAME) ----\n"
 	@rm -rf $(BUILD_DIR)
 	@echo -e "\tBuild/ delete."
+	@rm -rf $(TESTS_DIR)
+	@echo -e "\tTests/ delete."
 	@rm -rf *.bmp
 	@echo -e "\t*.bmp delete."
 	@rm -f $(EXE)
 	@echo -e "\t$(EXE) delete." 
 	@echo -e "\nClean Finish.\n"
+	
+tests: all
+	@chmod a+x tests.sh 
+	./tests.sh
