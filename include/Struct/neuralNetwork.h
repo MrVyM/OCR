@@ -6,9 +6,11 @@
 
 struct NeuralNetwork
 {
-	Matrix* hidden;
+	Matrix* hidden1;
+	Matrix* hidden2;
 	Matrix* output;
-	Matrix* hiddenBias;
+	Matrix* hidden1Bias;
+	Matrix* hidden2Bias;
 	Matrix* outputBias;
 	int numInput;
 	int numHidden;

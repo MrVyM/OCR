@@ -13,14 +13,12 @@ NeuralNetwork* initNetwork()
 		errx(-1,"NeuralNetwork cannot be initialize.");
 
 
-    network->hidden = randomMatrix(1,30,1);
+    network->hidden1 = randomMatrix(784,16,1);
+    network->hidden2 = randomMatrix(16,10,1);
+	network->hidden1Bias = randomMatrix(1,16,0);
+    network->hidden2Bias = randomMatrix(1,10,0);
 	network->output = randomMatrix(1,10,1);
-	network->hiddenBias = randomMatrix(1,30,0);
 	network->outputBias = randomMatrix(1,10,0);
-
-	network->numHidden = 30;
-	network->numOuput = 10;
-	network->numInput = 784;
 
 	return network;
 }
@@ -37,12 +35,12 @@ void saveWeight(char filename[], NeuralNetwork* net)
     {
         printf("Saving the weight\n");
         char s[50];
-        sprintf(s,"%d\n%d\n%d\n",net->numInput,net->numHidden,net->numOuput);
+        //sprintf(s,"%d\n%d\n%d\n",net->numInput,net->numHidden,net->numOuput);
         fputs(s,file);
-        fputs(stringMatrix(net->hidden),file); 
-        fputs(stringMatrix(net->output),file);
-        fputs(stringMatrix(net->hiddenBias),file);
-        fputs(stringMatrix(net->outputBias),file);
+        //fputs(stringMatrix(net->hidden),file); 
+        //fputs(stringMatrix(net->output),file);
+        //fputs(stringMatrix(net->hiddenBias),file);
+        //fputs(stringMatrix(net->outputBias),file);
         fclose(file);
     }
 }
@@ -66,21 +64,27 @@ NeuralNetwork* loadWeight(char filename[])
 
 void printNeural(NeuralNetwork* net)
 {
-	printf("Hidden :\n");
-	printMatrix(net->hidden);
+	printf("Hidden1 :\n");
+	printMatrix(net->hidden1);
+	printf("Hidden2 :\n");
+	printMatrix(net->hidden2);
 	printf("Output :\n");
 	printMatrix(net->output);
-	printf("HiddenBias :\n");
-	printMatrix(net->hiddenBias);
+	printf("HiddenBias1 :\n");
+	printMatrix(net->hidden1Bias);
+	printf("HiddenBias2 :\n");
+	printMatrix(net->hidden2Bias);
 	printf("OutputBias :\n");
 	printMatrix(net->outputBias);
 }
 
 void freeNetwork(NeuralNetwork* network)
 {
-	free(network->hidden);
+	free(network->hidden1);
+	free(network->hidden1);
 	free(network->output);
-	free(network->hiddenBias);
+	free(network->hidden1Bias);
+	free(network->hidden2Bias);
 	free(network->outputBias);
 
 	free(network);
