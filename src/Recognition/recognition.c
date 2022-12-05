@@ -76,6 +76,7 @@ NeuralNetwork* trainRecognition(NeuralNetwork* net, float (*activ)(float),float 
             Matrix* soluce = initMatrix(1,10);
             soluce->value[0][(int)(training_list->value[i][784])] = 1.0;
             a0 = addMatrix(mulMatrix(net->hidden1, input), net->hidden1Bias);
+            printf("end\n");
             z0 = applyFunctionMatrix(a0, activ);
             a1 = addMatrix(mulMatrix(net->hidden2, a0), net->hidden2Bias);
             z1 = applyFunctionMatrix(a1, activ);
@@ -83,7 +84,6 @@ NeuralNetwork* trainRecognition(NeuralNetwork* net, float (*activ)(float),float 
             z2 = applyFunctionMatrix(a2, activ);
 
 
-            
             Matrix* dZ2 = multiplyMatrix(costFunction(soluce, a2), applyFunctionMatrix(z2, deriv)); 
             dB2 = addMatrix(dB2, dZ2);
             dW2 = addMatrix(dW2,mulMatrix(a2,dZ2));
