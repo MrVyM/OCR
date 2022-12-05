@@ -14,10 +14,10 @@ NeuralNetwork* initNetwork()
 
 
     network->hidden1 = randomMatrix(784,16,1);
-    network->hidden2 = randomMatrix(16,10,1);
+    network->hidden2 = randomMatrix(16,16,1);
 	network->hidden1Bias = randomMatrix(1,16,0);
-    network->hidden2Bias = randomMatrix(1,10,0);
-	network->output = randomMatrix(1,10,1);
+    network->hidden2Bias = randomMatrix(1,16,0);
+	network->output = randomMatrix(16,10,1);
 	network->outputBias = randomMatrix(1,10,0);
 
 	return network;

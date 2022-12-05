@@ -126,11 +126,9 @@ void freeMatrix(Matrix* matrix)
 
 Matrix* multiplyMatrix(Matrix* m1, Matrix* m2)
 {
-    /*printMatrix(m1);
-    printf("\n");
-    printMatrix(m2);
-    printf("\n\n");*/
-    Matrix* res = initMatrix(m1->width,m2->height);
+    if (m1->height != m2->height && m1->width != m2->width)
+        errx(-10,"multiplyMatrix : The size of the matrix is not correct");
+    Matrix* res = initMatrix(m1->width,m1->height);
     for(int i = 0; i < m1->height; i++)
     {
         for(int j = 0; j < m1->width; j++)
