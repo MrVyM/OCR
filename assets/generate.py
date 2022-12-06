@@ -46,7 +46,7 @@ for ttf_file in ttf_files:
     for theta in range(0,30,10) :
         for y in range(-2,2) :
             for x in range(-5,5,2) :
-                for number in range(1,10) :
+                for number in range(0,10) :
                     image = Image.new('RGB', (width, height), WHITE)
                     draw = ImageDraw.Draw(image);
                     if (number != 0) : 
