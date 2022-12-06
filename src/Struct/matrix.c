@@ -123,6 +123,13 @@ void freeMatrix(Matrix* matrix)
     free(matrix);
 }
 
+void multiply(float* list, Matrix* multiplier)
+{
+    for(int i = 0; i < multiplier->height; i++)
+    {
+        list[i] *= multiplier->value[i][0];
+    }
+}
 
 Matrix* multiplyMatrix(Matrix* m1, Matrix* m2)
 {

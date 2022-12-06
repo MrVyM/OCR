@@ -21,6 +21,8 @@ Matrix* transpose(Matrix* matrix);
 
 void freeMatrix(Matrix* matrix);
 
+void multiply(float* list, Matrix* mulitplier);
+
 Matrix* addScalarMatrix(Matrix* matrix, float scalar);
 
 Matrix* mulScalarMatrix(Matrix* matrix, float scalar);
