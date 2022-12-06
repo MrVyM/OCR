@@ -18,55 +18,35 @@
 #include "Struct/matrix.h"
 #include "Xor/function.h"
 #include "Recognition/recognition.h"
+#include "Solver/solving.h"
+#include "Input/file.h"
+#include "Input/recompose.h"
 
-int main(int argc, char **argv)
-{
-    if (argc != 2 && argc != 3)
-    {
-        NeuralNetwork* net = initNetwork();
-        //printNeural(net);
-        trainRecognition(net,sigmoid,deriv_sigmoid);  
-        //saveWeight("test.net",net);
-        //loadWeight("test.net");
-        //showResult(net,sigmoid);
-        freeNetwork(net);
-    }
-    else
-    {
-        if (SDL_Init(SDL_INIT_VIDEO) != 0)
-            errx(EXIT_FAILURE, "%s", SDL_GetError());
-        
-        double angleRotation = 0;
-        if (argc == 3)
-            angleRotation = strtod(argv[2], NULL);
 
-        printf("The image will be rotate with a angle of %.0f degrees.\n", angleRotation);
-        Image *image = importImage(argv[1]);
-        //image = resizeImage(image, 750);
-        saveImage(image, "resize.bmp");
-        grayscaleImage(image);
-        saveImage(image, "grayscale.bmp");
-        // Les tests ci-dessous sont des essais qui ont été non-concluants.
-        // sobelOperator(image);
-        // saveImage(image,"sobel.bmp");
-        // applyGamma(image, 255);
-        // saveImage(image, "gamma.bmp");
-        // applyContrast(image, 128);
-        // saveImage(image, "contrast.bmp");
-        // applyGaussianBlur(image);
-        // saveImage(image, "blur.bmp");
-        // dilate(image, 5);
-        // saveImage(image, "dilate.bmp");
-        // erode(image, 5);
-        // saveImage(image, "erode.bmp");
-        otsuTresolding(image);
-        saveImage(image, "thresolding.bmp");
-        houghTransformBis(image);
-        saveImage(image, "hough.bmp");
-        image = rotateImage(image, angleRotation);
-        saveImage(image, "rotation.bmp");
-        freeImage(image);
-        SDL_Quit();
-    }
-    return EXIT_SUCCESS;
+int main(int argc, char** argv){
+    if(argc != 2)
+        errx(1, "The number of arguments is not valid");
+
+    size_t filename_len = strlen(argv[1]);
+    char filename[filename_len];
+    strcpy(filename, argv[1]);
+
+    unsigned char grid[9][9] = {};
+    unsigned char initial[9][9] = {};
+    read_sudoku_file(filename, initial);
+    int result_value = read_sudoku_file(filename, grid);
+
+    if(result_value == 1)
+        errx(2, "The file specified in argument doesn't exist");
+    else if(result_value == 2)
+        errx(3, "The file specified in argument doesn't respect the correct sudoku grid format");
+    else if(!solve_sudoku(grid, 0, 0))
+        errx(4, "No solution exists for this sudoku grid");
+
+    char result_filename[filename_len + 7];
+    strcpy(result_filename, filename);
+    strcat(result_filename, ".bmp");
+    write_sudoku_image(result_filename, grid, initial);
+
+    return 0;
 }

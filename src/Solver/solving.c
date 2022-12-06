@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "Solver/solving.h"
 
 /*******************************************************************************
  * Allows to display/print a sudoku grid
