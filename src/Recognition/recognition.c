@@ -5,17 +5,25 @@
 #include <stdlib.h>
 
 
-Matrix* recognized(NeuralNetwork* net,float (*activ)(float), float a, float b)
+Matrix* recognized(NeuralNetwork* net,float (*activ)(float), Matrix* input)
 {
-	return NULL;
+	Matrix* z0 = addMatrix(mulMatrix(net->hidden1, input), net->hidden1Bias);
+    Matrix* a0 = applyFunctionMatrix(z0, activ);
+    Matrix* z1 = addMatrix(mulMatrix(net->hidden2, a0), net->hidden2Bias);
+    Matrix* a1 = applyFunctionMatrix(z1, activ);
+    Matrix* z2 = addMatrix(mulMatrix(net->output, a1), net->outputBias);
+    Matrix* a2 = applyFunctionMatrix(z2, activ);
+    return a2;
 }
 
 void showStat(NeuralNetwork* net, float (*activ)(float))
 {
 	printf("Result : \n");
+    /*
 	for(int i = 0; i <= 1; i++)
 		for(int j = 0; j <=1; j++)
-			printf("%d %d %f\n",i,j,(recognized(net,activ,i,j))->value[0][0]);
+			printf("%d %d %f\n",i,j,(recognized(net,activ,))->value[0][0]);
+    */
 }
 
 Matrix* costFunction(Matrix* soluce, Matrix* result)
@@ -96,8 +104,20 @@ NeuralNetwork* trainRecognition(NeuralNetwork* net, float (*activ)(float),float 
                 multiply(net->hidden1->value[0],dZ0, learning_rate);
             }
 	    }
-        printf("trst\n");
+        if (i % 100 == 0)
+            printf("Iter : %d\n",i);
     }
     freeMatrix(input);
+    freeMatrix(z0);
+    freeMatrix(z1);
+    freeMatrix(z2);
+
+    freeMatrix(a0);
+    freeMatrix(a1);
+    freeMatrix(a2);
+
+    freeMatrix(dZ0);
+    freeMatrix(dZ1);
+    freeMatrix(dZ2);
     return net;
 }

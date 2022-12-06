@@ -8,6 +8,7 @@ image_path = "Dataset"
 width = 28 
 height = 28 
 WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
 
 if os.path.exists(image_path+"/data.txt") : 
     os.remove(image_path + "/data.txt")
@@ -32,9 +33,16 @@ def noise(x,y,theta) :
     if (theta+x+y < 3) :
         return None
     for i in range(0,28**2,x+y+theta) :
-        draw.point((i%28,i/14),fill=BLACK)
+        draw.point((i%28,i/12),fill=BLACK)
 
-BLACK = (0, 0, 0)
+def noiseWhite(x,y,theta) :
+    if (theta+x+y < 3) :
+        return None
+    for i in range(0,28**2,x+y+theta) :
+        draw.point((i/25,i%25),fill=WHITE)
+        draw.point(((i+1)/25,(i+1)%25),fill=WHITE)
+
+
 #draw.text((20, 20), "Cercle trigonométrique", fill=BLACK)
 ttf_files = glob.glob("Font/*.ttf")
 count = 0
@@ -51,7 +59,7 @@ for ttf_file in ttf_files:
                     draw = ImageDraw.Draw(image);
                     if (number != 0) : 
                         draw.text((9+x,1+y),str(number),fill=BLACK,font=font)
-                    
+                    noiseWhite(int(x/4),int(y/4),theta) 
                     noise(x,y,theta)
                     count += 1
                     addFile(image,number)
