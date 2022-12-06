@@ -62,7 +62,7 @@ int main(int argc, char **argv)
         Line **line = houghTransform(image);
         saveImage(image, "hough.bmp");
 	
-	int[9][9] sudoku = square(image,line);
+	square(image,line);
         //image = rotateImage(image, angleRotation);
         //saveImage(image, "rotation.bmp");
         freeImage(image);

@@ -5,6 +5,6 @@
 #include "Struct/line.h"
 #include "Treatment/houghTransform.h"
 
-int[9][9] square(Image* image,Line** listeline);
+int** square(Image* image,Line** listeline);
 
 #endif

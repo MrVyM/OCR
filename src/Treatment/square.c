@@ -68,9 +68,6 @@ Image* findbiggestSquare(Image* image,Line** listeline){
 Image** cutImage(Image* image){
     Image** tab = malloc(9*sizeof(Image*));
     int x1,y1,x2,y2;
-    int x1max,y1max,x2max,y2max;
-    int max = 0;
-    int tmp;
     int x = image->width/3;
     int y = image->height/3;
     for(int i = 0; i < 3; i++){
@@ -92,7 +89,7 @@ int* Imagetoint(Image* image){
     for(int i = 0; i < 28; i++){
         for(int j = 0; j < 28; j++){
             // on met 1 si le pixel est noir et 0 sinon
-            if(image2->pixels[i][j].r == 0){
+            if(image2->pixels[i][j].red == 0){
                 tab[i*28+j] = 1;
             }else{
                 tab[i*28+j] = 0;
@@ -104,7 +101,7 @@ int* Imagetoint(Image* image){
 
 int** createTab(Image** tab){
     // on crée un tableau de 9*9
-    int** tab2 = malloc(9*sizeof(int*));
+    int* tab2 = malloc(9*sizeof(int*));
     for(int i = 0; i < 9; i++){
         tab2[i] = malloc(9*sizeof(int));
     }
