@@ -7,6 +7,6 @@
 
 Matrix *createAccumulator(Image *image);
 Line **fillHoughMatrix(Image *image, Matrix *accumulator);
-void houghTransform(Image *image);
+Line** houghTransform(Image *image);
 
 #endif

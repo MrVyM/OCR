@@ -90,11 +90,12 @@ Line **fillHoughMatrix(Image *image, Matrix *accumulator)
     return lines;
 }
 
-void houghTransform(Image *image)
+Line** houghTransform(Image *image)
 {
     Matrix *accumulator = createAccumulator(image);
     Line **lines = fillHoughMatrix(image, accumulator);
     for (int index = 0; lines[index] != NULL; index++)
         drawLine(image, lines[index]);
     free(accumulator);
+    return lines;
 }
