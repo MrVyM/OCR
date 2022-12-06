@@ -21,9 +21,9 @@ typedef struct NeuralNetwork NeuralNetwork;
 
 NeuralNetwork* initNetwork();
 
-void saveWeight(char filename[], NeuralNetwork* net);
+void saveWeight(char hidden1_c[], char hidden2_c[], char output_c[], NeuralNetwork* net);
 
-NeuralNetwork* loadWeight(char filename[]);
+NeuralNetwork* loadWeight(char hidden1_c[], char hidden2_c[], char output_c[]);
 
 void printNeural(NeuralNetwork* net);
 

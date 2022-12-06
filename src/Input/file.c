@@ -13,9 +13,9 @@ int readNumber(FILE *file)
     if (readed == '-')
         sign = -1;
     else if (readed == 10 || readed == 32)
-        return result;
+        return result * sign;
     else if (readed < 48 || readed > 57)
-        return result;
+        return result * sign;
     else 
     {
         result *= 10;
@@ -33,24 +33,52 @@ int readNumber(FILE *file)
     return result * sign;
 }
 
-float readFloat(FILE *file)
+int readUnsignedNumber(FILE *file, char readed)
 {
-    float result = readNumber(file);
-    char readed;
-    float number = 1;
+    int result = 0;
     while ((readed = fgetc(file))!= EOF)
     {
         if (readed == 10 || readed == 32)
             return result;
         if (readed < 48 || readed > 57)
             break;
+        result *= 10;
+        result += (readed - 48);
+    }
+    return result;
+}
+
+float readFloat(FILE *file)
+{
+
+    char readed = fgetc(file);
+    char sign = 1;
+    if(readed == '|')
+{
+	return 1;
+}
+    if (readed == '-')
+    {
+        sign = -1;
+        readed = fgetc(file);
+    }
+    float result = readUnsignedNumber(file, readed);
+    float number = 1;
+    while ((readed = fgetc(file))!= EOF)
+    {
+        if (readed == 10 || readed == 32)
+	{
+            return result * sign;
+	}
+        if (readed < 48 || readed > 57)
+            break;
         number /= 10.0;
         if (result < 0)
-            result -= (float)(readed - 48) * number;        
+            result -= (float)(readed - 48) * number;
         else 
             result += (float)(readed - 48) * number;
     }
-    return result;
+    return result * sign;
 }
 
 Matrix* readData(char data[], char lines[])
