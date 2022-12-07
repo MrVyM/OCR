@@ -7,7 +7,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
-#include "Struct/resize.h"
+#include "Treatment/resize.h"
 
 Image *extractSquare(Image *image, int x1, int y1, int x2, int y2)
 {
@@ -155,7 +155,7 @@ Image **cutImage(Image *image)
 int *Imagetoint(Image *image)
 {
     // on rezie l'image pour avoir une image de 28*28
-    Image *image2 = resize(image, 28, 28);
+    Image *image2 = resizeImage(image, 28*28);
     int *tab = malloc(28 * 28 * sizeof(int));
     for (int i = 0; i < 28; i++)
     {
@@ -175,14 +175,10 @@ int *Imagetoint(Image *image)
     return tab;
 }
 
-int **createTab(Image **tab)
+int* createTab(Image **tab)
 {
     // on crée un tableau de 9*9
-    int *tab2 = malloc(9 * sizeof(int *));
-    for (int i = 0; i < 9; i++)
-    {
-        tab2[i] = malloc(9 * sizeof(int));
-    }
+    int tab2[9];
     // on parcours le tableau d'image et on converti en tableau d'entier
     for (int i = 0; i < 9; i++)
     {
@@ -196,8 +192,11 @@ int **result(Image *image)
     // on découpe l'image en 9 carrés
     Image **tab = cutImage(image);
     // on crée un tableau de 9*9
-    int **tab2 = createTab(tab);
-    return tab2;
+    int* sudoku[9];
+    for (int i = 0;i <9;i++){
+    	sudoku[i] = createTab(cutImage(tab[i]));
+	}
+    return sudoku;
 }
 
 int **square(Image *image, Line **listeline)

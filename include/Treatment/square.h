@@ -4,6 +4,7 @@
 #include "Struct/image.h"
 #include "Struct/line.h"
 #include "Treatment/houghTransform.h"
+#include "Treatment/resize.h"
 
 int** square(Image* image,Line** listeline);
 
