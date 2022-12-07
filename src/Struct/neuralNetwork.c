@@ -17,7 +17,7 @@ NeuralNetwork* initNetwork()
     network->hidden2 = randomMatrix(16,16,1);
 	network->hidden1Bias = randomMatrix(1,16,0);
     network->hidden2Bias = randomMatrix(1,16,0);
-	network->output = randomMatrix(16,10,1);
+	network->output = randomMatrix(16,10,0);
 	network->outputBias = randomMatrix(1,10,0);
 
 	return network;
@@ -182,7 +182,7 @@ void printNeural(NeuralNetwork* net)
 void freeNetwork(NeuralNetwork* network)
 {
 	free(network->hidden1);
-	free(network->hidden1);
+	free(network->hidden2);
 	free(network->output);
 	free(network->hidden1Bias);
 	free(network->hidden2Bias);

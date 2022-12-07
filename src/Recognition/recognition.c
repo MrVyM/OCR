@@ -42,7 +42,7 @@ NeuralNetwork* trainRecognition(NeuralNetwork* net, float (*activ)(float),float 
 {
     printNeural(net);
 	float learning_rate = 0.2;
-	int max_iter = 3500;
+	int max_iter = 500;
     FILE* lines = fopen("assets/Dataset/lines.txt", "r");
 	float training_set = readNumber(lines);
     fclose(lines);
@@ -62,14 +62,11 @@ NeuralNetwork* trainRecognition(NeuralNetwork* net, float (*activ)(float),float 
     }
     Matrix* soluce;
 
-    Matrix* hidden1Tranpose = transpose(net->hidden1);
     Matrix* hidden2Tranpose = transpose(net->hidden2);
     Matrix* outputTranpose = transpose(net->output);
-
-
 	for(int i = 0; i < max_iter; i++)
 	{
-	    for(int j = 0; j < training_set; j++)
+	    for(int j = 0; j <= training_set; j++)
 		{
 	        // Forward Prop.
             for(int i = 0; i < 784; i++)
@@ -103,7 +100,6 @@ NeuralNetwork* trainRecognition(NeuralNetwork* net, float (*activ)(float),float 
                 for(int j = 0; j < net->hidden1->height; j++)
                     net->hidden1->value[j][i] *= dZ0->value[j][0]* learning_rate;
             }
-            
             freeMatrix(z0);
             freeMatrix(z1);
             freeMatrix(z2);
@@ -111,11 +107,15 @@ NeuralNetwork* trainRecognition(NeuralNetwork* net, float (*activ)(float),float 
             freeMatrix(a0);
             freeMatrix(a1);
             freeMatrix(a2);
-	    }
+        }
         if (i % 100 == 0)
             printf("Iter : %d\n",i);
     }
     freeMatrix(input);
+    freeMatrix(soluce);
+    freeMatrix(outputTranpose);
+    freeMatrix(hidden2Tranpose);
+    free(list_soluce);
 
     freeMatrix(dZ0);
     freeMatrix(dZ1);

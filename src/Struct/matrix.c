@@ -10,13 +10,12 @@ Matrix* initMatrix(int width, int height) {
         errx(-1,"The matrix cannot be initialize");
     matrix->width = width;
     matrix->height = height;
-    float** data = malloc(sizeof(float*) * height); 
-    if (data == NULL)
+    matrix->value = malloc(sizeof(float*) * height); 
+    if (matrix->value == NULL)
         errx(-1,"The data cannot be initialize");
     for(int x = 0; x < height; x++){
-        data[x] = calloc(width, sizeof(float));
+        matrix->value[x] = calloc(width, sizeof(float));
     }
-    matrix->value = data;
     return matrix;
 }
 
@@ -46,28 +45,27 @@ Matrix* randomMatrix(int width, int height, int negative) {
         errx(-1,"randomMatrix : the matrix cannot be initialize");
     matrix->width = width;
     matrix->height = height;
-    float** data = malloc(sizeof(float*) * height); 
-    if (data == NULL)
+    matrix->value = malloc(sizeof(float*) * height); 
+    if (matrix->value == NULL)
         errx(-1,"randomMatrix : the line cannot be initialize");
     if (negative) 
     {
         for(int x = 0; x < height; x++)
         {
-            data[x] = calloc(width, sizeof(float));
+            matrix->value[x] = calloc(width, sizeof(float));
             for(int y = 0; y < width; y++)
-                data[x][y] = ((float)rand()/(RAND_MAX/2)) - 1;
+                matrix->value[x][y] = ((float)rand()/(RAND_MAX/2)) - 1;
         }
     } 
     else
     {
         for(int x = 0; x < height; x++)
         {
-            data[x] = calloc(width, sizeof(float));
+            matrix->value[x] = calloc(width, sizeof(float));
             for(int y = 0; y < width; y++)
-                data[x][y] = ((float)rand()/RAND_MAX);
+                matrix->value[x][y] = ((float)rand()/RAND_MAX);
         }
     }
-    matrix->value = data;
     return matrix;
 }
 
