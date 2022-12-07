@@ -78,7 +78,7 @@ void printMatrix(Matrix* matrix)
     else
     {
         printf("h : %d w : %d\n",matrix->height,matrix->width);
-    /*        for(int i = 0; i < matrix->height; i++)
+        /*for(int i = 0; i < matrix->height; i++)
         {
             printf("%d : ",i);
             for(int j = 0; j < matrix->width; j++)
@@ -123,24 +123,20 @@ void freeMatrix(Matrix* matrix)
     free(matrix);
 }
 
-void multiply(float* list, Matrix* multiplier, float learning_rate)
-{
-    for(int i = 0; i < multiplier->height; i++)
-    {
-        list[i] *= multiplier->value[i][0] * learning_rate;
-    }
-}
 
 Matrix* multiplyMatrix(Matrix* m1, Matrix* m2)
 {
-    if (m1->height != m2->height && m1->width != m2->width)
-        errx(-10,"multiplyMatrix : The size of the matrix is not correct");
-    Matrix* res = initMatrix(m1->width,m1->height);
+    /*printMatrix(m1);
+    printf("\n");
+    printMatrix(m2);
+    printf("\n\n");*/
+    Matrix* res = initMatrix(m1->width,m2->height);
     for(int i = 0; i < m1->height; i++)
     {
         for(int j = 0; j < m1->width; j++)
             res->value[i][j] = m1->value[i][j] * m2->value[i][j];
     }
+    free(m1);
     return res;
 }
 
@@ -177,6 +173,17 @@ Matrix* mulScalarMatrix(Matrix* matrix, float scalar)
     return res;
 }
 
+
+void multiply(float* list, Matrix* multiplier, float learning_rate)
+{
+    for(int i = 0; i < multiplier->height; i++)
+    {
+        //printf("%d ",i);
+        list[i] *= multiplier->value[i][0] * learning_rate;
+    }
+    // printf("\n");
+}
+
 Matrix* addMatrix(Matrix* m1, Matrix* m2)
 {
     if (m1 == NULL)
@@ -187,6 +194,7 @@ Matrix* addMatrix(Matrix* m1, Matrix* m2)
             for(int j = 0; j < m2->width; j++)
                 res->value[i][j] = m2->value[i][j];
         }
+        free(m1);
         return res;
     } 
     else
@@ -200,6 +208,7 @@ Matrix* addMatrix(Matrix* m1, Matrix* m2)
             for(int j = 0; j < m1->width; j++)
                 res->value[i][j] = m1->value[i][j] + m2->value[i][j];
         }
+        free(m1);
         return res;
     }
 }

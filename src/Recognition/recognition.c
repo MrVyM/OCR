@@ -48,27 +48,24 @@ NeuralNetwork* trainRecognition(NeuralNetwork* net, float (*activ)(float),float 
     fclose(lines);
     Matrix* training_list = readData("assets/Dataset/data.txt", "assets/Dataset/lines.txt");
 
-    Matrix* z0;
-    Matrix* z1;
-    Matrix* z2;
-
-    Matrix* a0;
-    Matrix* a1;
-    Matrix* a2;
-
     Matrix* dZ0;
     Matrix* dZ1;
     Matrix* dZ2;
 
-
     Matrix* input = initMatrix(1,784);
     Matrix** list_soluce = malloc(sizeof(struct Matrix) * 10);
+
     for(int i = 0; i < 10; i++)
     {
         list_soluce[i] = initMatrix(1,10);
         list_soluce[i]->value[0][i] = 1.0;
     }
     Matrix* soluce;
+
+    Matrix* hidden1Tranpose = transpose(net->hidden1);
+    Matrix* hidden2Tranpose = transpose(net->hidden2);
+    Matrix* outputTranpose = transpose(net->output);
+
 
 	for(int i = 0; i < max_iter; i++)
 	{
@@ -78,43 +75,47 @@ NeuralNetwork* trainRecognition(NeuralNetwork* net, float (*activ)(float),float 
             for(int i = 0; i < 784; i++)
                 input->value[i][0] = training_list->value[j][i];
             soluce = list_soluce[(int)(training_list->value[j][i])];
-            z0 = addMatrix(mulMatrix(net->hidden1, input), net->hidden1Bias);
-            a0 = applyFunctionMatrix(z0, activ);
-            z1 = addMatrix(mulMatrix(net->hidden2, a0), net->hidden2Bias);
-            a1 = applyFunctionMatrix(z1, activ);
-            z2 = addMatrix(mulMatrix(net->output, a1), net->outputBias);
-            a2 = applyFunctionMatrix(z2, activ);
-
+            Matrix* z0 = addMatrix(mulMatrix(net->hidden1, input), net->hidden1Bias);
+            Matrix* a0 = applyFunctionMatrix(z0, activ);
+            Matrix* z1 = addMatrix(mulMatrix(net->hidden2, a0), net->hidden2Bias);
+            Matrix* a1 = applyFunctionMatrix(z1, activ);
+            Matrix* z2 = addMatrix(mulMatrix(net->output, a1), net->outputBias);
+            Matrix* a2 = applyFunctionMatrix(z2, activ);
+            
+            
             dZ2 = multiplyMatrix(costFunction(soluce, a2), applyFunctionMatrix(z2, deriv)); 
             for(int i = 0; i < net->output->width; i++)
             {
-                multiply(net->output->value[0],dZ2, learning_rate);
+                for(int j = 0; j < net->output->height; j++)
+                    net->output->value[j][i] *= dZ2->value[j][0]* learning_rate;
             }
-
-            dZ1 = multiplyMatrix(mulMatrix(transpose(net->output),dZ2), applyFunctionMatrix(z1, deriv));
+            dZ1 = multiplyMatrix(mulMatrix(outputTranpose,dZ2), applyFunctionMatrix(z1, deriv));
             
             for(int i = 0; i < net->hidden2->width; i++)
             {
-                multiply(net->hidden2->value[0],dZ1, learning_rate);
+                for(int j = 0; j < net->hidden2->height; j++)
+                    net->hidden1->value[j][i] *= dZ1->value[j][0]* learning_rate;
             }
 
-            dZ0 = multiplyMatrix(mulMatrix(transpose(net->hidden2),dZ1), applyFunctionMatrix(z0, deriv));
+            dZ0 = multiplyMatrix(mulMatrix(hidden2Tranpose,dZ1), applyFunctionMatrix(z0, deriv));
             for(int i = 0; i < net->hidden1->width; i++)
             {
-                multiply(net->hidden1->value[0],dZ0, learning_rate);
+                for(int j = 0; j < net->hidden1->height; j++)
+                    net->hidden1->value[j][i] *= dZ0->value[j][0]* learning_rate;
             }
+            
+            freeMatrix(z0);
+            freeMatrix(z1);
+            freeMatrix(z2);
+
+            freeMatrix(a0);
+            freeMatrix(a1);
+            freeMatrix(a2);
 	    }
         if (i % 100 == 0)
             printf("Iter : %d\n",i);
     }
     freeMatrix(input);
-    freeMatrix(z0);
-    freeMatrix(z1);
-    freeMatrix(z2);
-
-    freeMatrix(a0);
-    freeMatrix(a1);
-    freeMatrix(a2);
 
     freeMatrix(dZ0);
     freeMatrix(dZ1);
