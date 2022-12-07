@@ -35,7 +35,7 @@ void saveWeight(char hidden1_c[], char hidden2_c[], char output_c[], NeuralNetwo
     }
     else 
     {
-        printf("Saving the weight\n");
+        printf("Saving the weight in %s\n",hidden1_c);
 	for(size_t i = 0; i < 16; ++i)
 	{
 		for(size_t j = 0; j < 784; ++j)
@@ -49,6 +49,7 @@ void saveWeight(char hidden1_c[], char hidden2_c[], char output_c[], NeuralNetwo
 		}
 		fprintf(hidden1,"\n");
 	}
+        printf("Saving the weight in %s\n",hidden2_c);
 
 	for(size_t i = 0; i < 16; ++i)
 	{
@@ -63,6 +64,7 @@ void saveWeight(char hidden1_c[], char hidden2_c[], char output_c[], NeuralNetwo
 		}
 		fprintf(hidden2,"\n");
 	}
+        printf("Saving the weight in %s\n",output_c);
 
 	for(size_t i = 0; i < 10; ++i)
 	{

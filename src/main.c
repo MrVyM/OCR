@@ -23,10 +23,12 @@ int main(int argc, char **argv)
 {
     if (argc != 2 && argc != 3)
     {
+        printf("Training Mode : \n");
         NeuralNetwork* net = initNetwork();
         //printNeural(net);
-        trainRecognition(net,sigmoid,deriv_sigmoid);  
-        //saveWeight("test.net",net);
+        trainRecognition(net,sigmoid,deriv_sigmoid); 
+        printMatrix(net->output); 
+        saveWeight("h1.net","h2.net","ot.net",net);
         //loadWeight("test.net");
         //showResult(net,sigmoid);
         freeNetwork(net);
