@@ -56,7 +56,9 @@ Image *findbiggestSquare(Image *image, Line **listeline)
     while (listeline[i] != 0)
     {
         x = listeline[i]->x1;
+	printf("x : %d\n",x);
         y = listeline[i]->y1;
+	printf("y : %d\n",y);
         int j = 0;
         // on cherche une ligne qui a un x proche de x
 
@@ -125,6 +127,7 @@ Image *findbiggestSquare(Image *image, Line **listeline)
             {
                 y2 = tempy2;
             }
+	    j++;
         }
     }
     return extractSquare(image, x1, y1, x2, y2);
