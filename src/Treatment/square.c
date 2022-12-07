@@ -32,26 +32,45 @@ int number(int *l)
     return 0;
 }
 
+Image *findBiggest(Image *image, Line **listeline){
+	int i = 0;
+	int x1 = 0;
+	int x2 = 0;
+	int y1 = 0;
+	int y2 = 0;
+
+	while(listeline[i] != 0){
+		if (listeline[i]->x2 > x2){
+			x2 = listeline[i]->x2;
+		}
+		if (listeline[i]->y2 > y2){
+			y2 = listeline[i]->y2;
+		}
+		i++;
+	}
+	return extractSquare(image, x1, y1, x2, y2);
+}
+
 Image *findbiggestSquare(Image *image, Line **listeline)
 {
 
     int i = 0;
-    int x;
-    int y;
-    int tempx;
-    int tempy;
+    int x = 0;
+    int y = 0;
+    int tempx = 0;
+    int tempy = 0;
 
     // x1,y1,x2,y2 sont les coordonnée du plus grand carré trouvé
-    int x1;
-    int y1;
-    int x2;
-    int y2;
+    int x1 = 0;
+    int y1 = 0;
+    int x2 = 0;
+    int y2 = 0;
 
     // tempx1,y1,x2,y2 sont les coordonnée du carré en cours de recherche
-    int tempx1;
-    int tempy1;
-    int tempx2;
-    int tempy2;
+    int tempx1 = 0;
+    int tempy1 = 0;
+    int tempx2 = 0;
+    int tempy2 = 0;
 
     while (listeline[i] != 0)
     {
@@ -79,6 +98,7 @@ Image *findbiggestSquare(Image *image, Line **listeline)
                 else
                 {
                     tempy1 = listeline[i]->y2;
+
                 }
                 if (listeline[j]->y1 < listeline[j]->y2)
                 {
@@ -113,6 +133,7 @@ Image *findbiggestSquare(Image *image, Line **listeline)
 
             if (tempx1 > x1)
             {
+	    	printf("tes un fils de pute : %d\n",tempx1);
                 x1 = tempx1;
             }
             if (tempy1 > y1)
@@ -131,6 +152,8 @@ Image *findbiggestSquare(Image *image, Line **listeline)
         }
 	i++;
     }
+    printf("x fin : %d\n",x1);
+    printf("y fin : %d\n",y1);
     return extractSquare(image, x1, y1, x2, y2);
 }
 
@@ -210,7 +233,8 @@ int **square(Image *image, Line **listeline)
     // findSquare(image, &x1, &y1, &x2, &y2);
     // Image *result= extractSquare(image, l[0], l[1], l[2], l[3]);
     // Image *result= extractSquare(image,50,50,200,200);
-    Image *image2 = findbiggestSquare(image, listeline);
+    //Image *image2 = findbiggestSquare(image, listeline);
+    Image *image2 = findBiggest(image,listeline);
     saveImage(image2, "square.bmp");
     int **sudoku = result(image2);
     return sudoku;
