@@ -76,13 +76,15 @@ void printMatrix(Matrix* matrix)
     else
     {
         printf("h : %d w : %d\n",matrix->height,matrix->width);
-        /*for(int i = 0; i < matrix->height; i++)
+        for(int i = 0; i < matrix->height; i++)
         {
-            printf("%d : ",i);
+            printf("%2d : ",i);
             for(int j = 0; j < matrix->width; j++)
-                printf("%f ",matrix->value[i][j]);
+            {
+                    printf("%5.2f ",4,matrix->value[i][j]);                    
+            }
             printf("\n");
-        }*/
+        }
     }
 }
 
