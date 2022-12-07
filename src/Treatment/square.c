@@ -129,6 +129,7 @@ Image *findbiggestSquare(Image *image, Line **listeline)
             }
 	    j++;
         }
+	i++;
     }
     return extractSquare(image, x1, y1, x2, y2);
 }
