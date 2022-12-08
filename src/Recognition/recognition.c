@@ -16,6 +16,7 @@ Matrix* recognized(NeuralNetwork* net,float (*activ)(float), Matrix* input)
     return a2;
 }
 
+
 void showStat(NeuralNetwork* net, float (*activ)(float))
 {
 	printf("Result : \n");
@@ -42,7 +43,7 @@ NeuralNetwork* trainRecognition(NeuralNetwork* net, float (*activ)(float),float 
 {
     //printNeural(net);
 	float learning_rate = 0.2;
-	int max_iter = 1;
+	int max_iter = 8;
     FILE* lines = fopen("assets/Dataset/lines.txt", "r");
 	float training_set = readNumber(lines);
     fclose(lines);
@@ -62,7 +63,7 @@ NeuralNetwork* trainRecognition(NeuralNetwork* net, float (*activ)(float),float 
     for(int i = 0; i < 10; i++)
     {
         list_soluce[i] = initMatrix(1,10);
-        list_soluce[i]->value[0][i] = 1.0;
+        list_soluce[i]->value[i][0] = 1.0;
     }
     Matrix* soluce;
 
@@ -70,43 +71,32 @@ NeuralNetwork* trainRecognition(NeuralNetwork* net, float (*activ)(float),float 
     Matrix* hidden2Tranpose = transpose(net->hidden2);
     Matrix* outputTranpose = transpose(net->output);
 
-
+    float train_f = 0;
+    float train_v = 0;
 	for(int i = 0; i < max_iter; i++)
 	{
 	    for(int j = 0; j < training_set; j++)
 		{
             for(int h = 0; h < 784; h++)
                 input->value[h][0] = training_list->value[j][h];
-            soluce = list_soluce[(int)(training_list->value[j][i])];
+            soluce = list_soluce[(int)(training_list->value[j][784])];
 
             // Forward Propagation
 
             //Zh1 = [ X • wh1 ] + bh1
             Matrix* Zh1 = addMatrix(mulMatrix(net->hidden1, input), net->hidden1Bias);
-            /*
-            printf("Zh1 h = %d (h1) w = %d (n)\n", Zh1->height, Zh1->width);
-            printf("X h = %d (d) w = %d (n)\n", input->height, input->width);
-            printf("Wh1 h = %d (h1) w = %d (d)\n", net->hidden1->height, net->hidden1->width);
-            printf("bh1 h = %d (h1) w = %d (1)\n", net->hidden1Bias->height, net->hidden1Bias->width);
-            */
 
             //ah1 = Φ (Zh1)
             Matrix* ah1 = applyFunctionMatrix(Zh1, activ);
-            //Zh2 = [ ah1 • wh2 ] + bh2
 
+            //Zh2 = [ ah1 • wh2 ] + bh2
             Matrix* Zh2 = addMatrix(mulMatrix(net->hidden2, ah1), net->hidden2Bias);
+
             // ah2 = Φ (Zh2)
             Matrix* ah2 = applyFunctionMatrix(Zh2, activ);
-            // Zout = [ ah2 • wout ] + bhout
 
+            // Zout = [ ah2 • wout ] + bhout
             Matrix* Zout = addMatrix(mulMatrix(net->output, ah2), net->outputBias);
-            /*
-            printf("\n");
-            printf("Zout h = %d (t) w = %d (n)\n", Zout->height, Zout->width);
-            printf("ah2 h = %d (h2) w = %d (n)\n", ah2->height, ah2->width);
-            printf("wout h = %d (t) w = %d (h2)\n", net->output->height, net->output->width);
-            printf("bout h = %d (t) w = %d (1)\n", net->outputBias->height, net->outputBias->width);
-            */
 
             // aout = Φ (Zout)
             Matrix* aout = applyFunctionMatrix(Zout, activ);
@@ -117,15 +107,10 @@ NeuralNetwork* trainRecognition(NeuralNetwork* net, float (*activ)(float),float 
             // Step 1:
             // Errorout = aout - soluce
             Matrix* Errorout = subMatrix(aout, soluce);
-            /*
-            printMatrix(Errorout);// h = 10 -
-            printMatrix(aout);
-            printMatrix(soluce);*/
 
             //Step 2:
             // Δwout = η ( ah2T • Errorout ) (η -> learning rate)
             Matrix* ah2T = transpose(ah2);
-            printMatrix(ah2T); // h = 1 w = 16
             Matrix* deltaWout = mulScalarMatrix(mulMatrix(Errorout, ah2T), learning_rate);
 
             // Δbout = η [ ∑i=1,n (Errorout,i) ]
@@ -178,12 +163,26 @@ NeuralNetwork* trainRecognition(NeuralNetwork* net, float (*activ)(float),float 
             // bh1 = bh1 - Δbh1
             net->hidden2Bias = subMatrix(net->hidden1Bias, deltaBh1);
             
-            printf("%d t = %f\n",j,training_set);
+            /*
+            Matrix* p = recognized(net, activ, input);
+            if(maxIndexMatrix(p) == maxIndexMatrix(soluce))
+            {
+                train_v += 1;
+            }
+            else
+            {
+                train_f += 1;
+            }
+            float bhd = train_v / (train_v + train_f);
+            printf("vrai: %f % \n", bhd);
+            printMatrix(p);
+            printf("p %d\n", maxIndexMatrix(p));
+            printf("soluce %d\n", maxIndexMatrix(soluce));
+            */
 	    }
         if (i % 100 == 0)
             printf("Iter : %d\n",i);
     }
-    printf("pass\n");
     freeMatrix(input);
     return net;
 }
