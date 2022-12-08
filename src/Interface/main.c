@@ -100,8 +100,13 @@ void change_image(GtkWidget *widget, gpointer data)
     
     gchar *filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(widget));
 
-    gchar *filename2 = filename + 1;
-    g_print("%s \n",filename2);
+    //gchar *filename2 = filename + 1;
+    Image *image = importImage(filename);
+    if (image->height > 1000 || image->width > 1000){
+    	image = resizeImage(image, 1000000);
+	saveImage(image, );
+    }
+
 
     gtk_image_set_from_file(GTK_IMAGE(ui->image), filename);
 
