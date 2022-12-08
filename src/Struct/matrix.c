@@ -81,7 +81,7 @@ void printMatrix(Matrix* matrix)
             printf("%2d : ",i);
             for(int j = 0; j < matrix->width; j++)
             {
-                    printf("%5.2f ",4,matrix->value[i][j]);                    
+                    printf("%5.2f ",matrix->value[i][j]);                    
             }
             printf("\n");
         }

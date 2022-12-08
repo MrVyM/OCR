@@ -36,7 +36,7 @@ Matrix* costFunction(Matrix* soluce, Matrix* result)
         t = (result->value[0][i] - soluce->value[0][i]);
         res->value[0][i] = t*t;
     }
-    return res;
+    return mulScalarMatrix(res,1/2);
 }
 
 NeuralNetwork* trainRecognition(NeuralNetwork* net, float (*activ)(float),float (*deriv)(float))
