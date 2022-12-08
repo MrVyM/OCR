@@ -1,18 +1,38 @@
 #include <gtk/gtk.h>
 
+#include <stdio.h>
+#include <stdlib.h>
+#include "Struct/pixel.h"
+#include "Struct/image.h"
+#include "Treatment/grayscale.h"
+#include "Treatment/blur.h"
+#include "Treatment/rotation.h"
+#include "Treatment/resize.h"
+#include "Treatment/thresolding.h"
+#include "Treatment/sobel.h"
+#include "Treatment/morph.h"
+#include "Treatment/contrast.h"
+#include "Treatment/gamma.h"
+#include "Treatment/hough.h"
+#include <err.h>
+#include "Struct/neuralNetwork.h"
+#include "Xor/xor.h"
+#include "Struct/matrix.h"
+#include "Xor/function.h"
 
 typedef struct UserInterface
 {
-    GtkWindow *window;           
-    GtkImage *image;        
+    GtkWindow *window;
+    GtkImage *image;
     GtkButton *rotate;
-    GtkButton *moov;     
+    GtkButton *moov;
     GtkButton *line;
     GtkButton *traitement;
     GtkButton *resolve;
     GtkProgressBar *progress;
     GtkEntry *entry;
     GtkScale *scale;
+    gchar* path;
 } UserInterface;
 
 
@@ -24,7 +44,14 @@ void rotate_image(GtkWidget *widget, gpointer data)
     g_print("Rotate\n");
     // on mets la progress bar à 15
     gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(ui->progress), 0.2);
-    //on rotate l'image de 10 degré
+    //gtk_range_get_value(ui->scale);
+
+    Image* image = importImage(ui->path);
+    double angleRotation = (double)gtk_range_get_value(ui->scale);
+    image = rotateImage(image, angleRotation);
+    saveImage(image, "rotation.bmp");
+    gtk_image_set_from_file(GTK_IMAGE(ui->image), "rotation.bmp");
+
 }
 
 void line_image(GtkWidget *widget, gpointer data)
@@ -33,6 +60,11 @@ void line_image(GtkWidget *widget, gpointer data)
     g_print("Line\n");
     // on mets la progress bar à 50
     gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(ui->progress), 0.7);
+    Image* image = importImage(ui->path);
+
+    houghTransform(image);
+    gtk_image_set_from_file(GTK_IMAGE(ui->image), "hough.bmp");
+
 
     //je te renvoie le seuil avec donc ui->entry
 }
@@ -43,6 +75,10 @@ void traitement_image(GtkWidget *widget, gpointer data)
     g_print("Traitement\n");
     // on mets la progress bar à 25
     gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(ui->progress), 0.4);
+    Image* image = importImage(ui->path);
+    otsuTresolding(image);
+    saveImage(image, "thresolding.bmp");
+    gtk_image_set_from_file(GTK_IMAGE(ui->image), "thresolding.bmp");
 }
 
 void resolve_image(GtkWidget *widget, gpointer data)
@@ -69,6 +105,8 @@ void change_image(GtkWidget *widget, gpointer data)
 
     gtk_image_set_from_file(GTK_IMAGE(ui->image), filename);
 
+    ui->path = filename;
+
 }
 
 void entry_changed(GtkWidget *widget, gpointer data)
@@ -85,6 +123,8 @@ void entry_changed(GtkWidget *widget, gpointer data)
 void save_image(GtkWidget *widget, gpointer data){
     UserInterface *ui = (UserInterface *)data;
     // on save avec saveImage() ui->image
+    Image* image = importImage(ui->path);
+    saveImage(image,"sudoku.bmp");
     g_print("save");
 }
 
@@ -93,6 +133,10 @@ void blur_image(GtkWidget *widget, gpointer data)
     UserInterface *ui = (UserInterface *)data;
     g_print("Blur\n");
     gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(ui->progress), 0.1);
+    Image* image = importImage(ui->path);
+    applyGaussianBlur(image);
+    saveImage(image,"blur.bmp");
+    gtk_image_set_from_file(GTK_IMAGE(ui->image), "blur.bmp");
 }
 
 void sobel_image(GtkWidget *widget, gpointer data)
@@ -100,6 +144,11 @@ void sobel_image(GtkWidget *widget, gpointer data)
     UserInterface *ui = (UserInterface *)data;
     g_print("Sobel\n");
     gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(ui->progress), 0.55);
+    
+    Image* image = importImage(ui->path);
+    saveImage(sobelOperator(image),"sobel.bmp");
+    gtk_image_set_from_file(GTK_IMAGE(ui->image), "sobel.bmp");
+
 }
 
 void modify_scale(GtkWidget *widget, gpointer data){
@@ -107,7 +156,6 @@ void modify_scale(GtkWidget *widget, gpointer data){
     //gtk_range_get_value(ui->scale);
     ui->scale = GTK_SCALE(widget);
     g_print("scale");
-
 }
 
 int main(int argc, char *argv[])
@@ -151,7 +199,7 @@ int main(int argc, char *argv[])
     // progressbar 
     GtkProgressBar *progressbar = GTK_PROGRESS_BAR(gtk_builder_get_object(builder, "progressbar"));
     //gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(progressbar), 0);
-    
+    const gchar* chemin;
     // Creates the "Game" structure.
     UserInterface ui =  
     {
@@ -164,6 +212,7 @@ int main(int argc, char *argv[])
         .progress = progressbar,
         .entry = entry,
         .scale = rotation_scale,
+	.path = chemin,
     };
     // Connects event handlers.
     g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
