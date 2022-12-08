@@ -32,6 +32,7 @@ int number(int *l)
     return 0;
 }
 
+// version simple qui marche que pour le premier sad
 Image *findBiggest(Image *image, Line **listeline){
 	int i = 0;
 	int x1 = 0;
@@ -59,6 +60,50 @@ Image *findBiggest(Image *image, Line **listeline){
 	return extractSquare(image, x1, y1, x2, y2);
 }
 
+//version simple qui marche si le sudoku est seul
+Image *findBiggest2(Image *image, Line **listeline){
+	int i = 0;
+	int x1 = listeline[0]->x1;
+	if (x1 < 0){
+		x1 = 0;
+	}
+	int x2 = 0;
+	int y1 = listeline[0]->y1;
+	if (y1 < 0){
+		y1 = 0;
+	}
+	int y2 = 0;
+
+	while(listeline[i] != 0){
+		if (listeline[i]->x2 > x2){
+			x2 = listeline[i]->x2;
+		}
+		if (listeline[i]->y2 > y2){
+			y2 = listeline[i]->y2;
+		}
+		if (listeline[i]->x1 < x1 && listeline[i]->x1 >= 0){
+			x1 = listeline[i]->x1;
+		}
+		if (listeline[i]->y1 < y1 && listeline[i]->y1 >= 0){
+			y1 = listeline[i]->y1;
+		}
+		i++;
+	}
+	if (x2 > image->width){
+		x2 = image->width;
+	}
+	if (y2 > image->height){
+		y2 = image->height;
+	}
+	printf("x2 : %d\n",x2);
+        printf("y2 : %d\n",y2);
+	printf("x1 : %d\n",x1);
+        printf("y1 : %d\n",y1);
+	return extractSquare(image, x1, y1, x2, y2);
+}
+
+
+//version qui marche pas
 Image *findbiggestSquare(Image *image, Line **listeline)
 {
 
@@ -240,9 +285,9 @@ int **square(Image *image, Line **listeline)
     // int x1, y1, x2, y2;
     // findSquare(image, &x1, &y1, &x2, &y2);
     // Image *result= extractSquare(image, l[0], l[1], l[2], l[3]);
-    // Image *result= extractSquare(image,50,50,200,200);
+    //Image *image2= extractSquare(image,0,0,1011,128);
     //Image *image2 = findbiggestSquare(image, listeline);
-    Image *image2 = findBiggest(image,listeline);
+    Image *image2 = findBiggest2(image,listeline);
     saveImage(image2, "square.bmp");
     int **sudoku = result(image2);
     return sudoku;
