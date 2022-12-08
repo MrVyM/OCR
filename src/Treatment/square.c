@@ -48,6 +48,14 @@ Image *findBiggest(Image *image, Line **listeline){
 		}
 		i++;
 	}
+	if (x2 > image->width){
+		x2 = image->width;
+	}
+	if (y2 > image->height){
+		y2 = image->height;
+	}
+	printf("x2 : %d\n",x2);
+        printf("y2 : %d\n",y2);
 	return extractSquare(image, x1, y1, x2, y2);
 }
 
