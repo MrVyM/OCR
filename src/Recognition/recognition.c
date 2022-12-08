@@ -149,14 +149,35 @@ NeuralNetwork* trainRecognition(NeuralNetwork* net, float (*activ)(float),float 
             Matrix* deltaWh2 = mulScalarMatrix(mulMatrix(Error2, ah1T), learning_rate);
 
             // Δbh2 = η [∑ i=1n (Error2,i)]
-            Matrix* deltaBh2 = mulScalarMatrix(Errorout, learning_rate);
+            Matrix* deltaBh2 = mulScalarMatrix(Error2, learning_rate);
 
             // Update weight ant bias
             // wh2 = wh2 - Δwh2
             net->hidden2 = subMatrix(net->hidden2, deltaWh2);
 
+            // bh2 = bh2 - Δbh2
+            net->hidden2Bias = subMatrix(net->hidden2Bias, deltaBh2);
 
+            // Step 5:
+            // Error2 = [Error2 • wh2T] ✴ Φ/ (ah1)
+            Matrix* wh2T = transpose(net->hidden2);
+            Matrix* Error3 = multiplyMatrix(mulMatrix(wh2T, Error2), applyFunctionMatrix(ah1, deriv));
 
+            // Step 6:
+            // Δwh1 = η ( XT • Error3 )
+            Matrix* XT = transpose(input);
+            Matrix* deltaWh1 = mulScalarMatrix(mulMatrix(Error3, XT), learning_rate);
+
+            // Δbh1 = η [∑ i=1n (Error3,i)]
+            Matrix* deltaBh1 = mulScalarMatrix(Error3, learning_rate);
+
+            // Update weight ant bias
+            // wh1 = wh1 - Δwh1
+            net->hidden1 = subMatrix(net->hidden1, deltaWh1);
+
+            // bh1 = bh1 - Δbh1
+            net->hidden2Bias = subMatrix(net->hidden1Bias, deltaBh1);
+            
             printf("%d t = %f\n",j,training_set);
 	    }
         if (i % 100 == 0)
