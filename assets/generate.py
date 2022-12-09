@@ -27,6 +27,7 @@ def addFile(image,number) :
         for y in range(width) : 
             f.write(str(0 if image.getpixel((x,y))[0] < 10 else 1))
     f.write(str(number)+"\n")
+    print(str(number))
     f.close()
 
 def noise(x,y,theta) :
@@ -60,10 +61,11 @@ for ttf_file in ttf_files:
                     if (number != 0) : 
                         draw.text((9+x,1+y),str(number),fill=BLACK,font=font)
                     noiseWhite(int(x/4),int(y/4),theta) 
-                    noise(x,y,theta)
+#                    noise(x,y,theta)
                     count += 1
                     addFile(image,number)
                     #image = image.rotate(theta,fillcolor=WHITE)
+                    print(f"{image_path}/dataset_{name_font}_({x},{y},{theta})_{number}")
                     image.save(f"{image_path}/dataset_{name_font}_({x},{y},{theta})_{number}","png")
 
 f = open(image_path +"/lines.txt","a")

@@ -17,21 +17,22 @@
 #include "Struct/neuralNetwork.h"
 #include "Struct/matrix.h"
 #include "Xor/function.h"
+#include "Input/file.h"
 #include "Recognition/recognition.h"
 
 int main(int argc, char **argv)
 {
     if (argc != 2 && argc != 3)
     {
-        printf("Training Mode : \n");
-        NeuralNetwork* net = initNetwork();
-        //printNeural(net);
+        NeuralNetwork* net = loadWeight("h1.net","h2.net","ot.net");
         trainRecognition(net,sigmoid,deriv_sigmoid); 
-        printMatrix(net->output); 
-        saveWeight("h1.net","h2.net","ot.net",net);
-        //loadWeight("test.net");
-        //showResult(net,sigmoid);
-        freeNetwork(net);
+        printMatrix(net->output);
+        Matrix* training_list = readData("assets/Test/test.txt", "assets/Test/lines.txt");
+        Matrix* input = initMatrix(1,784);
+        for(int h = 0; h < 784; h++)
+                input->value[h][0] = training_list->value[0][h];
+        printMatrix(recognized(net,sigmoid,input));
+        //saveWeight("h1.net","h2.net","ot.net",net);
     }
     else
     {

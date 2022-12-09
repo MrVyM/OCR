@@ -90,11 +90,11 @@ NeuralNetwork* loadWeight(char hidden1_c[], char hidden2_c[], char output_c[])
 	FILE *hidden1 = fopen(hidden1_c, "r");
 	FILE *hidden2 = fopen(hidden2_c, "r");
 	FILE *output = fopen(output_c, "r");
-	NeuralNetwork* net = malloc(sizeof(NeuralNetwork));
+	NeuralNetwork* net = initNetwork();
 	if(net == NULL)
 		errx(-1,"NeuralNetwork cannot be initialize.");
 
-        if (hidden1 == NULL || hidden2 == NULL || output == NULL)
+    if (hidden1 == NULL || hidden2 == NULL || output == NULL)
 	{
 		printf("loadWeight : Can't load the network");
 		return net;
