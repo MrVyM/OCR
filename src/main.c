@@ -61,8 +61,9 @@ int main(int argc, char **argv)
         saveImage(image, "thresolding.bmp");
         Line **line = houghTransform(image);
         saveImage(image, "hough.bmp");
-	
-	square(image,line);
+
+	    square(image,line);
+        printf("fin square\n");
         //image = rotateImage(image, angleRotation);
         //saveImage(image, "rotation.bmp");
         freeImage(image);

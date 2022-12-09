@@ -228,12 +228,12 @@ int **result(Image *image)
 
 int **square(Image *image, Line **listeline)
 {
-    printf("here dbut\n");
     // int x1, y1, x2, y2;
     // findSquare(image, &x1, &y1, &x2, &y2);
     // Image *result= extractSquare(image, l[0], l[1], l[2], l[3]);
     // Image *result= extractSquare(image,50,50,200,200);
     //Image *image2 = findbiggestSquare(image, listeline);
+    printf("square\n");
     Image *image2 = findBiggest(image,listeline);
     saveImage(image2, "square.bmp");
     int **sudoku = result(image2);
