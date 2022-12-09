@@ -59,6 +59,7 @@ Image *findBiggest2(Image *image, Line **listeline){
     printf("y2 : %d\n",y2);
     printf("x1 : %d\n",x1);
     printf("y1 : %d\n",y1);
+    // rotate
     return extractSquare(image, x1, y1, x2, y2);
 }
 
@@ -222,10 +223,6 @@ int* createTab(Image **tab)
     // on parcours le tableau d'image et on converti en tableau d'entier
     for (int i = 0; i < 9; i++)
     {
-
-        //char s[25];
-        //sprintf(s, "%d.%d tzt",i);
-        //saveImage(tab[i],s); 
         tab2[i] = number(Imagetoint(tab[i]));
     }
     return tab2;
@@ -240,13 +237,7 @@ int **result(Image *image)
     for (int i = 0;i <9;i++)
     {
         Image** subTab = cutImage(tab[i]);
-        printf("boucle : %d\n",i);
-        for(int j = 0; j < 9; j++)
-        {
-            char s[50];
-            sprintf(s, "assets/Test/%d.%d.png",i,j);
-            saveImage(subTab[j],s); 
-    	}
+        sudoku[i] = createTab(subTab);
 	}
     return sudoku;
 }
