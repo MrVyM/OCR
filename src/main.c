@@ -62,8 +62,7 @@ int main(int argc, char **argv)
         Line **line = houghTransform(image);
         saveImage(image, "hough.bmp");
 
-	    square(image,line);
-        printf("fin square\n");
+	    int** test = square(image,line);
         //image = rotateImage(image, angleRotation);
         //saveImage(image, "rotation.bmp");
         freeImage(image);

@@ -3,7 +3,7 @@
 #include "Struct/pixel.h"
 #include "Treatment/houghTransform.h"
 #include <stdio.h>
-
+#include <string.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
@@ -12,11 +12,11 @@
 Image *extractSquare(Image *image, int x1, int y1, int x2, int y2)
 {
     Image *square = createEmptyImage(x2 - x1, y2 - y1);
-    for (int i = 0; i < x2 - x1; i++) // -> équivalent . mais en pointeur
+    for (int i = x1; i < x2; i++) // -> équivalent . mais en pointeur
     {
-        for (int j = 0; j < y2 - y1; j++)
+        for (int j = y1; j < y2; j++)
         {
-            square->pixels[i][j] = image->pixels[i + y1][j + x1];
+            square->pixels[i-x1][j-y1] = image->pixels[i][j];
         }
     }
     return square;
@@ -32,25 +32,38 @@ int number(int *l)
     return 0;
 }
 
-Image *findBiggest(Image *image, Line **listeline){
+//version simple qui marche si le sudoku est seul
+Image *findBiggest2(Image *image, Line **listeline){
 	int i = 0;
-	int x1 = 0;
-	int x2 = 0;
-	int y1 = 0;
-	int y2 = 0;
+    int x1 = image->width;
+    int x2 = 0;
+    int y1 = image->height;
+    int y2 = 0;
 
-	while(listeline[i] != 0){
-		if (listeline[i]->x2 > x2){
-			x2 = listeline[i]->x2;
-		}
-		if (listeline[i]->y2 > y2){
-			y2 = listeline[i]->y2;
-		}
-		i++;
-	}
-	return extractSquare(image, x1, y1, x2, y2);
+    while(listeline[i] != 0){
+        if (listeline[i]->x2 < image->width && listeline[i]->x2 > x2){
+            x2 = listeline[i]->x2;
+        }
+        if (listeline[i]->y2 < image->height && listeline[i]->y2 > y2){
+            y2 = listeline[i]->y2;
+        }
+        if (listeline[i]->x1 > 0 && listeline[i]->x1 < x1){
+            x1 = listeline[i]->x1;
+        }
+        if (listeline[i]->y1 > 0 && listeline[i]->y1 < y1){
+            y1 = listeline[i]->y1;
+        }
+        i++;
+    }
+    printf("x2 : %d\n",x2);
+    printf("y2 : %d\n",y2);
+    printf("x1 : %d\n",x1);
+    printf("y1 : %d\n",y1);
+    return extractSquare(image, x1, y1, x2, y2);
 }
 
+
+//version qui marche pas
 Image *findbiggestSquare(Image *image, Line **listeline)
 {
 
@@ -173,7 +186,7 @@ Image **cutImage(Image *image)
             y1 = j * y;
             x2 = (i + 1) * x;
             y2 = (j + 1) * y;
-            tab[i * 3 + j] = extractSquare(image, x1, y1, x2, y2);
+           tab[i * 3 + j] = extractSquare(image, x1, y1, x2, y2);
         }
     }
     return tab;
@@ -205,10 +218,14 @@ int *Imagetoint(Image *image)
 int* createTab(Image **tab)
 {
     // on crée un tableau de 9*9
-    int tab2[9];
+    int* tab2 = malloc(sizeof(int) * 9);
     // on parcours le tableau d'image et on converti en tableau d'entier
     for (int i = 0; i < 9; i++)
     {
+
+        //char s[25];
+        //sprintf(s, "%d.%d tzt",i);
+        //saveImage(tab[i],s); 
         tab2[i] = number(Imagetoint(tab[i]));
     }
     return tab2;
@@ -219,9 +236,17 @@ int **result(Image *image)
     // on découpe l'image en 9 carrés
     Image **tab = cutImage(image);
     // on crée un tableau de 9*9
-    int* sudoku[9];
-    for (int i = 0;i <9;i++){
-    	sudoku[i] = createTab(cutImage(tab[i]));
+    int** sudoku = malloc(sizeof(int*) * 9);
+    for (int i = 0;i <9;i++)
+    {
+        Image** subTab = cutImage(tab[i]);
+        printf("boucle : %d\n",i);
+        for(int j = 0; j < 9; j++)
+        {
+            char s[50];
+            sprintf(s, "assets/Test/%d.%d.png",i,j);
+            saveImage(subTab[j],s); 
+    	}
 	}
     return sudoku;
 }
@@ -231,11 +256,12 @@ int **square(Image *image, Line **listeline)
     // int x1, y1, x2, y2;
     // findSquare(image, &x1, &y1, &x2, &y2);
     // Image *result= extractSquare(image, l[0], l[1], l[2], l[3]);
-    // Image *result= extractSquare(image,50,50,200,200);
+    //Image *image2= extractSquare(image,0,0,1011,128);
     //Image *image2 = findbiggestSquare(image, listeline);
     printf("square\n");
-    Image *image2 = findBiggest(image,listeline);
+    Image *image2 = findBiggest2(image,listeline);
     saveImage(image2, "square.bmp");
     int **sudoku = result(image2);
+    printf("end\n");
     return sudoku;
 }
