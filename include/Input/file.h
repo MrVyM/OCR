@@ -5,4 +5,4 @@ int readNumber(FILE *file);
 
 float readFloat(FILE *file);
 
-Matrix* readData(char data[], char lines[]);
+Matrix* readData(char data[], int number_lines);

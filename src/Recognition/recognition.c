@@ -38,12 +38,20 @@ Matrix* recognized(NeuralNetwork* net,float (*activ)(float), Matrix* input)
 
 void showStat(NeuralNetwork* net, float (*activ)(float))
 {
-    printf("Result : \n");
-    /*
-    for(int i = 0; i <= 1; i++)
-        for(int j = 0; j <=1; j++)
-            printf("%d %d %f\n",i,j,(recognized(net,activ,))->value[0][0]);
-    */
+    FILE* lines = fopen("assets/Test/lines.txt", "r");
+    printf("Load the number of lines\n");
+    float line = (float)readNumber(lines);
+    fclose(lines);
+
+    Matrix* training_list = readData("assets/Test/data.txt", line);
+    Matrix* input = initMatrix(1,784);
+    for(int height = 0; height < 1; height++)
+    {
+        for(int h = 0; h < 784; h++)
+            input->value[h][0] = training_list->value[height][h];
+        printf("soluce : %d\n",training_list->value[height][784]);
+        printMatrix(recognized(net,sigmoid,input));
+    }
 }
 
 Matrix* costFunction(Matrix* soluce, Matrix* result)
@@ -62,12 +70,15 @@ NeuralNetwork* trainRecognition(NeuralNetwork* net, float (*activ)(float),float 
 {
     //printNeural(net);
     float learning_rate = 0.2;
-    int max_iter = 100;
-    FILE* lines = fopen("assets/Dataset/lines.txt", "r");
-    float training_set = readNumber(lines);
-    fclose(lines);
-    Matrix* training_list = readData("assets/Dataset/data.txt", "assets/Dataset/lines.txt");
+    int max_iter = 8;
 
+    FILE* lines = fopen("assets/Dataset/lines.txt", "r");
+    printf("Load the number of lines\n");
+    float training_set = (float)readNumber(lines);
+    fclose(lines);
+    printf("training_set : %f\n", training_set);
+    Matrix* training_list = readData("assets/Dataset/data.txt", training_set);
+    printf("Load the dataset\n");
     Matrix* dZ0;
     Matrix* dZ1;
     Matrix* dZ2;

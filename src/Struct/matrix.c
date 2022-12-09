@@ -249,3 +249,25 @@ Matrix *mulMatrix(Matrix *m1, Matrix *m2)
     printMatrix(res);*/
     return res; 
 }
+
+int maxIndexMatrix(Matrix* m1)
+{
+    if(!(m1->height > 0 && m1->width > 0))
+    {
+        errx(-1, "maxMatrix: Matrix empty");
+    }
+    float max = m1->value[0][0];
+    int max_i = 0;
+    for (int i = 0; i < m1->height; ++i)
+    {
+        for(int j = 0; j < m1->width; ++j)
+        {
+            if(m1->value[i][j] > max)
+            {
+                max = m1->value[i][j];
+                max_i = i;
+            }
+        }
+    }
+    return max_i;
+}

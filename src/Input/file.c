@@ -81,11 +81,8 @@ float readFloat(FILE *file)
     return result * sign;
 }
 
-Matrix* readData(char data[], char lines[])
+Matrix* readData(char data[], int number_lines)
 {
-    FILE* lines_file = fopen(lines, "r");
-    int number_lines = readNumber(lines_file);
-    fclose(lines_file);
     Matrix* dataset = initMatrix(785, number_lines);
 
     FILE* dataset_file = fopen(data, "r");
