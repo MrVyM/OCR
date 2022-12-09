@@ -39,19 +39,26 @@ Matrix* recognized(NeuralNetwork* net,float (*activ)(float), Matrix* input)
 void showStat(NeuralNetwork* net, float (*activ)(float))
 {
     FILE* lines = fopen("assets/Test/lines.txt", "r");
-    printf("Load the number of lines\n");
+    if (lines == NULL)
+        err(-1, "showStat : Cannot read the lines\n");
     float line = (float)readNumber(lines);
+    printf("Load the number of lines(%f)\n",line);
     fclose(lines);
 
     Matrix* training_list = readData("assets/Test/data.txt", line);
     Matrix* input = initMatrix(1,784);
-    for(int height = 0; height < 1; height++)
+    float ratio = 0.0;
+    for(int height = 0; height < line; height++)
     {
         for(int h = 0; h < 784; h++)
             input->value[h][0] = training_list->value[height][h];
-        printf("soluce : %d\n",training_list->value[height][784]);
-        printMatrix(recognized(net,sigmoid,input));
+        printf("Soluce : %d\n",(int)(training_list->value[height][784]));
+        int result = maxIndexMatrix(recognized(net,sigmoid,input));
+        if ((int)(training_list->value[height][784]) == result)
+            ratio+= 1.0;
+        printf("The result : %d\n",result);
     }
+    printf("Ratio : %f\n", ratio/line);
 }
 
 Matrix* costFunction(Matrix* soluce, Matrix* result)
@@ -112,7 +119,7 @@ NeuralNetwork* trainRecognition(NeuralNetwork* net, float (*activ)(float),float 
             for(int h = 0; h < 784; h++)
                 input->value[h][0] = training_list->value[j][h];
             soluce = list_soluce[(int)(training_list->value[j][784])];
-
+            printf("Soluce : %d\n",(int)(training_list->value[j][784]));
             // Forward Propagation
 
             //Zh1 = [ X • wh1 ] + bh1

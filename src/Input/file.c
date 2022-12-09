@@ -86,6 +86,8 @@ Matrix* readData(char data[], int number_lines)
     Matrix* dataset = initMatrix(785, number_lines);
 
     FILE* dataset_file = fopen(data, "r");
+    if (dataset_file == NULL)
+        err(-1,"readData : Cannot load the data\n");
     for(int i = 0; i < number_lines; i++)
     {
         for(int j = 0; j < 784; j++)
