@@ -1,5 +1,6 @@
 #include "Struct/image.h"
 #include "Struct/pixel.h"
+#include "Struct/line.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <stdio.h>
@@ -34,6 +35,22 @@ Image *createEmptyImage(int width, int height)
   }
 
   return image;
+}
+
+void cleanImage(Image* image)
+{
+  if (image->width != 28 && image->height != 28)
+    printf("cleanImage : i cannot clean this image\n");
+  else 
+  {
+    for(int y = 0; y < 2; y++)
+    {
+      for(int x = 0; x < 28; x++)
+      {
+        setPixel(&image->pixels[x][y]);
+      }
+    }
+  }
 }
 
 Image *importImage(char *filename)

@@ -59,7 +59,6 @@ Image *findBiggest2(Image *image, Line **listeline){
     printf("y2 : %d\n",y2);
     printf("x1 : %d\n",x1);
     printf("y1 : %d\n",y1);
-    // rotate
     return extractSquare(image, x1, y1, x2, y2);
 }
 
@@ -223,23 +222,32 @@ int* createTab(Image **tab)
     // on parcours le tableau d'image et on converti en tableau d'entier
     for (int i = 0; i < 9; i++)
     {
+
+        //char s[25];
+        //sprintf(s, "%d.%d tzt",i);
+        //saveImage(tab[i],s); 
         tab2[i] = number(Imagetoint(tab[i]));
     }
     return tab2;
 }
 
-int **result(Image *image)
+void decoupage(Image *image)
 {
     // on découpe l'image en 9 carrés
     Image **tab = cutImage(image);
     // on crée un tableau de 9*9
-    int** sudoku = malloc(sizeof(int*) * 9);
     for (int i = 0;i <9;i++)
     {
         Image** subTab = cutImage(tab[i]);
-        sudoku[i] = createTab(subTab);
+        for(int j = 0; j < 9; j++)
+        {
+            char s[50];
+            sprintf(s, "assets/Test/%d.%d.%d.png",i,j);
+            subTab[j] = resizeImage(subTab[j], 28);
+            cleanImage(subTab[j]);
+            saveImage(subTab[j],s); 
+        }
 	}
-    return sudoku;
 }
 
 int **square(Image *image, Line **listeline)
@@ -249,10 +257,8 @@ int **square(Image *image, Line **listeline)
     // Image *result= extractSquare(image, l[0], l[1], l[2], l[3]);
     //Image *image2= extractSquare(image,0,0,1011,128);
     //Image *image2 = findbiggestSquare(image, listeline);
-    printf("square\n");
     Image *image2 = findBiggest2(image,listeline);
     saveImage(image2, "square.bmp");
-    int **sudoku = result(image2);
-    printf("end\n");
-    return sudoku;
+    decoupage(image2);
+    return NULL;
 }

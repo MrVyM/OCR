@@ -15,5 +15,6 @@ Image *createEmptyImage(int width, int height);
 Image *importImage(char *filename);
 void saveImage(Image *image, char *filename);
 void freeImage(Image *image);
+void cleanImage(Image *image);
 
 #endif

@@ -74,7 +74,7 @@ Image *drawLine(Image *image, Line *line)
 
     while (1)
     {
-        if (0 <= x0 && x0 < image->width && 0 <= y0 && y0 < image->height)
+        if (1 <= x0 && x0 < image->width-1 && 1 <= y0 && y0 < image->height -1)
         {
             setPixel(&image->pixels[x0][y0]);
         }
