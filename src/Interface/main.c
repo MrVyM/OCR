@@ -33,12 +33,16 @@ typedef struct UserInterface
     GtkEntry *entry;
     GtkScale *scale;
     gchar *path;
+    gint ifsobel;
 } UserInterface;
 
-// atof() pour convertir en float
+// atof() pour convertir en float ou strtod
 
 void rotate_image(GtkWidget *widget, gpointer data)
 {
+    if (widget == 0){
+        g_print("widget");
+    }
     UserInterface *ui = (UserInterface *)data;
     g_print("Rotate\n");
     // on mets la progress bar à 15
@@ -46,7 +50,7 @@ void rotate_image(GtkWidget *widget, gpointer data)
     // gtk_range_get_value(ui->scale);
 
     Image *image = importImage(ui->path);
-    double angleRotation = (double)gtk_range_get_value(ui->scale);
+    double angleRotation = (double)gtk_range_get_value(GTK_RANGE(ui->scale));
     image = rotateImage(image, angleRotation);
     saveImage(image, ui->path);
     gtk_image_set_from_file(GTK_IMAGE(ui->image), ui->path);
@@ -54,13 +58,17 @@ void rotate_image(GtkWidget *widget, gpointer data)
 
 void line_image(GtkWidget *widget, gpointer data)
 {
+    if (widget == 0){
+        g_print("widget");
+    }
+    const gchar *sText;
     UserInterface *ui = (UserInterface *)data;
     g_print("Line\n");
     // on mets la progress bar à 50
     gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(ui->progress), 0.7);
     Image *image = importImage(ui->path);
-
-    houghTransform(image, 0, 0);
+    sText = gtk_entry_get_text(ui->entry);
+    houghTransform(image, atof(sText), (int)ui->ifsobel);
     saveImage(image, ui->path);
     gtk_image_set_from_file(GTK_IMAGE(ui->image), ui->path);
 
@@ -69,6 +77,9 @@ void line_image(GtkWidget *widget, gpointer data)
 
 void traitement_image(GtkWidget *widget, gpointer data)
 {
+    if (widget == 0){
+        g_print("widget");
+    }
     UserInterface *ui = (UserInterface *)data;
     g_print("Traitement\n");
     // on mets la progress bar à 25
@@ -82,6 +93,9 @@ void traitement_image(GtkWidget *widget, gpointer data)
 
 void resolve_image(GtkWidget *widget, gpointer data)
 {
+    if (widget == 0){
+        g_print("widget");
+    }
     UserInterface *ui = (UserInterface *)data;
     g_print("Resolve\n");
     // on mets la progress bar à 100
@@ -136,6 +150,9 @@ void save_image(GtkWidget *widget, gpointer data)
 
 void blur_image(GtkWidget *widget, gpointer data)
 {
+    if (widget == 0){
+        g_print("widget");
+    }
     UserInterface *ui = (UserInterface *)data;
     g_print("Blur\n");
     gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(ui->progress), 0.1);
@@ -147,8 +164,13 @@ void blur_image(GtkWidget *widget, gpointer data)
 
 void sobel_image(GtkWidget *widget, gpointer data)
 {
+    if (widget == 0){
+        g_print("widget");
+    }
     UserInterface *ui = (UserInterface *)data;
     g_print("Sobel\n");
+    gint newsobel = 1;
+    ui->ifsobel = newsobel;
     gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(ui->progress), 0.55);
 
     Image *image = importImage(ui->path);
@@ -205,7 +227,7 @@ int main(int argc, char *argv[])
     // progressbar
     GtkProgressBar *progressbar = GTK_PROGRESS_BAR(gtk_builder_get_object(builder, "progressbar"));
     // gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(progressbar), 0);
-    const gchar *chemin;
+    gchar *chemin = "";
     // Creates the "Game" structure.
     UserInterface ui =
         {
@@ -219,6 +241,7 @@ int main(int argc, char *argv[])
             .entry = entry,
             .scale = rotation_scale,
             .path = chemin,
+	    .ifsobel = 0,
         };
     // Connects event handlers.
     g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);

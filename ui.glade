@@ -61,7 +61,7 @@
               <object class="GtkEntry" id="seuil">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
-                <property name="text" translatable="yes">seuil</property>
+                <property name="text" translatable="yes">0</property>
                 <property name="primary-icon-name">application-x-executable</property>
                 <property name="secondary-icon-name">contact-new</property>
               </object>
