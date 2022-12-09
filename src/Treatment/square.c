@@ -242,7 +242,7 @@ void decoupage(Image *image)
         for(int j = 0; j < 9; j++)
         {
             char s[50];
-            sprintf(s, "assets/Test/%d.%d.%d.png",i,j);
+            sprintf(s, "assets/Test/%d.%d.png",i,j);
             subTab[j] = resizeImage(subTab[j], 28);
             cleanImage(subTab[j]);
             saveImage(subTab[j],s); 
