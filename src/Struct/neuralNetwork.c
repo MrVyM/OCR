@@ -12,8 +12,8 @@ NeuralNetwork* initNetwork()
 	if (network == NULL)
 		errx(-1,"NeuralNetwork cannot be initialize.");
 
-	int num_hidden1 = 64;
-	int num_hidden2 = 64; 
+	int num_hidden1 = 12;
+	int num_hidden2 = 12; 
     network->hidden1 = randomMatrix(784,num_hidden1,1);
     network->hidden2 = randomMatrix(num_hidden1,num_hidden2,1);
 	network->hidden1Bias = randomMatrix(1,num_hidden1,0);

@@ -69,12 +69,12 @@ void showStat(NeuralNetwork* net, float (*activ)(float))
                 ratio+= 1.0;
             else
             {
-                printf("Soluce : %d Result : %d\n",(int)(training_list->value[height][784]), result);
+                printf("\tS : %d \t R : %d\n",(int)(training_list->value[height][784]), result);
             }
         }
         // printf("The result : %d\n",result);
     }
-    printf("Ratio : %f Tested : %d\n\n", (ratio/line)*100, tested);
+    printf("\nRatio : %f\n\n", (ratio/line)*100);
 }
 
 Matrix* costFunction(Matrix* soluce, Matrix* result)
@@ -93,7 +93,7 @@ NeuralNetwork* trainRecognition(NeuralNetwork* net, float (*activ)(float),float 
 {
     //printNeural(net);
     float learning_rate = 0.001;
-    int max_iter = 2;
+    int max_iter = 10;
 
     FILE* lines = fopen("assets/Dataset/lines.txt", "r");
     // printf("Load the number of lines\n");
@@ -267,7 +267,7 @@ NeuralNetwork* trainRecognition(NeuralNetwork* net, float (*activ)(float),float 
     }
 
     bhd = train_v / (train_v + train_f);
-    printf("Pourcentage True : %f\n", bhd*100);
+    printf("Ratio Data : %f\n\n", bhd*100);
     freeMatrix(input);
     return net;
 }
