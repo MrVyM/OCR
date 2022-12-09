@@ -12,12 +12,13 @@ NeuralNetwork* initNetwork()
 	if (network == NULL)
 		errx(-1,"NeuralNetwork cannot be initialize.");
 
-
-    network->hidden1 = randomMatrix(784,16,1);
-    network->hidden2 = randomMatrix(16,16,1);
-	network->hidden1Bias = randomMatrix(1,16,0);
-    network->hidden2Bias = randomMatrix(1,16,0);
-	network->output = randomMatrix(16,10,0);
+	int num_hidden1 = 64;
+	int num_hidden2 = 64; 
+    network->hidden1 = randomMatrix(784,num_hidden1,1);
+    network->hidden2 = randomMatrix(num_hidden1,num_hidden2,1);
+	network->hidden1Bias = randomMatrix(1,num_hidden1,0);
+    network->hidden2Bias = randomMatrix(1,num_hidden2,0);
+	network->output = randomMatrix(num_hidden2,10,0);
 	network->outputBias = randomMatrix(1,10,0);
 
 	return network;
@@ -35,7 +36,7 @@ void saveWeight(char hidden1_c[], char hidden2_c[], char output_c[], NeuralNetwo
     }
     else 
     {
-        printf("Saving the weight in %s\n",hidden1_c);
+        // printf("Saving the weight in %s\n",hidden1_c);
 	for(size_t i = 0; i < 16; ++i)
 	{
 		for(size_t j = 0; j < 784; ++j)
@@ -49,7 +50,7 @@ void saveWeight(char hidden1_c[], char hidden2_c[], char output_c[], NeuralNetwo
 		}
 		fprintf(hidden1,"\n");
 	}
-        printf("Saving the weight in %s\n",hidden2_c);
+        // printf("Saving the weight in %s\n",hidden2_c);
 
 	for(size_t i = 0; i < 16; ++i)
 	{
@@ -64,7 +65,7 @@ void saveWeight(char hidden1_c[], char hidden2_c[], char output_c[], NeuralNetwo
 		}
 		fprintf(hidden2,"\n");
 	}
-        printf("Saving the weight in %s\n",output_c);
+        // printf("Saving the weight in %s\n",output_c);
 
 	for(size_t i = 0; i < 10; ++i)
 	{

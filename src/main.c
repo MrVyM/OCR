@@ -25,12 +25,11 @@ int main(int argc, char **argv)
     if (argc != 2 && argc != 3)
     {
         NeuralNetwork* net = loadWeight("h1.net","h2.net","ot.net");
-        //trainRecognition(net,sigmoid,deriv_sigmoid); 
-        printf("Training Mode :\n");
+        trainRecognition(net,sigmoid,deriv_sigmoid); 
         //printMatrix(net->output);
 
         showStat(net,sigmoid);
-        //saveWeight("h1.net","h2.net","ot.net",net);
+        saveWeight("h1.net","h2.net","ot.net",net);
     }
     else
     {
