@@ -5,7 +5,6 @@ build/
 *.bmp
 dataset_*
 *.csv
-*.txt
 *.exerc
 # VScode file
 .vscode/
