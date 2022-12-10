@@ -8,4 +8,7 @@ float deriv_sigmoid(float z);
 
 float deriv_relu(float z);
 
-Matrix* costFunction(Matrix* soluce, Matrix* result);
+Matrix* meanAbsoluteError(Matrix* soluce, Matrix* result);
+
+Matrix* meanSquareError(Matrix* soluce, Matrix* result);
+

@@ -76,7 +76,7 @@ void printMatrix(Matrix* matrix)
     else
     {
         printf("h : %d w : %d\n",matrix->height,matrix->width);
-        for(int i = 0; i < matrix->height; i++)
+        /*for(int i = 0; i < matrix->height; i++)
         {
             printf("%2d : ",i);
             for(int j = 0; j < matrix->width; j++)
@@ -84,7 +84,7 @@ void printMatrix(Matrix* matrix)
                     printf("%5.2f ",matrix->value[i][j]);                    
             }
             printf("\n");
-        }
+        }*/
     }
 }
 
@@ -194,7 +194,6 @@ Matrix* addMatrix(Matrix* m1, Matrix* m2)
             for(int j = 0; j < m2->width; j++)
                 res->value[i][j] = m2->value[i][j];
         }
-        free(m1);
         return res;
     } 
     else

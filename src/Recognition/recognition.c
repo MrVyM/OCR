@@ -8,14 +8,6 @@
 
 Matrix* recognized(NeuralNetwork* net,float (*activ)(float), Matrix* input)
 {
-    /*
-    Matrix* z0 = addMatrix(mulMatrix(net->hidden1, input), net->hidden1Bias);
-    Matrix* a0 = applyFunctionMatrix(z0, activ);
-    Matrix* z1 = addMatrix(mulMatrix(net->hidden2, a0), net->hidden2Bias);
-    Matrix* a1 = applyFunctionMatrix(z1, activ);
-    Matrix* z2 = addMatrix(mulMatrix(net->output, a1), net->outputBias);
-    Matrix* a2 = applyFunctionMatrix(z2, activ);
-    return a2;*/
     //Zh1 = [ X • wh1 ] + bh1
     Matrix* Zh1 = addMatrix(mulMatrix(net->hidden1, input), net->hidden1Bias);
 
@@ -50,50 +42,45 @@ void showStat(NeuralNetwork* net, float (*activ)(float))
     if (lines == NULL)
         errx(-1, "showStat : Cannot read the lines\n");
     float line = (float)readNumber(lines);
-    // printf("Load the number of lines(%f)\n",line);
     fclose(lines);
-
     Matrix* training_list = readData("assets/Test/data.txt", line);
     Matrix* input = initMatrix(1,784);
     float ratio = 0.0;
-    int tested =0;
+    float tested = 0.0;
+
+    int vrai[10] = {0};
+    int faux[10] = {0};
     for(int height = 0; height < line; height++)
     {
         for(int h = 0; h < 784; h++)
             input->value[h][0] = training_list->value[height][h];
-        if ((int)(training_list->value[height][784]) != 0)
+        tested ++;
+        int result = maxIndexMatrix(recognized(net,activ,input));
+        if ((int)(training_list->value[height][784]) == result)
         {
-            tested ++;
-            int result = maxIndexMatrix(recognized(net,sigmoid,input));
-            if ((int)(training_list->value[height][784]) == result)
-                ratio+= 1.0;
-            else
-            {
-                printf("\tS : %d \t R : %d\n",(int)(training_list->value[height][784]), result);
-            }
+            ratio += 1.0;
+            vrai[(int)(training_list->value[height][784])] ++;
         }
-        // printf("The result : %d\n",result);
+        else
+        {
+            faux[(int)(training_list->value[height][784])]++;
+        }
     }
-    printf("\nRatio : %f\n\n", (ratio/line)*100);
+    printf("Show Stat (%d) :\n\n",(int)tested);
+
+    for(int i = 0; i < 10; i++)
+    {
+        printf("    I : %d    V : %d, F : %d\n",i,vrai[i],faux[i]);        
+    }
+    printf("\nRatio : %3.3f% \n\n", (ratio/tested)*100);
 }
 
-Matrix* costFunction(Matrix* soluce, Matrix* result)
-{
-    float t = 0;
-    Matrix* res = initMatrix(1,soluce->height);
-    for(int i = 0; i < soluce->height; i++)
-    {   
-        t = (result->value[0][i] - soluce->value[0][i]);
-        res->value[0][i] = t*t;
-    }
-    return mulScalarMatrix(res,1/2);
-}
 
 NeuralNetwork* trainRecognition(NeuralNetwork* net, float (*activ)(float),float (*deriv)(float))
 {
-    //printNeural(net);
-    float learning_rate = 0.001;
-    int max_iter = 10;
+    // printNeural(net);
+    float learning_rate = 0.02;
+    int max_iter = 3;
 
     FILE* lines = fopen("assets/Dataset/lines.txt", "r");
     // printf("Load the number of lines\n");
@@ -125,7 +112,7 @@ NeuralNetwork* trainRecognition(NeuralNetwork* net, float (*activ)(float),float 
             int j = (high+rng)%(int)training_set;
             for(int h = 0; h < 784; h++)
                 input->value[h][0] = training_list->value[j][h];
-
+            // printf("boucle %d\n",j);
             Matrix* Zh1;
             Matrix* ah1;
             Matrix* Zh2;
@@ -147,13 +134,14 @@ NeuralNetwork* trainRecognition(NeuralNetwork* net, float (*activ)(float),float 
             Matrix* XT;
             Matrix* deltaWh1; 
             Matrix* deltaBh1;
+
             soluce = list_soluce[(int)(training_list->value[j][784])];
             // printf("Soluce : %d\n",(int)(training_list->value[j][784]));
             // Forward Propagation
 
             //Zh1 = [ X • wh1 ] + bh1
             Zh1 = addMatrix(mulMatrix(net->hidden1, input), net->hidden1Bias);
-
+            //printf("Here\n");
             //ah1 = Φ (Zh1)
             
             ah1 = applyFunctionMatrix(Zh1, activ);
@@ -170,18 +158,25 @@ NeuralNetwork* trainRecognition(NeuralNetwork* net, float (*activ)(float),float 
             // aout = Φ (Zout)
             aout = applyFunctionMatrix(Zout, activ);
             
-            
             // Backward Propagation
 
             // Step 1:
-            // Errorout = aout - soluce
+            // Errorout (mean square error)
+            // Errorout = divScalarMatrix(subMatrix(aout, soluce), soluce->height);          
+
+            Errorout = initMatrix(1, soluce->height);
+            for(int errorI = 0; errorI < soluce->height; errorI++)
+            {
+                float t = (soluce->value[0][errorI] -aout->value[0][errorI]);
+                Errorout->value[0][errorI] = t*t/soluce->height;
+            }
             Errorout = subMatrix(aout, soluce);
 
             //Step 2:
             // Δwout = η ( ah2T • Errorout ) (η -> learning rate)
             ah2T = transpose(ah2);
             deltaWout = mulScalarMatrix(mulMatrix(Errorout, ah2T), learning_rate);
-
+            
             // Δbout = η [ ∑i=1,n (Errorout,i) ]
             deltaBout = mulScalarMatrix(Errorout, learning_rate);
 
@@ -232,8 +227,7 @@ NeuralNetwork* trainRecognition(NeuralNetwork* net, float (*activ)(float),float 
             // bh1 = bh1 - Δbh1
             net->hidden2Bias = subMatrix(net->hidden1Bias, deltaBh1);
 
-            Matrix* p = recognized(net, activ, input);
-            if(maxIndexMatrix(p) == maxIndexMatrix(soluce))
+            if(maxIndexMatrix(aout) == maxIndexMatrix(soluce))
             {
                 train_v += 1;
             }
@@ -241,33 +235,32 @@ NeuralNetwork* trainRecognition(NeuralNetwork* net, float (*activ)(float),float 
             {
                 train_f += 1;
             }
+            freeMatrix(Zh1);
+            freeMatrix(ah1);
+            freeMatrix(Zh2);
+            freeMatrix(ah2);
+            freeMatrix(Zout);
 
-        freeMatrix(Zh1);
-        freeMatrix(ah1);
-        freeMatrix(Zh2);
-        freeMatrix(ah2);
-        freeMatrix(Zout);
-        freeMatrix(aout);
-
-        freeMatrix(Errorout);
-        freeMatrix(ah2T);
-        freeMatrix(deltaWout);
-        freeMatrix(deltaBout);
-        freeMatrix(wouT);
-        freeMatrix(Error2);
-        freeMatrix(ah1T);
-        freeMatrix(deltaWh2);
-        freeMatrix(deltaBh2);
-        freeMatrix(wh2T);
-        freeMatrix(Error3);    
-        freeMatrix(XT);
-        freeMatrix(deltaWh1); 
-        freeMatrix(deltaBh1);
+            // freeMatrix(Errorout);
+            // freeMatrix(ah2T);
+            // freeMatrix(deltaWout);
+            // freeMatrix(deltaBout);
+            // freeMatrix(wouT);
+            // freeMatrix(Error2);
+            // freeMatrix(ah1T);
+            // freeMatrix(deltaWh2);
+            // freeMatrix(deltaBh2);
+            // freeMatrix(wh2T);
+            // freeMatrix(Error3);    
+            // freeMatrix(XT);
+            // freeMatrix(deltaWh1); 
+            // freeMatrix(deltaBh1);
         }
     }
 
+    showStat(net,sigmoid);
     bhd = train_v / (train_v + train_f);
-    printf("Ratio Data : %f\n\n", bhd*100);
+    printf("Ratio Data : %3.3f% \n\n", bhd*100);
     freeMatrix(input);
     return net;
 }

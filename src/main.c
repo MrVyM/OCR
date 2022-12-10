@@ -27,8 +27,6 @@ int main(int argc, char **argv)
         NeuralNetwork* net = loadWeight("h1.net","h2.net","ot.net");
         trainRecognition(net,sigmoid,deriv_sigmoid); 
         //printMatrix(net->output);
-
-        showStat(net,sigmoid);
         saveWeight("h1.net","h2.net","ot.net",net);
     }
     else
