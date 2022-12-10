@@ -12,10 +12,10 @@ NeuralNetwork* initNetwork()
 	if (network == NULL)
 		errx(-1,"NeuralNetwork cannot be initialize.");
 
-	int num_hidden1 = 12;
-	int num_hidden2 = 12; 
+	int num_hidden1 = 25;
+	int num_hidden2 = 25; 
     network->hidden1 = randomMatrix(784,num_hidden1,1);
-    network->hidden2 = randomMatrix(num_hidden1,num_hidden2,1);
+    network->hidden2 = randomMatrix(num_hidden2,num_hidden1,1);
 	network->hidden1Bias = randomMatrix(1,num_hidden1,0);
     network->hidden2Bias = randomMatrix(1,num_hidden2,0);
 	network->output = randomMatrix(num_hidden2,10,0);
@@ -37,14 +37,14 @@ void saveWeight(char hidden1_c[], char hidden2_c[], char output_c[], NeuralNetwo
     else 
     {
         // printf("Saving the weight in %s\n",hidden1_c);
-	for(size_t i = 0; i < 16; ++i)
+	for(int i = 0; i < net->hidden1->height; ++i)
 	{
-		for(size_t j = 0; j < 784; ++j)
+		for(int j = 0; j < net->hidden1->width; ++j)
 		{
 			fprintf(hidden1, "%f ", net->hidden1->value[i][j]);
 		}
 		fprintf(hidden1,"| ");
-		for(size_t j = 0; j < 16; ++j)
+		for(int j = 0; j < net->hidden1Bias->height; ++j)
 		{
 			fprintf(hidden1,"%f ",net->hidden1Bias->value[j][0]);
 		}
@@ -52,14 +52,14 @@ void saveWeight(char hidden1_c[], char hidden2_c[], char output_c[], NeuralNetwo
 	}
         // printf("Saving the weight in %s\n",hidden2_c);
 
-	for(size_t i = 0; i < 16; ++i)
+	for(int i = 0; i < net->hidden2->height; ++i)
 	{
-		for(size_t j = 0; j < 16; ++j)
+		for(int j = 0; j < net->hidden2->width; ++j)
 		{
 			fprintf(hidden2, "%f ", net->hidden2->value[i][j]);
 		}
 		fprintf(hidden2,"| ");
-		for(size_t j = 0; j < 16; ++j)
+		for(int j = 0; j < net->hidden2Bias->height; ++j)
 		{
 			fprintf(hidden2,"%f ",net->hidden2Bias->value[j][0]);
 		}
@@ -67,14 +67,14 @@ void saveWeight(char hidden1_c[], char hidden2_c[], char output_c[], NeuralNetwo
 	}
         // printf("Saving the weight in %s\n",output_c);
 
-	for(size_t i = 0; i < 10; ++i)
+	for(int i = 0; i < net->output->height; ++i)
 	{
-		for(size_t j = 0; j < 16; ++j)
+		for(int j = 0; j < net->output->width; ++j)
 		{
 			fprintf(output, "%f ", net->output->value[i][j]);
 		}
 		fprintf(output,"| ");
-		for(size_t j = 0; j < 10; ++j)
+		for(int j = 0; j < net->output->height; ++j)
 		{
 			fprintf(output,"%f ",net->output->value[j][0]);
 		}
@@ -93,31 +93,26 @@ NeuralNetwork* loadWeight(char hidden1_c[], char hidden2_c[], char output_c[])
 	FILE *output = fopen(output_c, "r");
 	NeuralNetwork* net = initNetwork();
 	if(net == NULL)
-		errx(-1,"NeuralNetwork cannot be initialize.");
+		errx(-1,"NeuralNetwork cannot be initialize.\n");
 
     if (hidden1 == NULL || hidden2 == NULL || output == NULL)
 	{
-		printf("loadWeight : Can't load the network");
+		printf("loadWeight : Can't load the network\n");
+		saveWeight(hidden1_c,hidden2_c,output_c,net);
 		return net;
 	} 
 	else 
 	{
-		net->hidden1 = initMatrix(784,16);
-		net->hidden1Bias = initMatrix(1,16);
-		net->hidden2 = initMatrix(16,16);
-		net->hidden2Bias = initMatrix(1,16);
-		net->output = initMatrix(16,10);
-		net->outputBias = initMatrix(1,10);
-		for(size_t i = 0; i < 16; ++i)
+		for(int i = 0; i < net->hidden1->height; ++i)
 		{
-			for(size_t j = 0; j < 784; ++j)
+			for(int j = 0; j < net->hidden1->width; ++j)
 			{
 				net->hidden1->value[i][j] = readFloat(hidden1);
 	//			printf("hidden1 -> %f\n",net->hidden1->value[i][j]);
 			}
 			fgetc(hidden1);
 			fgetc(hidden1);
-			for(size_t j = 0; j < 16; ++j)
+			for(int j = 0; j < net->hidden1Bias->height; ++j)
 			{
 				net->hidden1Bias->value[j][0] = readFloat(hidden1);
 	//			printf("hidden1Bias -> %f\n",net->hidden1Bias->value[j][0]);
@@ -125,16 +120,16 @@ NeuralNetwork* loadWeight(char hidden1_c[], char hidden2_c[], char output_c[])
 			fgetc(hidden1);
 		}
 
-		for(size_t i = 0; i < 16; ++i)
+		for(int i = 0; i < net->hidden2->height; ++i)
 		{
-			for(size_t j = 0; j < 16; ++j)
+			for(int j = 0; j < net->hidden2->width; ++j)
 			{
 				net->hidden2->value[i][j] = readFloat(hidden2);
 //				printf("hidden2 -> %f\n",net->hidden2->value[i][j]);
 			}
 			fgetc(hidden2);
 			fgetc(hidden2);
-			for(size_t j = 0; j < 16; ++j)
+			for(int j = 0; j < net->hidden2Bias->height; ++j)
 			{
 				net->hidden2Bias->value[j][0] = readFloat(hidden2);
 	//			printf("hidden2Bias -> %f\n",net->hidden2Bias->value[j][0]);
@@ -143,16 +138,16 @@ NeuralNetwork* loadWeight(char hidden1_c[], char hidden2_c[], char output_c[])
 		}
 
 
-		for(size_t i = 0; i < 10; ++i)
+		for(int i = 0; i < net->output->height; ++i)
 		{
-			for(size_t j = 0; j < 16; ++j)
+			for(int j = 0; j < net->output->width; ++j)
 			{
 				net->output->value[i][j] = readFloat(output);
 	//			printf("output -> %f\n",net->output->value[i][j]);
 			}
 			fgetc(output);
 			fgetc(output);
-			for(size_t j = 0; j < 10; ++j)
+			for(int j = 0; j < net->outputBias->height; ++j)
 			{
 				net->outputBias->value[j][0] = readFloat(output);
 //				printf("Bias -> %f\n",net->outputBias->value[j][0]);
