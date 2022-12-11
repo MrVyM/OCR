@@ -51,16 +51,13 @@ for ttf_file in ttf_files:
     name_font=(ttf_file.split("/")[-1]).split(".ttf")[0]
     font = ImageFont.truetype(ttf_file, size=22)
     print("Generate for the font :",name_font)
-    image = Image.new('RGB', (width, height), WHITE)
-    addFile(image,0)
-    count+=1
-    image.save(f"{image_path}/dataset_{name_font}_(blank)_{0}","png")
     for y in range(-2,2,2) :
         for x in range(-5,5,5) :
-            for number in range(1,10) :
+            for number in range(0,10) :
                 image = Image.new('RGB', (width, height), WHITE)
                 draw = ImageDraw.Draw(image);
-                draw.text((9+x,1+y),str(number),fill=BLACK,font=font)
+                if (number != 0) :
+                    draw.text((9+x,1+y),str(number),fill=BLACK,font=font)
                 # noiseWhite(int(x/4),int(y/4)) 
 #               noise(x,y,theta)
                 count += 1
@@ -68,7 +65,6 @@ for ttf_file in ttf_files:
 #image = image.rotate(theta,fillcolor=WHITE)
                 # print(f"{image_path}/dataset_{name_font}_({x},{y},{theta})_{number}")
                 image.save(f"{image_path}/dataset_{name_font}_({x},{y})_{number}","png")
-
 
 print("Length dataset : ", count)
 f = open(image_path +"/lines.txt","a")

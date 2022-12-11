@@ -56,6 +56,8 @@ void showStat(NeuralNetwork* net, float (*activ)(float))
             input->value[h][0] = training_list->value[height][h];
         tested ++;
         int result = maxIndexMatrix(recognized(net,activ,input));
+        // if ((int)(training_list->value[height][784]) == 0)
+        //     printf("find for 0 : %d\n",result);
         if ((int)(training_list->value[height][784]) == result)
         {
             ratio += 1.0;
@@ -70,8 +72,20 @@ void showStat(NeuralNetwork* net, float (*activ)(float))
 
     for(int i = 0; i < 10; i++)
     {
-        printf("    I : %d    V : %d, F : %d\n",i,vrai[i],faux[i]);        
+        printf("\033[0;31m");
+        if (vrai[i] >= faux[i])
+            printf("\033[0;36m");
+        if (faux[i] == 0)
+        {
+            printf("\033[0;37m");
+            printf("    I : %d\n",i);        
+        }
+        else
+        {
+            printf("    I : %d    V : %d, F : %d\n",i,vrai[i],faux[i]);        
+        }
     }
+    printf("\033[0;37m");
     printf("\nRatio : %3.3f% \n\n", (ratio/tested)*100);
 }
 
@@ -79,8 +93,8 @@ void showStat(NeuralNetwork* net, float (*activ)(float))
 NeuralNetwork* trainRecognition(NeuralNetwork* net, float (*activ)(float),float (*deriv)(float))
 {
     // printNeural(net);
-    float learning_rate = 0.02;
-    int max_iter = 3;
+    float learning_rate = 0.00013823;
+    int max_iter = 2;
 
     FILE* lines = fopen("assets/Dataset/lines.txt", "r");
     // printf("Load the number of lines\n");
@@ -98,6 +112,7 @@ NeuralNetwork* trainRecognition(NeuralNetwork* net, float (*activ)(float),float 
         list_soluce[i] = initMatrix(1,10);
         list_soluce[i]->value[i][0] = 1.0;
     }
+
     Matrix* soluce;
 
     float train_v = 0;
@@ -109,6 +124,7 @@ NeuralNetwork* trainRecognition(NeuralNetwork* net, float (*activ)(float),float 
         for(int high = 0; high < training_set; high++)
         {
             int rng = (int)(rand());
+            // rng = 0;
             int j = (high+rng)%(int)training_set;
             for(int h = 0; h < 784; h++)
                 input->value[h][0] = training_list->value[j][h];
@@ -167,9 +183,10 @@ NeuralNetwork* trainRecognition(NeuralNetwork* net, float (*activ)(float),float 
             Errorout = initMatrix(1, soluce->height);
             for(int errorI = 0; errorI < soluce->height; errorI++)
             {
-                float t = (soluce->value[0][errorI] -aout->value[0][errorI]);
-                Errorout->value[0][errorI] = t*t/soluce->height;
+                float t = (aout->value[0][errorI] - soluce->value[0][errorI] );
+                Errorout->value[0][errorI] = t*t;
             }
+
             Errorout = subMatrix(aout, soluce);
 
             //Step 2:
