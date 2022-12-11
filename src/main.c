@@ -59,7 +59,6 @@ int main(int argc, char **argv)
         // saveImage(image, "erode.bmp");*/
         otsuTresolding(image);
         saveImage(image, "thresolding.bmp");
-	image = rotateImage(image,45);
         Line **line = houghTransform(image);
         saveImage(image, "hough.bmp");
 

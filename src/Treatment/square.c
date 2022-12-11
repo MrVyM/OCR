@@ -238,7 +238,7 @@ void decoupage(Image *image)
         {
             char s[50];
             sprintf(s, "assets/Test/%d.%d.%d.png",i,j);
-            subTab[j] = resizeImage(subTab[j], 29);
+            subTab[j] = resizeImage(subTab[j], 28);
             cleanImage(subTab[j]);
             saveImage(subTab[j],s); 
         }
@@ -287,10 +287,10 @@ int **square(Image *image, Line **listeline)
     // Image *result= extractSquare(image, l[0], l[1], l[2], l[3]);
     //Image *image2= extractSquare(image,0,0,1011,128);
     //Image *image2 = findbiggestSquare(image, listeline);
-    Image *image2 = traitement(image,listeline);
     
-    saveImage(image2, "traitement.bmp");
-    Image *image3 = findBiggest2(image2,listeline);
+    //Image *image2 = traitement(image,listeline);
+    //saveImage(image2, "traitement.bmp");
+    Image *image3 = findBiggest2(image,listeline);
     saveImage(image3, "square.bmp");
     decoupage(image3);
     return NULL;
