@@ -12,19 +12,16 @@ double radiansToDegrees(double radians)
 {
     return radians * 180.0 / M_PI;
 }
-
 double degreesToRadians(double degrees)
 {
     return degrees * M_PI / 180.0;
 }
-
 Matrix *createAccumulator(Image *image)
 {
     int max_rho = ceil(sqrt(image->width * image->width + image->height * image->height));
     Matrix *accumulator = initMatrix(MAX_THETA + 1, max_rho + 1);
     return accumulator;
 }
-
 Line **fillHoughMatrix(Image *image, Matrix *accumulator, int sobel_on, double thresold)
 {
     int max = thresold == 0 ? 0 : (int) thresold;

@@ -1,5 +1,4 @@
 #!/bin/bash
-
 j=0
 
 while [[ 1 ]]

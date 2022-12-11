@@ -50,6 +50,13 @@ void setPixelGreen(Pixel *pixel)
     pixel->green = 255;
 }
 
+void setPixel(Pixel *pixel)
+{
+    pixel->blue = 255;
+    pixel->red = 255;
+    pixel->green = 255;
+}
+
 Image *drawLine(Image *image, Line *line)
 {
     int x0 = line->x1;
@@ -78,6 +85,10 @@ Image *drawLine(Image *image, Line *line)
                 if(!(image->pixels[x0][y0].green == 0 && image->pixels[x0][y0].blue == 0))
                 setPixelGreen(&image->pixels[x0][y0]);
             }
+        }
+        if (1 <= x0 && x0 < image->width-1 && 1 <= y0 && y0 < image->height -1)
+        {
+            setPixel(&image->pixels[x0][y0]);
         }
 
         if (x0 == x1 && y0 == y1)
