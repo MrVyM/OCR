@@ -9,13 +9,8 @@ TESTS_DIR = tests
 
 # add -g argument just after the = of the CFLAGS for debugging with GDB
 
-<<<<<<< HEAD
-CFLAGS = -g `pkg-config --cflags sdl2 SDL2_image` -Wall -Wextra -I $(INCLUDE_DIR)/
-LFLAGS = `pkg-config --libs sdl2 SDL2_image`
-=======
 CFLAGS = -g `pkg-config --cflags sdl2 SDL2_image gtk+-3.0` -Wall -Wextra -I $(INCLUDE_DIR)/
 LFLAGS = `pkg-config --libs sdl2 SDL2_image gtk+-3.0`
->>>>>>> gui
 
 # find source file
 SRC = $(shell find $(SRC_DIR) -type f -name '*.c')
