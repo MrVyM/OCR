@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <err.h>
 #include "Struct/matrix.h"
 #include "Solver/solving.h"
 
@@ -75,9 +76,9 @@ int readNumber(FILE *file)
     if (readed == '-')
         sign = -1;
     else if (readed == 10 || readed == 32)
-        return result;
+        return result * sign;
     else if (readed < 48 || readed > 57)
-        return result;
+        return result * sign;
     else 
     {
         result *= 10;
@@ -95,34 +96,61 @@ int readNumber(FILE *file)
     return result * sign;
 }
 
-float readFloat(FILE *file)
+int readUnsignedNumber(FILE *file, char readed)
 {
-    float result = readNumber(file);
-    char readed;
-    float number = 1;
+    int result = 0;
     while ((readed = fgetc(file))!= EOF)
     {
         if (readed == 10 || readed == 32)
             return result;
         if (readed < 48 || readed > 57)
             break;
-        number /= 10.0;
-        if (result < 0)
-            result -= (float)(readed - 48) * number;        
-        else 
-            result += (float)(readed - 48) * number;
+        result *= 10;
+        result += (readed - 48);
     }
     return result;
 }
 
-Matrix* readData(char data[], char lines[])
+float readFloat(FILE *file)
 {
-    FILE* lines_file = fopen(lines, "r");
-    int number_lines = readNumber(lines_file);
-    fclose(lines_file);
+
+    char readed = fgetc(file);
+    char sign = 1;
+    if(readed == '|')
+{
+	return 1;
+}
+    if (readed == '-')
+    {
+        sign = -1;
+        readed = fgetc(file);
+    }
+    float result = readUnsignedNumber(file, readed);
+    float number = 1;
+    while ((readed = fgetc(file))!= EOF)
+    {
+        if (readed == 10 || readed == 32)
+	{
+            return result * sign;
+	}
+        if (readed < 48 || readed > 57)
+            break;
+        number /= 10.0;
+        if (result < 0)
+            result -= (float)(readed - 48) * number;
+        else 
+            result += (float)(readed - 48) * number;
+    }
+    return result * sign;
+}
+
+Matrix* readData(char data[], int number_lines)
+{
     Matrix* dataset = initMatrix(785, number_lines);
 
     FILE* dataset_file = fopen(data, "r");
+    if (dataset_file == NULL)
+        err(-1,"readData : Cannot load the data\n");
     for(int i = 0; i < number_lines; i++)
     {
         for(int j = 0; j < 784; j++)

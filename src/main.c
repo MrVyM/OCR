@@ -17,36 +17,47 @@
 #include "Struct/neuralNetwork.h"
 #include "Struct/matrix.h"
 #include "Xor/function.h"
+#include "Input/file.h"
 #include "Recognition/recognition.h"
 #include "Solver/solving.h"
 #include "Input/file.h"
 #include "Input/recompose.h"
 
+int main(int argc, char **argv)
+{
+    if (argc != 2 && argc != 3)
+    {
+        NeuralNetwork* net = loadWeight("h1.net","h2.net","ot.net");
+        // printNeural(net);
+        trainRecognition(net,sigmoid,deriv_sigmoid); 
+        //printMatrix(net->output);
+        saveWeight("h1.net","h2.net","ot.net",net);
+    }
+    else
+    {
+        if (SDL_Init(SDL_INIT_VIDEO) != 0)
+            errx(EXIT_FAILURE, "%s", SDL_GetError());
+        
+        size_t filename_len = strlen(argv[1]);
+        char filename[filename_len];
+        strcpy(filename, argv[1]);
 
-int main(int argc, char** argv){
-    if(argc != 2)
-        errx(1, "The number of arguments is not valid");
+        unsigned char grid[9][9] = {};
+        unsigned char initial[9][9] = {};
+        read_sudoku_file(filename, initial);
+        int result_value = read_sudoku_file(filename, grid);
 
-    size_t filename_len = strlen(argv[1]);
-    char filename[filename_len];
-    strcpy(filename, argv[1]);
+        if(result_value == 1)
+            errx(2, "The file specified in argument doesn't exist");
+        else if(result_value == 2)
+            errx(3, "The file specified in argument doesn't respect the correct sudoku grid format");
+        else if(!solve_sudoku(grid, 0, 0))
+            errx(4, "No solution exists for this sudoku grid");
 
-    unsigned char grid[9][9] = {};
-    unsigned char initial[9][9] = {};
-    read_sudoku_file(filename, initial);
-    int result_value = read_sudoku_file(filename, grid);
-
-    if(result_value == 1)
-        errx(2, "The file specified in argument doesn't exist");
-    else if(result_value == 2)
-        errx(3, "The file specified in argument doesn't respect the correct sudoku grid format");
-    else if(!solve_sudoku(grid, 0, 0))
-        errx(4, "No solution exists for this sudoku grid");
-
-    char result_filename[filename_len + 7];
-    strcpy(result_filename, filename);
-    strcat(result_filename, ".bmp");
-    write_sudoku_image(result_filename, grid, initial);
-
+        char result_filename[filename_len + 7];
+        strcpy(result_filename, filename);
+        strcat(result_filename, ".bmp");
+        write_sudoku_image(result_filename, grid, initial);
+    }
     return 0;
 }

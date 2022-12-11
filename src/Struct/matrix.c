@@ -10,13 +10,12 @@ Matrix* initMatrix(int width, int height) {
         errx(-1,"The matrix cannot be initialize");
     matrix->width = width;
     matrix->height = height;
-    float** data = malloc(sizeof(float*) * height); 
-    if (data == NULL)
+    matrix->value = malloc(sizeof(float*) * height); 
+    if (matrix->value == NULL)
         errx(-1,"The data cannot be initialize");
     for(int x = 0; x < height; x++){
-        data[x] = calloc(width, sizeof(float));
+        matrix->value[x] = calloc(width, sizeof(float));
     }
-    matrix->value = data;
     return matrix;
 }
 
@@ -46,28 +45,27 @@ Matrix* randomMatrix(int width, int height, int negative) {
         errx(-1,"randomMatrix : the matrix cannot be initialize");
     matrix->width = width;
     matrix->height = height;
-    float** data = malloc(sizeof(float*) * height); 
-    if (data == NULL)
+    matrix->value = malloc(sizeof(float*) * height); 
+    if (matrix->value == NULL)
         errx(-1,"randomMatrix : the line cannot be initialize");
     if (negative) 
     {
         for(int x = 0; x < height; x++)
         {
-            data[x] = calloc(width, sizeof(float));
+            matrix->value[x] = calloc(width, sizeof(float));
             for(int y = 0; y < width; y++)
-                data[x][y] = ((float)rand()/(RAND_MAX/2)) - 1;
+                matrix->value[x][y] = ((float)rand()/(RAND_MAX/2)) - 1;
         }
     } 
     else
     {
         for(int x = 0; x < height; x++)
         {
-            data[x] = calloc(width, sizeof(float));
+            matrix->value[x] = calloc(width, sizeof(float));
             for(int y = 0; y < width; y++)
-                data[x][y] = ((float)rand()/RAND_MAX);
+                matrix->value[x][y] = ((float)rand()/RAND_MAX);
         }
     }
-    matrix->value = data;
     return matrix;
 }
 
@@ -78,13 +76,17 @@ void printMatrix(Matrix* matrix)
     else
     {
         printf("h : %d w : %d\n",matrix->height,matrix->width);
-    /*        for(int i = 0; i < matrix->height; i++)
+        /*
+        for(int i = 0; i < matrix->height; i++)
         {
-            printf("%d : ",i);
+            printf("%2d : ",i);
             for(int j = 0; j < matrix->width; j++)
-                printf("%f ",matrix->value[i][j]);
+            {
+                    printf("%5.2f ",matrix->value[i][j]);                    
+            }
             printf("\n");
-        }*/
+        }
+        */
     }
 }
 
@@ -123,24 +125,20 @@ void freeMatrix(Matrix* matrix)
     free(matrix);
 }
 
-void multiply(float* list, Matrix* multiplier, float learning_rate)
-{
-    for(int i = 0; i < multiplier->height; i++)
-    {
-        list[i] *= multiplier->value[i][0] * learning_rate;
-    }
-}
 
 Matrix* multiplyMatrix(Matrix* m1, Matrix* m2)
 {
-    if (m1->height != m2->height && m1->width != m2->width)
-        errx(-10,"multiplyMatrix : The size of the matrix is not correct");
-    Matrix* res = initMatrix(m1->width,m1->height);
+    /*printMatrix(m1);
+    printf("\n");
+    printMatrix(m2);
+    printf("\n\n");*/
+    Matrix* res = initMatrix(m1->width,m2->height);
     for(int i = 0; i < m1->height; i++)
     {
         for(int j = 0; j < m1->width; j++)
             res->value[i][j] = m1->value[i][j] * m2->value[i][j];
     }
+    free(m1);
     return res;
 }
 
@@ -177,6 +175,17 @@ Matrix* mulScalarMatrix(Matrix* matrix, float scalar)
     return res;
 }
 
+
+void multiply(float* list, Matrix* multiplier, float learning_rate)
+{
+    for(int i = 0; i < multiplier->height; i++)
+    {
+        //printf("%d ",i);
+        list[i] *= multiplier->value[i][0] * learning_rate;
+    }
+    // printf("\n");
+}
+
 Matrix* addMatrix(Matrix* m1, Matrix* m2)
 {
     if (m1 == NULL)
@@ -200,6 +209,7 @@ Matrix* addMatrix(Matrix* m1, Matrix* m2)
             for(int j = 0; j < m1->width; j++)
                 res->value[i][j] = m1->value[i][j] + m2->value[i][j];
         }
+        free(m1);
         return res;
     }
 }
@@ -239,4 +249,26 @@ Matrix *mulMatrix(Matrix *m1, Matrix *m2)
     /*printf("Final :\n");
     printMatrix(res);*/
     return res; 
+}
+
+int maxIndexMatrix(Matrix* m1)
+{
+    if(!(m1->height > 0 && m1->width > 0))
+    {
+        errx(-1, "maxMatrix: Matrix empty");
+    }
+    float max = m1->value[0][0];
+    int max_i = 0;
+    for (int i = 0; i < m1->height; ++i)
+    {
+        for(int j = 0; j < m1->width; ++j)
+        {
+            if(m1->value[i][j] > max)
+            {
+                max = m1->value[i][j];
+                max_i = i;
+            }
+        }
+    }
+    return max_i;
 }
