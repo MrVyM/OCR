@@ -250,6 +250,31 @@ void decoupage(Image *image)
 	}
 }
 
+Image* traitement(Image *image, Line**listeline)
+{
+   int x1, y1, x2, y2;
+   int i = 0;
+   int x = image->width / 2;
+    int y = image->height / 2;
+   while(listeline[i] != 0){
+         if(listeline[i]->x1 < x && listeline[i]->x2 < x){
+              if(listeline[i]->y1 < y && listeline[i]->y2 < y){
+                x1 = listeline[i]->x1;
+                y1 = listeline[i]->y1;
+                x2 = listeline[i]->x2;
+                y2 = listeline[i]->y2;
+              }
+         }
+         i++;
+   }
+    int longueur = sqrt(pow(x2-x1,2)+pow(y2-y1,2));
+    int longueurOppose = sqrt(pow(x2-x1,2));
+    double angle = asin(longueurOppose/longueur);
+    printf("angle : %f\n",angle);
+    Image *image2 = rotateImage(image,angle);
+    return image2;
+}
+
 int **square(Image *image, Line **listeline)
 {
     // int x1, y1, x2, y2;
@@ -257,8 +282,9 @@ int **square(Image *image, Line **listeline)
     // Image *result= extractSquare(image, l[0], l[1], l[2], l[3]);
     //Image *image2= extractSquare(image,0,0,1011,128);
     //Image *image2 = findbiggestSquare(image, listeline);
-    Image *image2 = findBiggest2(image,listeline);
-    saveImage(image2, "square.bmp");
-    decoupage(image2);
+    Image *image2 = traitement(image,listeline);
+    Image *image3 = findBiggest2(image2,listeline);
+    saveImage(image3, "square.bmp");
+    decoupage(image3);
     return NULL;
 }
