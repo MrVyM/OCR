@@ -283,6 +283,7 @@ int **square(Image *image, Line **listeline)
     //Image *image2= extractSquare(image,0,0,1011,128);
     //Image *image2 = findbiggestSquare(image, listeline);
     Image *image2 = traitement(image,listeline);
+    saveImage(image2, "traitement.bmp");
     Image *image3 = findBiggest2(image2,listeline);
     saveImage(image3, "square.bmp");
     decoupage(image3);
