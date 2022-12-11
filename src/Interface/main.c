@@ -195,7 +195,8 @@ void moins90_image(GtkWidget *widget, gpointer data)
     g_print("moins90\n");
     gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(ui->progress), 0.3);
     Image *image = importImage(ui->path);
-    rotateImage(image, -90);
+    double angleRotation = -90;
+    image = rotateImage(image, angleRotation);
     saveImage(image, ui->path);
     gtk_image_set_from_file(GTK_IMAGE(ui->image), ui->path);
 }
@@ -209,7 +210,8 @@ void plus90_image(GtkWidget *widget, gpointer data)
     g_print("plus90\n");
     gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(ui->progress), 0.3);
     Image *image = importImage(ui->path);
-    rotateImage(image, 90);
+    double angleRotation = 90;
+    image = rotateImage(image,angleRotation);
     saveImage(image, ui->path);
     gtk_image_set_from_file(GTK_IMAGE(ui->image), ui->path);
 }
