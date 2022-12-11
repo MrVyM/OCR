@@ -68,7 +68,7 @@ void line_image(GtkWidget *widget, gpointer data)
     gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(ui->progress), 0.7);
     Image *image = importImage(ui->path);
     sText = gtk_entry_get_text(ui->entry);
-    houghTransform(image, atof(sText), (int)ui->ifsobel);
+    houghTransform(image, (int)ui->ifsobel, atof(sText));
     saveImage(image, ui->path);
     gtk_image_set_from_file(GTK_IMAGE(ui->image), ui->path);
 
