@@ -6,7 +6,7 @@
 #include <string.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-
+#include "Treatment/rotation.h"
 #include "Treatment/resize.h"
 
 Image *extractSquare(Image *image, int x1, int y1, int x2, int y2)
