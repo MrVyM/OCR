@@ -7,6 +7,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include "Treatment/rotation.h"
+#include "Xor/function.h"
 #include "Treatment/resize.h"
 
 Image *extractSquare(Image *image, int x1, int y1, int x2, int y2)
@@ -22,14 +23,10 @@ Image *extractSquare(Image *image, int x1, int y1, int x2, int y2)
     return square;
 }
 
-int number(int *l)
+int number(Matrix *l)
 {
-    if (l[1] == 9999)
-    {
-        return 1;
-    }
-    // on fera appel au reseau de neurone
-    return 0;
+    NeuralNetwork* net = loadNetwork("h1.net","h2.net","ot.net");
+    return recognized(net, sigmoid, l);
 }
 
 //version simple qui marche si le sudoku est seul
@@ -187,11 +184,11 @@ Image **cutImage(Image *image)
     return tab;
 }
 
-int *Imagetoint(Image *image)
+Matrix *Imagetoint(Image *image)
 {
     // on rezie l'image pour avoir une image de 28*28
-    Image *image2 = resizeImage(image, 29);
-    int *tab = malloc(28 * 28 * sizeof(int));
+    Image *image2 = resizeImage(image, 28);
+    Matrix *tab = initMatrix(728,1);
     for (int i = 0; i < 28; i++)
     {
         for (int j = 0; j < 28; j++)
@@ -199,11 +196,11 @@ int *Imagetoint(Image *image)
             // on met 1 si le pixel est noir et 0 sinon
             if (image2->pixels[i][j].red == 0)
             {
-                tab[i * 28 + j] = 1;
+                tab->value[i * 28 + j][0] = 1;
             }
             else
             {
-                tab[i * 28 + j] = 0;
+                tab->value[i * 28 + j][0] = 0;
             }
         }
     }
@@ -238,7 +235,7 @@ void decoupage(Image *image)
         {
             char s[50];
             sprintf(s, "assets/Test/%d.%d.%d.png",i,j);
-            subTab[j] = resizeImage(subTab[j], 28);
+            subTab[j] = resizeImage(subTab[j], 29);
             cleanImage(subTab[j]);
             saveImage(subTab[j],s); 
         }

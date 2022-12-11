@@ -32,7 +32,7 @@ Matrix* recognized(NeuralNetwork* net,float (*activ)(float), Matrix* input)
     freeMatrix(Zh2);
     freeMatrix(ah2);
     freeMatrix(Zout);
-    return aout;
+    return maxIndexMatrix(aout);
 }
 
 

@@ -40,11 +40,7 @@ Image *createEmptyImage(int width, int height)
 
 void cleanImage(Image* image)
 {
-  if (image->width != 28 && image->height != 28)
-    printf("cleanImage : i cannot clean this image\n");
-  else 
-  {
-    for(int y = 0; y < 2; y++)
+    for(int y = 0; y < 4; y++)
     {
       for(int x = 0; x < 28; x++)
       {
@@ -52,7 +48,6 @@ void cleanImage(Image* image)
       }
     }
   }
-}
 
 Image *importImage(char *filename)
 {
