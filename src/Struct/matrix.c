@@ -175,7 +175,6 @@ Matrix* mulScalarMatrix(Matrix* matrix, float scalar)
     return res;
 }
 
-
 void multiply(float* list, Matrix* multiplier, float learning_rate)
 {
     for(int i = 0; i < multiplier->height; i++)

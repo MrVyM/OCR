@@ -11,4 +11,3 @@ float deriv_relu(float z);
 Matrix* meanAbsoluteError(Matrix* soluce, Matrix* result);
 
 Matrix* meanSquareError(Matrix* soluce, Matrix* result);
-

@@ -2,76 +2,90 @@
 #include "Struct/image.h"
 #include "Struct/pixel.h"
 #include "Struct/matrix.h"
+#include "Struct/line.h"
 #include <stdio.h>
 #include <math.h>
-
-#define MAX_THETA 180
-#define STEP_THETA 1
-#define STEP_2_THETA 2
-
+#define MAX_THETA 360
+#define STEP_THETA 0.5
+#define THRESOLDING (max * 0.5)
 double radiansToDegrees(double radians)
 {
     return radians * 180.0 / M_PI;
 }
-
 double degreesToRadians(double degrees)
 {
     return degrees * M_PI / 180.0;
 }
-
 Matrix *createAccumulator(Image *image)
 {
     int max_rho = ceil(sqrt(image->width * image->width + image->height * image->height));
-    Matrix *accumulator = initMatrix(MAX_THETA + 1,max_rho +1);
-    printf("Accumulateur : max_rho : %5d | max_theta : %5d\n", accumulator->width, accumulator->height);
-    printf("Accumulateur : max_rho : %5d | max_theta : %5d\n", max_rho, MAX_THETA);
-    //printf("Accumulateur %f\n",accumulator->value[max_rho][MAX_THETA]);
+    Matrix *accumulator = initMatrix(MAX_THETA + 1, max_rho + 1);
     return accumulator;
 }
-
-Matrix *fillHoughMatrix(Image *image, Matrix *accumulator)
+Line **fillHoughMatrix(Image *image, Matrix *accumulator, int sobel_on, double thresold)
 {
-    size_t max_rho = 0;
-    size_t max_theta = 0;
-    printf("%d, %d\n", accumulator->width, accumulator->height);
+    int max = thresold == 0 ? 0 : (int) thresold;
+    double cosList[MAX_THETA + 1], sinList[MAX_THETA + 1];
+    for (int theta = 0; theta <= MAX_THETA; theta++)
+    {
+        cosList[theta] = cos(degreesToRadians(theta));
+        sinList[theta] = sin(degreesToRadians(theta));
+    }
     for (int x = 0; x < image->width; x++)
     {
         for (int y = 0; y < image->height; y++)
         {
-            if (image->pixels[x][y].red != 0)
+            if ((!sobel_on && image->pixels[x][y].red != 0)  || (sobel_on && image->pixels[x][y].red == 0))
                 continue;
-            for (double theta = 0; theta <= MAX_THETA; theta++)
+            for (int theta = 0; theta <= MAX_THETA; theta++)
             {
-                int rho = x * cos(degreesToRadians(theta)) + y * sin(degreesToRadians(theta));
-                if(rho < 0) continue;
-                if(rho > max_rho) max_rho = rho;
-                if(theta > max_theta) max_theta = theta;
-                //printf("X : %5d | Y : %5d | RHO : %5d | THETA : %5f\n", x, y, rho, theta);
-                
-            
-                printf("%f\n", accumulator->value[rho][(int) theta]);
-                    
+                int rho = x * cosList[theta] + y * sinList[theta];
+                if (rho < 0)
+                    continue;
+                accumulator->value[rho][theta]++;
+                if (accumulator->value[rho][theta] > max)
+                    max = accumulator->value[rho][theta];
             }
         }
     }
-    printf("%zu | %zu\n", max_rho, max_theta / STEP_THETA);
-
-    // Find lines by iterating the accumulator
-    for (int x = 0; x < accumulator->width; x++)
+    // Counts number of lines detected
+    int linesNumber = 0;
+    for (int x = 1; x < accumulator->width; x++)
     {
         for (int y = 0; y < accumulator->height; y++)
         {
-            if (accumulator->value[x][y] < image->width / 2)
-                continue;
-            printf("Line found : %5d | %5d\n", x, y);
+            if (accumulator->value[x][y] >= (thresold != 0 ? max : (THRESOLDING)))
+                linesNumber++;
         }
     }
-    return accumulator;
+    Line **lines = calloc(linesNumber + 1, sizeof(Line));
+    lines[linesNumber] = NULL;
+    linesNumber = 0;
+    int diagonale = ceil(sqrt(image->width * image->width + image->height * image->height));
+    for (int rho = 1; rho < accumulator->height; rho++)
+    {
+        for (int theta = 0; theta < accumulator->width; theta++)
+        {
+            if (accumulator->value[rho][theta] >= (thresold != 0 ? max : (THRESOLDING)))
+            {
+                double a = cosList[theta], b = sinList[theta];
+                int x0 = rho * a, y0 = rho * b;
+                int x1 = x0 + diagonale * (-b), y1 = y0 + diagonale * a;
+                int x2 = x0 - diagonale * (-b), y2 = y0 - diagonale * a;
+                lines[linesNumber] = initLine(theta, rho, accumulator->value[rho][theta], x1, y1, x2, y2);
+                linesNumber++;
+            }
+        }
+    }
+    return lines;
 }
 
-void houghTransformBis(Image *image)
+lines houghTransform(Image *image, int sobel_on, double thresold)
 {
     Matrix *accumulator = createAccumulator(image);
-    fillHoughMatrix(image, accumulator);
+    Line **lines = fillHoughMatrix(image, accumulator, sobel_on, thresold);
+    for (int index = 0; lines[index] != NULL; index++)
+        drawLine(image, lines[index]);
     free(accumulator);
+    return lines
 }

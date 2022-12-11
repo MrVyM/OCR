@@ -12,9 +12,6 @@ struct NeuralNetwork
 	Matrix* hidden1Bias;
 	Matrix* hidden2Bias;
 	Matrix* outputBias;
-	int numInput;
-	int numHidden;
-	int numOuput;
 };
 
 typedef struct NeuralNetwork NeuralNetwork;
