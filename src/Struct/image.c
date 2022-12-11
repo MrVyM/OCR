@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <err.h>
+#include "Struct/line.h"
 
 Image *createEmptyImage(int width, int height)
 {

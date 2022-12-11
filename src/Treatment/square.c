@@ -55,10 +55,6 @@ Image *findBiggest2(Image *image, Line **listeline){
         }
         i++;
     }
-    printf("x2 : %d\n",x2);
-    printf("y2 : %d\n",y2);
-    printf("x1 : %d\n",x1);
-    printf("y1 : %d\n",y1);
     return extractSquare(image, x1, y1, x2, y2);
 }
 
@@ -146,7 +142,6 @@ Image *findbiggestSquare(Image *image, Line **listeline)
 
             if (tempx1 > x1)
             {
-	    	printf("tes un fils de pute : %d\n",tempx1);
                 x1 = tempx1;
             }
             if (tempy1 > y1)
@@ -195,7 +190,7 @@ Image **cutImage(Image *image)
 int *Imagetoint(Image *image)
 {
     // on rezie l'image pour avoir une image de 28*28
-    Image *image2 = resizeImage(image, 28*28);
+    Image *image2 = resizeImage(image, 29);
     int *tab = malloc(28 * 28 * sizeof(int));
     for (int i = 0; i < 28; i++)
     {
@@ -242,34 +237,44 @@ void decoupage(Image *image)
         for(int j = 0; j < 9; j++)
         {
             char s[50];
-            sprintf(s, "assets/Test/%d.%d.png",i,j);
-            subTab[j] = resizeImage(subTab[j], 28);
+            sprintf(s, "assets/Test/%d.%d.%d.png",i,j);
+            subTab[j] = resizeImage(subTab[j], 29);
             cleanImage(subTab[j]);
             saveImage(subTab[j],s); 
         }
-	}
+     }
 }
 
 Image* traitement(Image *image, Line**listeline)
 {
-   int x1, y1, x2, y2;
+   int x1 = 0;
+   int y1 = 0;
+   int x2 = 0;
+   int y2 = 0;
    int i = 0;
    int x = image->width / 2;
-    int y = image->height / 2;
+   //int y = image->height / 2;
    while(listeline[i] != 0){
          if(listeline[i]->x1 < x && listeline[i]->x2 < x){
-              if(listeline[i]->y1 < y && listeline[i]->y2 < y){
                 x1 = listeline[i]->x1;
                 y1 = listeline[i]->y1;
                 x2 = listeline[i]->x2;
                 y2 = listeline[i]->y2;
-              }
          }
          i++;
    }
+    printf("x2 : %d\n",x2);
+    printf("y2 : %d\n",y2);
+    printf("x1 : %d\n",x1);
+    printf("y1 : %d\n",y1);
+
     int longueur = sqrt(pow(x2-x1,2)+pow(y2-y1,2));
     int longueurOppose = sqrt(pow(x2-x1,2));
-    double angle = asin(longueurOppose/longueur);
+    printf("end\n");
+    double angle = 0;
+    if (longueur != 0){
+    	angle = asin(longueurOppose/longueur);
+    }
     printf("angle : %f\n",angle);
     Image *image2 = rotateImage(image,angle);
     return image2;
@@ -283,6 +288,7 @@ int **square(Image *image, Line **listeline)
     //Image *image2= extractSquare(image,0,0,1011,128);
     //Image *image2 = findbiggestSquare(image, listeline);
     Image *image2 = traitement(image,listeline);
+    
     saveImage(image2, "traitement.bmp");
     Image *image3 = findBiggest2(image2,listeline);
     saveImage(image3, "square.bmp");
