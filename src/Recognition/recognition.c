@@ -93,15 +93,15 @@ void showStat(NeuralNetwork* net, float (*activ)(float))
 NeuralNetwork* trainRecognition(NeuralNetwork* net, float (*activ)(float),float (*deriv)(float))
 {
     // printNeural(net);
-    float learning_rate = 0.00013823;
-    int max_iter = 2;
+    float learning_rate = 0.01;
+    int max_iter = 20;
 
-    FILE* lines = fopen("assets/Dataset/lines.txt", "r");
+    FILE* lines = fopen("assets/Test/lines.txt", "r");
     // printf("Load the number of lines\n");
     float training_set = (float)readNumber(lines);
     fclose(lines);
     // printf("training_set : %f\n", training_set);
-    Matrix* training_list = readData("assets/Dataset/data.txt", training_set);
+    Matrix* training_list = readData("assets/Test/data.txt", training_set);
     // printf("Load the dataset\n");
 
     Matrix* input = initMatrix(1,784);
