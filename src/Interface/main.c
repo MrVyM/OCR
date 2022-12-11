@@ -186,6 +186,34 @@ void modify_scale(GtkWidget *widget, gpointer data)
     g_print("scale");
 }
 
+void moins90_image(GtkWidget *widget, gpointer data)
+{
+    if (widget == 0){
+        g_print("widget");
+    }
+    UserInterface *ui = (UserInterface *)data;
+    g_print("moins90\n");
+    gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(ui->progress), 0.3);
+    Image *image = importImage(ui->path);
+    rotateImage(image, -90);
+    saveImage(image, ui->path);
+    gtk_image_set_from_file(GTK_IMAGE(ui->image), ui->path);
+}
+
+void plus90_image(GtkWidget *widget, gpointer data)
+{
+    if (widget == 0){
+        g_print("widget");
+    }
+    UserInterface *ui = (UserInterface *)data;
+    g_print("plus90\n");
+    gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(ui->progress), 0.3);
+    Image *image = importImage(ui->path);
+    rotateImage(image, 90);
+    saveImage(image, ui->path);
+    gtk_image_set_from_file(GTK_IMAGE(ui->image), ui->path);
+}
+
 int main(int argc, char *argv[])
 {
     // Initializes GTK.
@@ -213,6 +241,8 @@ int main(int argc, char *argv[])
     GtkButton *sobel = GTK_BUTTON(gtk_builder_get_object(builder, "sobel"));
     GtkButton *save = GTK_BUTTON(gtk_builder_get_object(builder, "save"));
     GtkButton *line = GTK_BUTTON(gtk_builder_get_object(builder, "line"));
+    GtkButton *moins90 = GTK_BUTTON(gtk_builder_get_object(builder, "degree1"));
+    GtkButton *plus90 = GTK_BUTTON(gtk_builder_get_object(builder, "degree2"));
     GtkButton *traitement = GTK_BUTTON(gtk_builder_get_object(builder, "traitement"));
     GtkButton *resolve = GTK_BUTTON(gtk_builder_get_object(builder, "resolve"));
     GtkEntry *entry = GTK_ENTRY(gtk_builder_get_object(builder, "seuil"));
@@ -255,6 +285,9 @@ int main(int argc, char *argv[])
     g_signal_connect(resolve, "clicked", G_CALLBACK(resolve_image), &ui);
     g_signal_connect(filechooserbutton1, "file-set", G_CALLBACK(change_image), &ui);
     g_signal_connect(entry, "activate", G_CALLBACK(entry_changed), &ui);
+
+    g_signal_connect(moins90, "clicked", G_CALLBACK(moins90_image), &ui);
+    g_signal_connect(plus90, "clicked", G_CALLBACK(plus90_image), &ui);
 
     g_signal_connect(rotation_scale, "value-changed", G_CALLBACK(modify_scale), &ui);
 

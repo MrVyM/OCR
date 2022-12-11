@@ -35,12 +35,11 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="degree1">
-                <property name="label">gtk-go-back</property>
+              <object class="GtkButton" id="line">
+                <property name="label" translatable="yes">Hough-line</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
-                <property name="use-stock">True</property>
               </object>
               <packing>
                 <property name="left-attach">0</property>
@@ -110,12 +109,11 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="degree2">
-                <property name="label">gtk-go-forward</property>
+              <object class="GtkButton" id="sobel">
+                <property name="label" translatable="yes">Sobel</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
-                <property name="use-stock">True</property>
               </object>
               <packing>
                 <property name="left-attach">1</property>
