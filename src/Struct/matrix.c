@@ -20,25 +20,25 @@ Matrix* initMatrix(int width, int height) {
     return matrix;
 }
 
-char* stringMatrix(Matrix* mat)
-{
-    if (mat == NULL)
-        return NULL;
-    char *s;
-    int count = 0;
-    for(int i = 0; i < mat->height; i++)
-    {
-        for(int j = 0; j < mat->width; j++)
-        {
-            if (j < mat->width -1)
-                count += sprintf(s+count,"%f ",mat->value[i][j]);
-            else 
-                count += sprintf(s+count,"%f",mat->value[i][j]);
-        }
-        count +=sprintf(s+count,"\n");
-    }
-    return s;
-}
+// char* stringMatrix(Matrix* mat)
+// {
+//     if (mat == NULL)
+//         return NULL;
+//     char *s;
+//     int count = 0;
+//     for(int i = 0; i < mat->height; i++)
+//     {
+//         for(int j = 0; j < mat->width; j++)
+//         {
+//             if (j < mat->width -1)
+//                 count += sprintf(s+count,"%f ",mat->value[i][j]);
+//             else 
+//                 count += sprintf(s+count,"%f",mat->value[i][j]);
+//         }
+//         count +=sprintf(s+count,"\n");
+//     }
+//     return s;
+// }
 
 Matrix* randomMatrix(int width, int height, int negative) {
     Matrix* matrix = malloc(sizeof(Matrix));
