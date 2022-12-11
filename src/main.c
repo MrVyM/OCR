@@ -19,6 +19,7 @@
 #include "Xor/xor.h"
 #include "Struct/matrix.h"
 #include "Xor/function.h"
+#include "Input/file.h"
 
 typedef struct UserInterface
 {
@@ -96,10 +97,18 @@ void resolve_image(GtkWidget *widget, gpointer data)
     if (widget == 0){
         g_print("widget");
     }
+    const gchar *sText;
     UserInterface *ui = (UserInterface *)data;
     g_print("Resolve\n");
     // on mets la progress bar à 100
     gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(ui->progress), 1.0);
+    Image *image = importImage(ui->path);
+    sText = gtk_entry_get_text(ui->entry);
+    Line** listeline = houghTransform(image, (int)ui->ifsobel, atof(sText));
+    
+    write_sudoku_file("sudoku.png", square(image, listeline));
+    
+    gtk_image_set_from_file(GTK_IMAGE(ui->image), "sudoku.png");
 }
 
 void change_image(GtkWidget *widget, gpointer data)
@@ -221,16 +230,12 @@ int main(int argc, char *argv[])
     // Initializes GTK.
     if (argc >= 2)
     {
-        Image* image = importImage(argv[1]);
-        otsuTresolding(image);
-        saveImage(image, "thresolding.bmp");
-        Line **line = houghTransform(image,0,0);
-        saveImage(image, "hough.bmp");
+        //Image* image = importImage(argv[1]);
+        //otsuTresolding(image);
 
-        int** test = square(image,line);
+        //int** test = square(image,line);
         //image = rotateImage(image, angleRotation);
         //saveImage(image, "rotation.bmp");
-        freeImage(image);
         SDL_Quit();
     }
     else 

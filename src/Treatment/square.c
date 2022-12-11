@@ -8,6 +8,8 @@
 #include <SDL2/SDL_image.h>
 #include "Treatment/rotation.h"
 #include "Xor/function.h"
+#include "Recognition/recognition.h"
+#include "Struct/neuralNetwork.h"
 #include "Treatment/resize.h"
 
 Image *extractSquare(Image *image, int x1, int y1, int x2, int y2)
@@ -25,8 +27,9 @@ Image *extractSquare(Image *image, int x1, int y1, int x2, int y2)
 
 int number(Matrix *l)
 {
-    NeuralNetwork* net = loadNetwork("h1.net","h2.net","ot.net");
+    NeuralNetwork* net = loadWeight("h1.net","h2.net","ot.net");
     return recognized(net, sigmoid, l);
+    //return 0;
 }
 
 //version simple qui marche si le sudoku est seul
@@ -218,7 +221,9 @@ int* createTab(Image **tab)
         //char s[25];
         //sprintf(s, "%d.%d tzt",i);
         //saveImage(tab[i],s); 
-        tab2[i] = number(Imagetoint(tab[i]));
+        
+	tab2[i] = number(Imagetoint(tab[i]));
+	//tab2[i] = 0;
     }
     return tab2;
 }
@@ -234,7 +239,7 @@ void decoupage(Image *image)
         for(int j = 0; j < 9; j++)
         {
             char s[50];
-            sprintf(s, "assets/Test/%d.%d.%d.png",i,j);
+            sprintf(s, "assets/Test/%d.%d.png",i,j);
             subTab[j] = resizeImage(subTab[j], 29);
             cleanImage(subTab[j]);
             saveImage(subTab[j],s); 
@@ -276,6 +281,14 @@ Image* traitement(Image *image, Line**listeline)
     Image *image2 = rotateImage(image,angle);
     return image2;
 }
+int** sudoku(Image* image){
+	Image** tab = cutImage(image);
+	int** result = malloc(sizeof(int) * 9);
+	for (int i = 0; i < 9; i++){
+		result[i] = createTab(cutImage(tab[i]));
+	}
+	return result;
+}
 
 int **square(Image *image, Line **listeline)
 {
@@ -285,10 +298,10 @@ int **square(Image *image, Line **listeline)
     //Image *image2= extractSquare(image,0,0,1011,128);
     //Image *image2 = findbiggestSquare(image, listeline);
     
-    //Image *image2 = traitement(image,listeline);
+    Image *image2 = traitement(image,listeline);
     //saveImage(image2, "traitement.bmp");
-    Image *image3 = findBiggest2(image,listeline);
+    Image *image3 = findBiggest2(image2,listeline);
     saveImage(image3, "square.bmp");
-    decoupage(image3);
-    return NULL;
+    //decoupage(image3);
+    return sudoku(image3);
 }

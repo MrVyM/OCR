@@ -6,7 +6,7 @@
 #include <err.h>
 
 
-Matrix* recognized(NeuralNetwork* net,float (*activ)(float), Matrix* input)
+int recognized(NeuralNetwork* net,float (*activ)(float), Matrix* input)
 {
     //Zh1 = [ X • wh1 ] + bh1
     Matrix* Zh1 = addMatrix(mulMatrix(net->hidden1, input), net->hidden1Bias);
@@ -55,7 +55,7 @@ void showStat(NeuralNetwork* net, float (*activ)(float))
         for(int h = 0; h < 784; h++)
             input->value[h][0] = training_list->value[height][h];
         tested ++;
-        int result = maxIndexMatrix(recognized(net,activ,input));
+        int result = recognized(net,activ,input);
         // if ((int)(training_list->value[height][784]) == 0)
         //     printf("find for 0 : %d\n",result);
         if ((int)(training_list->value[height][784]) == result)
