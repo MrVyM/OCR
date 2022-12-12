@@ -35,8 +35,8 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="line">
-                <property name="label" translatable="yes">Hough-line</property>
+              <object class="GtkButton" id="degree1">
+                <property name="label" translatable="yes">&lt; 90°</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
@@ -109,8 +109,8 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="sobel">
-                <property name="label" translatable="yes">Sobel</property>
+              <object class="GtkButton" id="degree2">
+                <property name="label" translatable="yes">90° &gt;</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
@@ -145,7 +145,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="save1">
+              <object class="GtkButton" id="save">
                 <property name="label" translatable="yes">Save</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
@@ -157,7 +157,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="quit1">
+              <object class="GtkButton" id="quit">
                 <property name="label" translatable="yes">Exit</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
@@ -169,7 +169,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="line1">
+              <object class="GtkButton" id="line">
                 <property name="label" translatable="yes">Hough-line</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
@@ -181,7 +181,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="sobel1">
+              <object class="GtkButton" id="sobel">
                 <property name="label" translatable="yes">Sobel</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
