@@ -10,7 +10,6 @@
 
 Image *createEmptyImage(int width, int height)
 {
-  printf("width %d height %d\n", width, height);
   Image *image = malloc(sizeof(Image));
   if (image == NULL)
     errx(-1, "Error while allocating a image (createEmptyImage)");
@@ -45,6 +44,9 @@ void cleanImage(Image* image)
       for(int x = 0; x < 28; x++)
       {
         setPixel(&image->pixels[x][y]);
+        setPixel(&image->pixels[y][x]);
+        setPixel(&image->pixels[27 - x][y]);
+        setPixel(&image->pixels[27 - y][x]);
       }
     }
   }

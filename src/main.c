@@ -24,6 +24,8 @@
 #include "Treatment/square.h"
 #include "Input/recompose.h"
 
+#include "Recognition/recognition.h"
+
 typedef struct UserInterface
 {
     GtkWindow *window;
@@ -48,13 +50,13 @@ void rotate_image(GtkWidget *widget, gpointer data)
         g_print("widget");
     }
     UserInterface *ui = (UserInterface *)data;
-    g_print("Rotate\n");
     // on mets la progress bar à 15
     gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(ui->progress), 0.2);
     // gtk_range_get_value(ui->scale);
 
     Image *image = importImage(ui->path);
     double angleRotation = (double)gtk_range_get_value(GTK_RANGE(ui->scale));
+    g_print("Rotate the image (%f)\n", angleRotation);
     image = rotateImage(image, angleRotation);
     saveImage(image, ui->path);
     gtk_image_set_from_file(GTK_IMAGE(ui->image), ui->path);
@@ -67,7 +69,7 @@ void line_image(GtkWidget *widget, gpointer data)
     }
     const gchar *sText;
     UserInterface *ui = (UserInterface *)data;
-    g_print("Line\n");
+    g_print("Apply houghTransform\n");
     // on mets la progress bar à 50
     gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(ui->progress), 0.7);
     Image *image = importImage(ui->path);
@@ -85,7 +87,7 @@ void traitement_image(GtkWidget *widget, gpointer data)
         g_print("widget");
     }
     UserInterface *ui = (UserInterface *)data;
-    g_print("Traitement\n");
+    g_print("Treatement\n");
     // on mets la progress bar à 25
     gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(ui->progress), 0.4);
     Image *image = importImage(ui->path);
@@ -127,7 +129,7 @@ void resolve_image(GtkWidget *widget, gpointer data)
 void change_image(GtkWidget *widget, gpointer data)
 {
     UserInterface *ui = (UserInterface *)data;
-    g_print("Change\n");
+    g_print("Loading the image\n");
     // on mets la progress bar à 10
     gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(ui->progress), 0.1);
 
@@ -166,8 +168,8 @@ void save_image(GtkWidget *widget, gpointer data)
     UserInterface *ui = (UserInterface *)data;
     // on save avec saveImage() ui->image
     Image *image = importImage(ui->path);
-    saveImage(image, "sudoku.bmp");
-    g_print("save");
+    saveImage(image, "sudoku.png");
+    g_print("Save the image in \"sudoku.png\"");
 }
 
 void blur_image(GtkWidget *widget, gpointer data)
@@ -176,7 +178,7 @@ void blur_image(GtkWidget *widget, gpointer data)
         g_print("widget");
     }
     UserInterface *ui = (UserInterface *)data;
-    g_print("Blur\n");
+    g_print("Aplly Blur\n");
     gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(ui->progress), 0.1);
     Image *image = importImage(ui->path);
     applyGaussianBlur(image);
@@ -190,7 +192,7 @@ void sobel_image(GtkWidget *widget, gpointer data)
         g_print("widget");
     }
     UserInterface *ui = (UserInterface *)data;
-    g_print("Sobel\n");
+    g_print("Apply Sobel\n");
     gint newsobel = 1;
     ui->ifsobel = newsobel;
     gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(ui->progress), 0.55);
@@ -205,7 +207,7 @@ void modify_scale(GtkWidget *widget, gpointer data)
     UserInterface *ui = (UserInterface *)data;
     // gtk_range_get_value(ui->scale);
     ui->scale = GTK_SCALE(widget);
-    g_print("scale");
+    g_print("Rescale\n");
 }
 
 void moins90_image(GtkWidget *widget, gpointer data)
@@ -214,7 +216,7 @@ void moins90_image(GtkWidget *widget, gpointer data)
         g_print("widget");
     }
     UserInterface *ui = (UserInterface *)data;
-    g_print("moins90\n");
+    g_print("Roation de - 90\n");
     gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(ui->progress), 0.3);
     Image *image = importImage(ui->path);
     double angleRotation = -90;
@@ -229,7 +231,7 @@ void plus90_image(GtkWidget *widget, gpointer data)
         g_print("widget");
     }
     UserInterface *ui = (UserInterface *)data;
-    g_print("plus90\n");
+    g_print("Rotation de + 90\n");
     gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(ui->progress), 0.3);
     Image *image = importImage(ui->path);
     double angleRotation = 90;
@@ -240,15 +242,14 @@ void plus90_image(GtkWidget *widget, gpointer data)
 
 int main(int argc, char *argv[])
 {
-    // Initializes GTK.
     if (argc >= 2)
     {
-        //Image* image = importImage(argv[1]);
-        //otsuTresolding(image);
+        Image* image = importImage(argv[1]);
+        otsuTresolding(image);
 
-        //int** test = square(image,line);
-        //image = rotateImage(image, angleRotation);
-        //saveImage(image, "rotation.bmp");
+        int** test = square(image,line);
+        image = rotateImage(image, angleRotation);
+        saveImage(image, "rotation.bmp");
         SDL_Quit();
     }
     else 

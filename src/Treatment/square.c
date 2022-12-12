@@ -43,13 +43,10 @@ int number(NeuralNetwork* net, int *l)
     Matrix* input = initMatrix(1,784); 
     for(int i = 0; i < 784; i++)
     {
-        printf("%d %d \n",i,l[i]);
         input->value[i][0] = l[i];
     }
     // on fera appel au reseau de neurone
-    printf("Call number\n");
     int result = recognized(net, sigmoid, input);
-    printf("number find %d\n",result);
     return result;
 }
 
@@ -247,11 +244,11 @@ int *Imagetoint(Image *image)
             // on met 1 si le pixel est noir et 0 sinon
             if (image2->pixels[i][j].red == 0)
             {
-                tab[i * 28 + j] = 1;
+                tab[i* 28 + j] = 0;
             }
             else
             {
-                tab[i * 28 + j] = 0;
+                tab[i * 28 + j] = 1;
             }
         }
     }
@@ -334,19 +331,12 @@ Image* traitement(Image *image, Line**listeline)
          }
          i++;
    }
-    printf("x2 : %d\n",x2);
-    printf("y2 : %d\n",y2);
-    printf("x1 : %d\n",x1);
-    printf("y1 : %d\n",y1);
-
     int longueur = sqrt(pow(x2-x1,2)+pow(y2-y1,2));
     int longueurOppose = sqrt(pow(x2-x1,2));
-    printf("end\n");
     double angle = 0;
     if (longueur != 0){
     	angle = asin(longueurOppose/longueur);
     }
-    printf("angle : %f\n",angle);
     Image *image2 = rotateImage(image,angle);
     return image2;
 }
@@ -375,7 +365,6 @@ int **square(Image *image, Line **listeline)
     //saveImage(image2, "traitement.bmp");
     Image *image3 = findBiggest2(image,listeline);
     saveImage(image3, "square.bmp");
-    decoupage(image3);S
-    //return sudoku(image3);
+    decoupage(image3);
     return result(image3);
 }
