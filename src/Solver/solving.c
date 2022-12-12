@@ -7,8 +7,9 @@
  *
  * @param grid     The sudoku grid that we want to display/print
  ******************************************************************************/
-void print_sudoku(unsigned char grid[9][9])
+void print_sudoku(int** grid)
 {
+    printf("Sudoku : \n");
     for (unsigned char x = 0; x < 9; x++)
     {
         if (x == 3 || x == 6)
@@ -32,7 +33,7 @@ void print_sudoku(unsigned char grid[9][9])
  * @param num      The number that we want to check if it can be placed
  * @return int     0 if the number can't be placed here else 1
  ******************************************************************************/
-int can_be_placed(unsigned char grid[9][9], unsigned char row, unsigned char col, unsigned char num)
+int can_be_placed(int** grid, unsigned char row, unsigned char col, unsigned char num)
 {
     for (unsigned char x = 0; x <= 8; x++)
         if (grid[row][x] == num)
@@ -60,7 +61,7 @@ int can_be_placed(unsigned char grid[9][9], unsigned char row, unsigned char col
  * @param col      The col of the sudoku grid (for recursive call)
  * @return int     0 if the sudoku grid doesn't have solution else 1
  ******************************************************************************/
-int solve_sudoku(unsigned char grid[9][9], unsigned char row, unsigned char col)
+int solve_sudoku(int** grid, unsigned char row, unsigned char col)
 {
     if (row == 9 - 1 && col == 9)
         return 1;

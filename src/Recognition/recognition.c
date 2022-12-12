@@ -10,6 +10,7 @@ int recognized(NeuralNetwork* net,float (*activ)(float), Matrix* input)
 {
     //Zh1 = [ X • wh1 ] + bh1
     Matrix* Zh1 = addMatrix(mulMatrix(net->hidden1, input), net->hidden1Bias);
+    printf("recognized\n");
 
     //ah1 = Φ (Zh1)
     Matrix* ah1 = applyFunctionMatrix(Zh1, activ);

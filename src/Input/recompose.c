@@ -3,7 +3,7 @@
 #include "Struct/image.h"
 #include "Struct/pixel.h"
 
-void write_sudoku_image(char filename[], unsigned char grid[9][9], unsigned char initial[9][9])
+void write_sudoku_image(char filename[], int** grid, int** initial)
 {
 	// Import Texte for Number
 	Image** list_image = malloc(sizeof(struct Image*)*10);

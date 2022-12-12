@@ -20,6 +20,9 @@
 #include "Struct/matrix.h"
 #include "Xor/function.h"
 #include "Input/file.h"
+#include "Solver/solving.h"
+#include "Treatment/square.h"
+#include "Input/recompose.h"
 
 typedef struct UserInterface
 {
@@ -99,14 +102,24 @@ void resolve_image(GtkWidget *widget, gpointer data)
     }
     const gchar *sText;
     UserInterface *ui = (UserInterface *)data;
-    g_print("Resolve\n");
+    g_print("Resolve Button\n");
     // on mets la progress bar à 100
     gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(ui->progress), 1.0);
     Image *image = importImage(ui->path);
     sText = gtk_entry_get_text(ui->entry);
     Line** listeline = houghTransform(image, (int)ui->ifsobel, atof(sText));
-    
-    write_sudoku_file("sudoku.png", square(image, listeline));
+    int ** initial = square(image, listeline);
+    g_print("Export the 81 square from the sudoku\n");
+
+    int** result = square(image, listeline);
+
+
+    print_sudoku(result);
+    g_print("Solve the solve_sudoku\n");
+    solve_sudoku(result , 0, 0);
+
+    g_print("Export the result in the image \"sudoku.png\"\n");
+    write_sudoku_image("sudoku.png", result, initial);
     
     gtk_image_set_from_file(GTK_IMAGE(ui->image), "sudoku.png");
 }

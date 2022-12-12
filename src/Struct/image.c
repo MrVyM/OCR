@@ -10,23 +10,23 @@
 
 Image *createEmptyImage(int width, int height)
 {
+  printf("width %d height %d\n", width, height);
   Image *image = malloc(sizeof(Image));
-
   if (image == NULL)
-    errx(-1, "Error while allocating a pointer (createEmptyImage)");
+    errx(-1, "Error while allocating a image (createEmptyImage)");
 
   image->width = width;
   image->height = height;
   image->pixels = calloc(width, sizeof(Pixel *));
 
   if (image->pixels == NULL)
-    errx(-1, "Error while allocating a pointer (createEmptyImage)");
+    errx(-1, "Error while allocating all the pixel (createEmptyImage)");
 
   for (int x = 0; x < width; x++)
   {
     image->pixels[x] = calloc(height, sizeof(Pixel *));
     if (image->pixels[x] == NULL)
-      errx(-1, "Error while allocating a pointer (createEmptyImage)");
+      errx(-1, "Error while allocating a row pixel (createEmptyImage)");
   }
 
   for (int x = 0; x < width; x++)

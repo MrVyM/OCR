@@ -7,15 +7,27 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include "Treatment/rotation.h"
-#include "Xor/function.h"
-#include "Recognition/recognition.h"
-#include "Struct/neuralNetwork.h"
 #include "Treatment/resize.h"
+#include "Recognition/recognition.h"
+#include "Xor/function.h"
 
 Image *extractSquare(Image *image, int x1, int y1, int x2, int y2)
 {
+    int temp;
+    if (x1 > x2){
+        temp = x2;
+        x2 = x1;
+        x1 = temp;
+    }
+
+    if (y1 > y2){
+        temp = y2;
+        y2 = y1;
+        y1 = temp;
+    }
     Image *square = createEmptyImage(x2 - x1, y2 - y1);
-    for (int i = x1; i < x2; i++) // -> équivalent . mais en pointeur
+    
+    for (int i = x1; i < x2; i++)
     {
         for (int j = y1; j < y2; j++)
         {
@@ -25,11 +37,20 @@ Image *extractSquare(Image *image, int x1, int y1, int x2, int y2)
     return square;
 }
 
-int number(Matrix *l)
+int number(NeuralNetwork* net, int *l)
 {
-    NeuralNetwork* net = loadWeight("h1.net","h2.net","ot.net");
-    return recognized(net, sigmoid, l);
-    //return 0;
+
+    Matrix* input = initMatrix(1,784); 
+    for(int i = 0; i < 784; i++)
+    {
+        printf("%d %d \n",i,l[i]);
+        input->value[i][0] = l[i];
+    }
+    // on fera appel au reseau de neurone
+    printf("Call number\n");
+    int result = recognized(net, sigmoid, input);
+    printf("number find %d\n",result);
+    return result;
 }
 
 //version simple qui marche si le sudoku est seul
@@ -41,13 +62,20 @@ Image *findBiggest2(Image *image, Line **listeline){
     int y2 = 0;
 
     while(listeline[i] != 0){
+        printf("x1 fin : %d\n",listeline[i]->x1);
+        printf("y1 fin : %d\n",listeline[i]->y1);
+        printf("x2 fin : %d\n",listeline[i]->x2);
+        printf("y2 fin : %d\n",listeline[i]->y2);
+        if (x1 < 0){
+            x1 = 0;
+        }
         if (listeline[i]->x2 < image->width && listeline[i]->x2 > x2){
             x2 = listeline[i]->x2;
         }
         if (listeline[i]->y2 < image->height && listeline[i]->y2 > y2){
             y2 = listeline[i]->y2;
         }
-        if (listeline[i]->x1 > 0 && listeline[i]->x1 < x1){
+        if (listeline[i]->x1 >= 0 && listeline[i]->x1 < x1){
             x1 = listeline[i]->x1;
         }
         if (listeline[i]->y1 > 0 && listeline[i]->y1 < y1){
@@ -55,6 +83,26 @@ Image *findBiggest2(Image *image, Line **listeline){
         }
         i++;
     }
+    printf("x1 fin : %d\n",x1);
+    printf("y1 fin : %d\n",y1);
+    printf("x2 fin : %d\n",x2);
+    printf("y2 fin : %d\n",y2);
+    if (x1 == image->width){
+        x1 = 0;
+    }
+    if (x2 == 0){
+        x2 = image->width;
+    }
+    if (y1 == image->height){
+        y1 = 0;
+    }
+    if (y2 == 0){
+        y2 = image->height;
+    }
+    printf("x1 fin : %d\n",x1);
+    printf("y1 fin : %d\n",y1);
+    printf("x2 fin : %d\n",x2);
+    printf("y2 fin : %d\n",y2);
     return extractSquare(image, x1, y1, x2, y2);
 }
 
@@ -187,11 +235,11 @@ Image **cutImage(Image *image)
     return tab;
 }
 
-Matrix *Imagetoint(Image *image)
+int *Imagetoint(Image *image)
 {
     // on rezie l'image pour avoir une image de 28*28
     Image *image2 = resizeImage(image, 28);
-    Matrix *tab = initMatrix(728,1);
+    int *tab = malloc(28 * 28 * sizeof(int));
     for (int i = 0; i < 28; i++)
     {
         for (int j = 0; j < 28; j++)
@@ -199,11 +247,11 @@ Matrix *Imagetoint(Image *image)
             // on met 1 si le pixel est noir et 0 sinon
             if (image2->pixels[i][j].red == 0)
             {
-                tab->value[i * 28 + j][0] = 1;
+                tab[i * 28 + j] = 1;
             }
             else
             {
-                tab->value[i * 28 + j][0] = 0;
+                tab[i * 28 + j] = 0;
             }
         }
     }
@@ -212,6 +260,7 @@ Matrix *Imagetoint(Image *image)
 
 int* createTab(Image **tab)
 {
+    NeuralNetwork* net = loadWeight("h1.net", "h2.net", "ot.net");
     // on crée un tableau de 9*9
     int* tab2 = malloc(sizeof(int) * 9);
     // on parcours le tableau d'image et on converti en tableau d'entier
@@ -221,9 +270,7 @@ int* createTab(Image **tab)
         //char s[25];
         //sprintf(s, "%d.%d tzt",i);
         //saveImage(tab[i],s); 
-        
-	tab2[i] = number(Imagetoint(tab[i]));
-	//tab2[i] = 0;
+        tab2[i] = number(net,Imagetoint(tab[i]));
     }
     return tab2;
 }
@@ -240,11 +287,33 @@ void decoupage(Image *image)
         {
             char s[50];
             sprintf(s, "assets/Test/%d.%d.png",i,j);
-            subTab[j] = resizeImage(subTab[j], 29);
+            subTab[j] = resizeImage(subTab[j], 28);
             cleanImage(subTab[j]);
             saveImage(subTab[j],s); 
         }
      }
+}
+
+int** result(Image *image)
+{
+    // on découpe l'image en 9 carrés
+    NeuralNetwork* net = loadWeight("h1.net", "h2.net", "ot.net");
+    Image **tab = cutImage(image);
+    int** sudoku = malloc(9*sizeof(int*));
+    // on crée un tableau de 9*9
+    for (int i = 0;i <9;i++)
+    {
+        Image** subTab = cutImage(tab[i]);
+        int* subsudoku = malloc(9*sizeof(int));
+        for(int j = 0; j < 9; j++)
+        {
+            //subTab[j] = resizeImage(subTab[j], 28);
+            cleanImage(subTab[j]);
+            subsudoku[j] = number(net,Imagetoint(subTab[j]));
+        }
+        sudoku[i] = subsudoku;
+     }
+     return sudoku;
 }
 
 Image* traitement(Image *image, Line**listeline)
@@ -281,13 +350,17 @@ Image* traitement(Image *image, Line**listeline)
     Image *image2 = rotateImage(image,angle);
     return image2;
 }
-int** sudoku(Image* image){
-	Image** tab = cutImage(image);
-	int** result = malloc(sizeof(int) * 9);
-	for (int i = 0; i < 9; i++){
-		result[i] = createTab(cutImage(tab[i]));
-	}
-	return result;
+
+
+int** sudoku(Image* image)
+{
+    int** result = malloc(9 * sizeof(int *));
+    Image ** tab= cutImage(image);
+
+    for(int i = 0; i < 9; i++)
+        result[i] = createTab(cutImage(tab[i]));
+
+    return result;
 }
 
 int **square(Image *image, Line **listeline)
@@ -298,10 +371,11 @@ int **square(Image *image, Line **listeline)
     //Image *image2= extractSquare(image,0,0,1011,128);
     //Image *image2 = findbiggestSquare(image, listeline);
     
-    Image *image2 = traitement(image,listeline);
+    //Image *image2 = traitement(image,listeline);
     //saveImage(image2, "traitement.bmp");
-    Image *image3 = findBiggest2(image2,listeline);
+    Image *image3 = findBiggest2(image,listeline);
     saveImage(image3, "square.bmp");
-    //decoupage(image3);
-    return sudoku(image3);
+    decoupage(image3);S
+    //return sudoku(image3);
+    return result(image3);
 }
