@@ -1,11 +1,14 @@
 # Directory of build
 build/
 
-# Picture .bmp
+# Picture
 *.bmp
 dataset_*
 *.csv
-*.exerc
+
+# Vim file
+*.exrc
+
 # VScode file
 .vscode/
 
