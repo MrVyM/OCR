@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include "Struct/neuralNetwork.h"
-#include "Xor/function.h"
+#include "Recognition/function.h"
 #include "Input/file.h"
 #include <stdlib.h>
 #include <err.h>

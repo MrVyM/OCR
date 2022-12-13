@@ -16,9 +16,8 @@
 #include "Treatment/houghTransform.h"
 #include <err.h>
 #include "Struct/neuralNetwork.h"
-#include "Xor/xor.h"
 #include "Struct/matrix.h"
-#include "Xor/function.h"
+#include "Recognition/function.h"
 #include "Input/file.h"
 #include "Solver/solving.h"
 #include "Treatment/square.h"
@@ -114,13 +113,13 @@ void resolve_image(GtkWidget *widget, gpointer data)
     g_print("Export the 81 square from the sudoku\n");
 
     int** result = square(image, listeline);
-
+    g_print("Recognize the number on the square\n");
 
     print_sudoku(result);
     g_print("Solve the solve_sudoku\n");
     solve_sudoku(result , 0, 0);
-
     g_print("Export the result in the image \"sudoku.png\"\n");
+
     write_sudoku_image("sudoku.png", result, initial);
     
     gtk_image_set_from_file(GTK_IMAGE(ui->image), "sudoku.png");
@@ -244,12 +243,12 @@ int main(int argc, char *argv[])
 {
     if (argc >= 2)
     {
-        Image* image = importImage(argv[1]);
-        otsuTresolding(image);
+        // Image* image = importImage(argv[1]);
+        // otsuTresolding(image);
 
-        int** test = square(image,line);
-        image = rotateImage(image, angleRotation);
-        saveImage(image, "rotation.bmp");
+        // int** test = square(image,line);
+        // image = rotateImage(image, angleRotation);
+        // saveImage(image, "rotation.bmp");
         SDL_Quit();
     }
     else 

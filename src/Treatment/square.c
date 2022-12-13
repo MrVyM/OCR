@@ -9,7 +9,7 @@
 #include "Treatment/rotation.h"
 #include "Treatment/resize.h"
 #include "Recognition/recognition.h"
-#include "Xor/function.h"
+#include "Recognition/function.h"
 
 Image *extractSquare(Image *image, int x1, int y1, int x2, int y2)
 {
@@ -59,10 +59,6 @@ Image *findBiggest2(Image *image, Line **listeline){
     int y2 = 0;
 
     while(listeline[i] != 0){
-        printf("x1 fin : %d\n",listeline[i]->x1);
-        printf("y1 fin : %d\n",listeline[i]->y1);
-        printf("x2 fin : %d\n",listeline[i]->x2);
-        printf("y2 fin : %d\n",listeline[i]->y2);
         if (x1 < 0){
             x1 = 0;
         }
@@ -80,10 +76,6 @@ Image *findBiggest2(Image *image, Line **listeline){
         }
         i++;
     }
-    printf("x1 fin : %d\n",x1);
-    printf("y1 fin : %d\n",y1);
-    printf("x2 fin : %d\n",x2);
-    printf("y2 fin : %d\n",y2);
     if (x1 == image->width){
         x1 = 0;
     }
@@ -96,10 +88,6 @@ Image *findBiggest2(Image *image, Line **listeline){
     if (y2 == 0){
         y2 = image->height;
     }
-    printf("x1 fin : %d\n",x1);
-    printf("y1 fin : %d\n",y1);
-    printf("x2 fin : %d\n",x2);
-    printf("y2 fin : %d\n",y2);
     return extractSquare(image, x1, y1, x2, y2);
 }
 
@@ -129,9 +117,7 @@ Image *findbiggestSquare(Image *image, Line **listeline)
     while (listeline[i] != 0)
     {
         x = listeline[i]->x1;
-	printf("x : %d\n",x);
         y = listeline[i]->y1;
-	printf("y : %d\n",y);
         int j = 0;
         // on cherche une ligne qui a un x proche de x
 
@@ -205,8 +191,6 @@ Image *findbiggestSquare(Image *image, Line **listeline)
         }
 	i++;
     }
-    printf("x fin : %d\n",x1);
-    printf("y fin : %d\n",y1);
     return extractSquare(image, x1, y1, x2, y2);
 }
 
